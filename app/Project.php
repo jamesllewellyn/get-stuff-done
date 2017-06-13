@@ -18,4 +18,18 @@ class Project extends Model
     protected $fillable = [
         'name'
     ];
+    /**
+     * Modal validation.
+     * @var array
+     */
+    public $validation = [
+        'name' => 'required'
+    ];
+    /**
+     * Custom validation messages
+     * @var array
+     */
+    public $messages = [
+        'name.required' => 'Please provide a name for this project'
+    ];
 }
