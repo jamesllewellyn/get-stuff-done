@@ -17,4 +17,18 @@ class Section extends Model
     protected $fillable = [
         'project_id', 'name'
     ];
+    /**
+     * Modal validation.
+     * @var array
+     */
+    public $validation = [
+        'name' => 'required'
+    ];
+    /**
+     * Custom validation messages
+     * @var array
+     */
+    public $messages = [
+        'name.required' => 'Please provide a name for this section'
+    ];
 }

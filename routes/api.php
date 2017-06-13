@@ -17,6 +17,26 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('project', 'ProjectController',
-                ['only' => ['index', 'store', 'show','update', 'destroy']]);
+/***********************
+ * Project API
+ **********************/
+    Route::resource('project', 'ProjectController',
+                    ['only' => ['index', 'store', 'show','update', 'destroy']]);
 
+    Route::group(['prefix'=>'/project/{project}'], function () {
+        /** Project Section Routes */
+        Route::post('/section', ['uses'=>'SectionController@store', 'as'=>'Section.store'] );
+    });
+
+/***********************
+ * Section API
+ **********************/
+    Route::resource('section', 'SectionController',
+                    ['only' => [ 'show','update', 'destroy']]);
+
+
+/***********************
+ * Task API
+ **********************/
+    Route::resource('section', 'SectionController',
+                    ['only' => [ 'show','update', 'destroy']]);

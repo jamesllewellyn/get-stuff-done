@@ -4,21 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use App\UserProject;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     public function __construct() {
-
+        /** define controller middleware */
+        $this->middleware('auth:api');
     }
-
-    /** Get all projects */
+    /**
+     * Get all projects.
+     * @return \Illuminate\Http\Response
+     */
     public function index() {
         return Project::all();
     }
-
-    /** Store new project */
+    /**
+     * Store new project
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request) {
         $project =  new Project();
         /** validate the request data */
@@ -31,7 +37,11 @@ class ProjectController extends Controller
         return ['success' => true, 'message' => 'project has been created', 'project' => $project];
     }
 
-    /** Show project */
+    /**
+     * get project data
+     * @param Project $project
+     * @return \Illuminate\Http\Response
+     */
     public function show(Project $project) {
         /** If project cant be found return error */
         if(!$project){
@@ -41,7 +51,12 @@ class ProjectController extends Controller
         return ['success' => true, 'message' => 'project has been found', 'project' => $project];
     }
 
-    /** Update project */
+    /**
+     * Update project
+     * @param \Illuminate\Http\Request $request
+     * @param Project $project
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, Project $project) {
         /** If project cant be found return error */
         if(!$project){
@@ -51,11 +66,16 @@ class ProjectController extends Controller
         $this->validate(Request(),$project->validation, $project->messages);
         /** update record */
         $project->name = $request->get('name');
+        $project->save();
         /** return success and updated project */
         return ['success' => true, 'message' => 'project has been updated', 'project' => $project];
     }
 
-    /** destroy project */
+    /**
+     * Delete project
+     * @param Project $project
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Project $project) {
         /** If project cant be found return error */
         if(!$project){
