@@ -1,20 +1,46 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-window.Vue = require('vue');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-Vue.component('example', require('./components/Example.vue'));
+import './bootstrap';
+import router from './app-routes';
+import appstore from './app-store';
+// import projectNav from './components/ProjectNav';
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    router: router,
+    data: {
+        user: appstore.user,
+        projects: appstore.projects
+    },
+    components : {
+
+    },
+    methods: {
+        getUserData: function() {
+            let self = this;
+            axios.get('/api/user')
+                .then(function (response) {
+                    /** set user data in store */
+                    appstore.initiateUser(response.data);
+                    /** Now we've got the user we can get the users projects */
+                    self.getUserProjects();
+                })
+                .catch(function (error) {
+                        console.log(error);
+                });
+        },
+        getUserProjects: function() {
+            let self = this;
+            axios.get('/api/user/' + self.user.id + '/projects' )
+                .then(function (response) {
+                    /** set users project data in store */
+                    appstore.setProjectData(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+    },
+    mounted: function () {
+        /** Call method to get user data */
+        this.getUserData();
+    }
 });

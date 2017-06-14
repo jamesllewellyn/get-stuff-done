@@ -1,3 +1,8 @@
-/**
- * Created by jamesllewellyn on 6/14/17.
- */
+class Project{
+    constructor($data){
+        this.id = $data.id;
+        this.name = $data.name;
+        this.created_at = $data.created_at;
+    }
+}
+export default Project;

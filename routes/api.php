@@ -12,31 +12,34 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+/***********************
+ * User API
+ **********************/
+//    /** Get logged in user */
+//    Route::middleware('auth:api')->get('/user', function (Request $request) {
+//        return $request->user();
+//    });
+    /** Project store, show, destroy */
+    Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show','update', 'destroy']]);
+    /** get users projects */
+    Route::get('/user/{user}/projects', ['uses'=>'UserController@projects', 'as'=>'User.projects'] );
 /***********************
  * Project API
  **********************/
-    Route::resource('project', 'ProjectController',
-                    ['only' => ['index', 'store', 'show','update', 'destroy']]);
-
-    Route::group(['prefix'=>'/project/{project}'], function () {
-        /** Project Section Routes */
-        Route::post('/section', ['uses'=>'SectionController@store', 'as'=>'Section.store'] );
-    });
-
+    /** Project index, store, show, destroy */
+    Route::resource('project', 'ProjectController', ['only' => ['index', 'store', 'show','update', 'destroy']]);
 /***********************
  * Section API
  **********************/
-    Route::resource('section', 'SectionController',
-                    ['only' => [ 'show','update', 'destroy']]);
-
+    /** Section show, update, destroy */
+    Route::resource('section', 'SectionController', ['only' => [ 'show','update', 'destroy']]);
+    /** Section store */
+    Route::post('/project/{project}/section', ['uses'=>'SectionController@store', 'as'=>'Section.store'] );
 
 /***********************
  * Task API
  **********************/
-    Route::resource('section', 'SectionController',
-                    ['only' => [ 'show','update', 'destroy']]);
+    /** Section store */
+    Route::resource('section', 'SectionController', ['only' => [ 'show','update', 'destroy']]);
+    /** Task store */
+    Route::post('/project/{project}/section/{section}/task', ['uses'=>'TaskController@store', 'as'=>'Task.store'] );

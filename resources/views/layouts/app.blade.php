@@ -25,7 +25,7 @@
                     </div>
                     <div class="has-text-centered">
                         <a href="#" class="has-text-centered" role="button" aria-expanded="false">
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                            <span v-text="user.name"><span class="caret"></span>
                         </a>
                     </div>
                     <hr/>
@@ -33,20 +33,28 @@
                         General
                     </p>
                     <ul class="menu-list">
-                        <li class="is-active"><a>Dashboard</a></li>
-                        <li><a>Profile</a></li>
+                        <li>
+                            <router-link exact active-class="is-active" tag="a" to="/" >
+                                Dashboard
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link exact active-class="is-active" tag="a" to="/profile" >
+                               My Profile
+                            </router-link>
+                        </li>
                     </ul>
                     <hr/>
                     <p class="menu-label">
                         Projects
                     </p>
                     <ul class="menu-list">
-                        <li><a>Scout</a></li>
-                        <li><a>Vision</a></li>
-                        <li><a>myPeoplesafe</a></li>
-                        <li><a>Side Project</a></li>
+                        <li v-for="project in projects">
+                            <router-link exact active-class="is-active" tag="a"  :to="'/project/'+ project.id" >
+                                @{{project.name}}
+                            </router-link>
+                        </li>
                     </ul>
-
                 </div>
             </aside>
             <div class="column content">
@@ -91,7 +99,9 @@
 
                     </div>
                 </nav>
-                @yield('content')
+                <transition name="fade" mode="out-in">
+                    <router-view ></router-view>
+                </transition>
             </div>
         </div>
     </div>
