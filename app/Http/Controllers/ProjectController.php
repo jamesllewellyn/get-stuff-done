@@ -52,6 +52,21 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get all project sections
+     * @param \Illuminate\Http\Request $request
+     * @param Project $project
+     * @return \Illuminate\Http\Response
+     */
+    public function sections(Request $request, Project $project) {
+        /** If project cant be found return error */
+        if(!$project){
+            return ['success' => false, 'message' => 'The requested project could not be found'];
+        }
+        /** return project sections */
+        return $project->sections()->get();
+    }
+
+    /**
      * Update project
      * @param \Illuminate\Http\Request $request
      * @param Project $project

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -50,7 +50,7 @@
                     </p>
                     <ul class="menu-list">
                         <li v-for="project in projects">
-                            <router-link exact active-class="is-active" tag="a"  :to="'/project/'+ project.id" >
+                            <router-link exact active-class="is-active" tag="a" :to="'/project/'+ project.id" >
                                 @{{project.name}}
                             </router-link>
                         </li>

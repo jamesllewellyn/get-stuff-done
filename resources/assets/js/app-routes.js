@@ -9,13 +9,13 @@ let routes = [
         path: '/home/',
         component: require('./views/app/Home.vue')
     },
-    { path: '/project/:id', component: require('./views/app/Profile'),
+    { path: '/project/:id', component: require('./views/app/Project.vue'),
         children: [
             {
                 // UserProfile will be rendered inside User's <router-view>
                 // when /user/:id/profile is matched
                 path: '',
-                component: require('./views/app/Profile')
+                component: require('./views/app/Project.vue')
             }
         ]
     }

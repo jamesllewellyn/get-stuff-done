@@ -1,7 +1,7 @@
 import './bootstrap';
 import router from './app-routes';
 import appstore from './app-store';
-// import projectNav from './components/ProjectNav';
+window.Event = new Vue();
 
 const app = new Vue({
     el: '#app',
@@ -37,7 +37,7 @@ const app = new Vue({
                 .catch(function (error) {
                     console.log(error);
                 });
-        },
+        }
     },
     mounted: function () {
         /** Call method to get user data */

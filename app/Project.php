@@ -10,6 +10,7 @@ class Project extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $table = 'projects';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +19,7 @@ class Project extends Model
     protected $fillable = [
         'name'
     ];
+
     /**
      * Modal validation.
      * @var array
@@ -25,6 +27,7 @@ class Project extends Model
     public $validation = [
         'name' => 'required'
     ];
+
     /**
      * Custom validation messages
      * @var array
@@ -32,4 +35,12 @@ class Project extends Model
     public $messages = [
         'name.required' => 'Please provide a name for this project'
     ];
+
+    /**
+     * Get all project sections.
+     */
+    public function sections(){
+        return $this->hasMany('App\Section', 'project_id', 'id' );
+    }
+
 }

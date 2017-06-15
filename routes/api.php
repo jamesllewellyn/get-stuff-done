@@ -15,10 +15,6 @@ use Illuminate\Http\Request;
 /***********************
  * User API
  **********************/
-//    /** Get logged in user */
-//    Route::middleware('auth:api')->get('/user', function (Request $request) {
-//        return $request->user();
-//    });
     /** Project store, show, destroy */
     Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show','update', 'destroy']]);
     /** get users projects */
@@ -28,6 +24,8 @@ use Illuminate\Http\Request;
  **********************/
     /** Project index, store, show, destroy */
     Route::resource('project', 'ProjectController', ['only' => ['index', 'store', 'show','update', 'destroy']]);
+    /** get all project sections */
+    Route::get('/project/{project}/sections', ['uses'=>'ProjectController@sections', 'as'=>'Project.sections'] );
 /***********************
  * Section API
  **********************/

@@ -1,9 +1,9 @@
-class Project{
+class Section{
     constructor($data){
         this.id = $data.id;
+        this.project_id = $data.project_id;
         this.name = $data.name;
         this.created_at = $data.created_at;
-        this.sections = $data.sections;
     }
 }
-export default Project;
+export default Section;

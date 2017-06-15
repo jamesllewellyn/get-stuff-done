@@ -75,6 +75,6 @@ class UserController extends Controller
             return ['success' => false, 'message' => 'The requested user could not be found'];
         }
         /** return success message */
-        return $user->projects()->get();
+        return $user->projects()->with('sections')->get();
     }
 }
