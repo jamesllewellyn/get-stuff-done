@@ -28,8 +28,20 @@ class TaskController extends Controller
         $task =  new Task();
         /** validate the request data */
         $this->validate(Request(),$task->validation, $task->messages);
-        /** create new task and join*/
-        $task = Task::create(['name' => $request->get('name'), 'due_date' => Carbon::parse($request->get('due_date')),'due_time' => $request->get('due_time')]);
+        /** get current section task */
+        $currentTasks = $section->tasks()->get();
+        /** get sort order for new task */
+        $sortOrder = count($currentTasks) + 1;
+        /** create new task */
+        $task = Task::create([
+            'name' => $request->get('name'),
+            'due_date' => Carbon::parse($request->get('due_date')),
+            'due_time' => $request->get('due_time'),
+            'sort_order' => $sortOrder,
+            'priority_id' => $request->get('priority_id'),
+            'note' => $request->get('note'),
+        ]);
+        /** create SectionTask join */
         SectionTask::create(['section_id' => $section->id, 'task_id' => $task->id]);
         /** return success and stored task */
         return ['success' => true, 'message' => 'New task has been added to '.$section->name , 'task' => $task];

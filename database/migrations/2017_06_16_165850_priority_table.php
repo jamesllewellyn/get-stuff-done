@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TasksTable extends Migration
+class PriorityTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,29 @@ class TasksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('priorities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('priority_id')->default(3);
             $table->string('name');
-            $table->text('note')->nullable();
-            $table->integer('sort_order');
-            $table->boolean('done')->nullable();
-            $table->date('due_date');
-            $table->time('due_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
-    }
 
+        $this->addPriorities();
+    }
+    /**
+     * add Priorities to table.
+     *
+     * @return void
+     */
+    public function addPriorities(){
+        $priorities = ['high', 'medium', 'low'];
+
+        foreach ($priorities as $key => $priority) {
+            $new = new \App\Priority();
+            $new->name = $priority;
+            $new->save();
+        }
+    }
     /**
      * Reverse the migrations.
      *
@@ -34,6 +43,6 @@ class TasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('priorities');
     }
 }

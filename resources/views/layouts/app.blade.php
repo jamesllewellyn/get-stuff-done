@@ -46,7 +46,7 @@
                     </ul>
                     <hr/>
                     <p class="menu-label">
-                        Projects
+                        Projects <a  @click.prevent.stop="toggelModal('addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                     </p>
                     <ul class="menu-list">
                         <li v-for="project in projects">
@@ -104,6 +104,27 @@
                 </transition>
             </div>
         </div>
+        <modal modal-name="addProject" title="Add New Project">
+            <div slot="body">
+                <form>
+                    <div class="field">
+                        <label class="label">Project Name</label>
+                        <p class="control">
+                            <input class="input" type="text" name="name" placeholder="Project Name" v-model="newProject.name">
+                        </p>
+                        <p class="help is-danger" v-text="errors.get('name')"></p>
+                    </div>
+                    {{--<div class="field">--}}
+                        {{--<label class="label">Due Date</label>--}}
+                        {{--<p class="control">--}}
+                            {{--<datepicker :config="{ wrap: true }" v-model="newTask.due_date">--}}
+                            {{--</datepicker>--}}
+                        {{--</p>--}}
+                        {{--<p class="help is-danger" v-text="errors.get('name')"></p>--}}
+                    {{--</div>--}}
+                </form>
+            </div>
+        </modal>
     </div>
 
     <!-- Scripts -->

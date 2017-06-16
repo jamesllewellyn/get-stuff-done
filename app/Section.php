@@ -39,6 +39,6 @@ class Section extends Model
      * Get all section tasks.
      */
     public function tasks(){
-        return $this->hasManyThrough('App\Task', 'App\SectionTask', 'task_id' ,'id' );
+        return $this->hasManyThrough('App\Task', 'App\SectionTask', 'section_id' ,'id' );
     }
 }

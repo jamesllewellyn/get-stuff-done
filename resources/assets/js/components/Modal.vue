@@ -11,7 +11,7 @@
                     <slot name="body"></slot>
                 </section>
                 <footer class="modal-card-foot">
-                    <a class="button is-success" @click="onSubmit()">Save changes</a>
+                    <a class="button is-success" :class="{ 'is-loading': isLoading}" @click="onSubmit()">Save changes</a>
                     <a class="button"  @click="hideModal()">Cancel</a>
                 </footer>
             </div>
@@ -27,11 +27,23 @@
                 isVisible : false
             }
         },
-        props: ['modalName','title'],
+        props: {
+            modalName : {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            },
+            isLoading:{
+                type: Boolean,
+                default: false
+            },
+        },
         created: function() {
             let self = this;
             Event.$on(this.modalName, function() {
-                console.log('listening...');
                 self.isVisible = (self.isVisible == true ? false : true);
             });
         },
@@ -40,6 +52,7 @@
                 this.isVisible = false;
             },
             onSubmit: function(){
+                this.isLoading = true;
                 Event.$emit('modalSubmit', this.modalName);
             }
         }
