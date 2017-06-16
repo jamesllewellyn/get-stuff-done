@@ -31,9 +31,3 @@
 .modal-leave-active {
   opacity: 0;
 }
-
-.modal-enter .modal-card,
-.modal-leave-active .modal-card {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}

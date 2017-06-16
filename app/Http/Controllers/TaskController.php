@@ -32,7 +32,7 @@ class TaskController extends Controller
         $task = Task::create(['name' => $request->get('name'), 'due_date' => Carbon::parse($request->get('due_date')),'due_time' => $request->get('due_time')]);
         SectionTask::create(['section_id' => $section->id, 'task_id' => $task->id]);
         /** return success and stored task */
-        return ['success' => true, 'message' => 'task has been created', 'task' => $task];
+        return ['success' => true, 'message' => 'New task has been added to '.$section->name , 'task' => $task];
     }
 
     /**

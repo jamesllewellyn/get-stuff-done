@@ -15,7 +15,7 @@ class TasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('name');
+            $table->string('name');
             $table->date('due_date');
             $table->time('due_time')->nullable();
             $table->timestamps();

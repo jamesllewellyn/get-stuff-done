@@ -9,6 +9,7 @@ class Section extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $table = 'sections';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,6 +18,7 @@ class Section extends Model
     protected $fillable = [
         'project_id', 'name'
     ];
+
     /**
      * Modal validation.
      * @var array
@@ -24,6 +26,7 @@ class Section extends Model
     public $validation = [
         'name' => 'required'
     ];
+
     /**
      * Custom validation messages
      * @var array
@@ -31,4 +34,11 @@ class Section extends Model
     public $messages = [
         'name.required' => 'Please provide a name for this section'
     ];
+
+    /**
+     * Get all section tasks.
+     */
+    public function tasks(){
+        return $this->hasManyThrough('App\Task', 'App\SectionTask', 'task_id' ,'id' );
+    }
 }

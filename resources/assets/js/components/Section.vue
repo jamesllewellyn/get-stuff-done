@@ -11,11 +11,13 @@
                 type: String,
                 required: true
             },
-            tasks: []
+            tasks: [],
+            id: ''
         },
         methods:{
             toggelModal: function(modalName){
                 Event.$emit(modalName);
+                Event.$emit('clickedSection', this.id);
             }
        },
         mounted() {

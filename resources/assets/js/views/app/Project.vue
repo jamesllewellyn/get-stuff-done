@@ -12,7 +12,7 @@
 
         <div>
             <div class="columns">
-                <projectSection v-for="section in project.sections" :name="section.name" :key="section.id"></projectSection>
+                <projectSection v-for="section in project.sections" :name="section.name" :key="section.id" :id="section.id"></projectSection>
             </div>
         </div>
         <Modal modalName="addTask" title="Add New Task">
@@ -21,8 +21,17 @@
                     <div class="field">
                         <label class="label">Task</label>
                         <p class="control">
-                            <input class="input" type="text" name="task" placeholder="Task Name">
+                            <input class="input" type="text" name="name" placeholder="Task Name" v-model="newTask.name">
                         </p>
+                        <p class="help is-danger" v-text="errors.get('name')"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Due Date</label>
+                        <p class="control">
+                            <datepicker :config="{ wrap: true }" v-model="newTask.due_date">
+                            </datepicker>
+                        </p>
+                        <p class="help is-danger" v-text="errors.get('name')"></p>
                     </div>
                 </form>
             </div>
@@ -33,8 +42,10 @@
 <script>
     import appstore from '../../app-store';
     import projectSection from '../../components/Section';
+    import Errors from '../../core/Errors';
     import Modal from '../../components/Modal.vue';
     import Section from '../../core/Section';
+    import Datepicker from 'vue-bulma-datepicker'
     export default {
         data() {
             return{
@@ -43,10 +54,18 @@
                 /** current users projects */
                 projects: appstore.projects,
                 /** current projects id */
-                id: ''
+                id: '',
+                /** current section id */
+                sectionId: '',
+                /** form errors */
+                errors: new Errors(),
+                newTask: {
+                    name: '',
+                    due_date:''
+                }
             }
         },
-        components:{projectSection, Modal},
+        components:{projectSection, Modal, Datepicker},
         computed: {
             /** current project */
             project: function() {
@@ -62,10 +81,33 @@
             }
         },
         methods: {
-
+            addTask: function(){
+                let self = this;
+                axios.post('/api/project/'+ self.project.id +'/section/' + self.sectionId + '/task', self.newTask )
+                    .then(function (response) {
+                        /** add new task to section array */
+                        appstore.addTask(self.project.id, self.sectionId, response.data.task)
+                    })
+                    .catch(function (error) {
+                        /** if error keep modal open and display errors */
+                        if(error.response.data){
+                            self.errors.record(error.response.data);
+                        }
+                    });
+            },
         },
         mounted() {
             let self = this;
+            Event.$on('modalSubmit', function(form) {
+                switch(form) {
+                    case 'addTask':
+                        self.addTask();
+                        break;
+                }
+            });
+            Event.$on('clickedSection', function(id) {
+                self.sectionId = id;
+            });
         }
     }
 </script>

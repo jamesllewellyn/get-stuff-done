@@ -1,4 +1,6 @@
 import Project from './core/Project';
+import Task from './core/Task';
+
 let appstore = {
     user: {
         id : "",
@@ -16,6 +18,21 @@ let appstore = {
         projects.forEach(function(project) {
             self.projects.push(new Project(project));
         });
+    },
+   addTask: function (projectId, sectionId, task) {
+      console.log(task);
+       /** find project */
+        let project =  this.projects.filter(function (project) {
+            return project.id == projectId;
+        });
+              console.log(project);
+        /** find section and add task to it */
+        project[0].sections.filter(function (section) {
+            if(section.id == sectionId){
+                section.tasks.push(new Task(task));
+            }
+        });
+
     }
 }
 export default appstore
