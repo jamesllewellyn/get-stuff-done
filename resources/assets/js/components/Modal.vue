@@ -1,6 +1,6 @@
 <template>
-    <transition name="modal">
-        <div class="modal" :class="isVisible ? 'is-active' : '' " v-show="isVisible" >
+    <transition name="modal" mode="out-in">
+        <div class="modal" :class="isVisible ? 'is-active' : '' " v-if="isVisible">
             <div class="modal-background"  @click="hideModal()"></div>
             <div class="modal-card modal-container">
                 <header class="modal-card-head">

@@ -1,17 +1,14 @@
 <template>
-    <div class="content">
-        <h1 class="title has-text-centered">
-            {{project.name}}
-            <a  @click.prevent.stop="event('addSection')"><i class="fa fa-plus-circle align-vertical" aria-hidden="true"></i></a>
-        </h1>
-
-        <div class="tabs is-centered">
-            <ul>
-                <li class="is-active"><a>Overview</a></li>
-                <li><a>Due Today</a></li>
-            </ul>
+    <div class="container">
+            <h1 class="title">
+                {{project.name}}
+            </h1>
+        <div class="has-text-right">
+            <span class="tag is-orange is-medium">
+                <a  @click.prevent.stop="event('addSection')" class="orange">Add Section <i class="fa fa-plus-circle align-vertical" aria-hidden="true"></i></a>
+            </span>
         </div>
-
+        <hr>
         <div>
             <div class="columns is-multiline ">
                 <projectSection v-for="section in project.sections" :name="section.name" :key="section.id" :id="section.id" :tasks="section.tasks"></projectSection>

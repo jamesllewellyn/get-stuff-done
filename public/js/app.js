@@ -5108,9 +5108,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 
@@ -25196,15 +25193,10 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('transition', {
     attrs: {
-      "name": "modal"
+      "name": "modal",
+      "mode": "out-in"
     }
-  }, [_c('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.isVisible),
-      expression: "isVisible"
-    }],
+  }, [(_vm.isVisible) ? _c('div', {
     staticClass: "modal",
     class: _vm.isVisible ? 'is-active' : ''
   }, [_c('div', {
@@ -25251,7 +25243,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.hideModal()
       }
     }
-  }, [_vm._v("Cancel")])])])])])
+  }, [_vm._v("Cancel")])])])]) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -25267,10 +25259,15 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "content"
+    staticClass: "container"
   }, [_c('h1', {
-    staticClass: "title has-text-centered"
-  }, [_vm._v("\n        " + _vm._s(_vm.project.name) + "\n        "), _c('a', {
+    staticClass: "title"
+  }, [_vm._v("\n            " + _vm._s(_vm.project.name) + "\n        ")]), _vm._v(" "), _c('div', {
+    staticClass: "has-text-right"
+  }, [_c('span', {
+    staticClass: "tag is-orange is-medium"
+  }, [_c('a', {
+    staticClass: "orange",
     on: {
       "click": function($event) {
         $event.preventDefault();
@@ -25278,12 +25275,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.event('addSection')
       }
     }
-  }, [_c('i', {
+  }, [_vm._v("Add Section "), _c('i', {
     staticClass: "fa fa-plus-circle align-vertical",
     attrs: {
       "aria-hidden": "true"
     }
-  })])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', [_c('div', {
+  })])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [_c('div', {
     staticClass: "columns is-multiline "
   }, _vm._l((_vm.project.sections), function(section) {
     return _c('projectSection', {
@@ -25463,13 +25460,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "textContent": _vm._s(_vm.errors.get('name'))
     }
   })])])])])], 1)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "tabs is-centered"
-  }, [_c('ul', [_c('li', {
-    staticClass: "is-active"
-  }, [_c('a', [_vm._v("Overview")])]), _vm._v(" "), _c('li', [_c('a', [_vm._v("Due Today")])])])])
-}]}
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

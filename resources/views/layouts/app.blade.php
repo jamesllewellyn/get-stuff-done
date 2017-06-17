@@ -11,6 +11,7 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -21,7 +22,7 @@
             <aside class="column is-2 is-hidden-mobile hero menu is-fullheight">
                 <div class="side-menu">
                     <div class="has-text-centered">
-                        <i class="fa fa-user"></i>
+                        <img src="cowboy.png" alt="">
                     </div>
                     <div class="has-text-centered">
                         <a href="#" class="has-text-centered" role="button" aria-expanded="false">

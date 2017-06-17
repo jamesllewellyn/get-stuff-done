@@ -23,11 +23,24 @@
  * You can easily play with the modal transition by editing
  * these styles.
  */
-
+.modal-background{
+  transition: opacity .3s ease;
+}
+.modal-card{
+  transition: all .3s ease;
+}
 .modal-enter {
+  transition: all .3s ease;
   opacity: 0;
 }
 
 .modal-leave-active {
+  transition: all .3s ease;
   opacity: 0;
+}
+
+.modal-enter .modal-card,
+.modal-leave-active .modal-card {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }

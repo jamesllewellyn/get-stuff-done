@@ -1,20 +1,50 @@
+body{
+  background-color:#f2f4f6;
+  font-family: $font-family;
+  font-weight: 400;
+}
 /** Sidebar menu */
 aside{
-  border-right: 1px solid #dbdbdb;
+
+  background-color: #ffffff;
   .side-menu{
     padding-top:20px;
-    padding-left:20px;
-    //background-color: #31475A;
+    .menu-label{
+      margin-left:1em;
+    }
     .fa-user{
       font-size: 60px;
+    }
+    .menu-list{
+      a{
+        padding:1em 0.75em;
+        transition: all .3s ease;
+        &.is-active{
+          background-color:#ffffff;
+          font-weight: bold;
+          border-left:5px solid $orange;
+          color:#4a4a4a ;
+        }
+        &:hover{
+          background-color: #ffffff;
+          color:#4a4a4a ;
+        }
+
+      }
     }
   }
 }
 /** top nav */
 .nav{
+  display:none;
   border-bottom: 1px solid #dbdbdb;
 }
-
+.container{
+  padding: 10px 20px;
+}
+hr{
+  color:#eaebec;
+}
 /** Todo boxs */
 .todo-toggles{
   margin-bottom:0;
@@ -36,8 +66,20 @@ h3{
 /** typography */
 .content{
   .box{
-    border: 1px solid #dbdbdb;
-    box-shadow:none;
     margin-top: 1em;
   }
+}
+.title{
+  padding-top:1em;
+}
+.is-orange{
+  background-color: $orange;
+  color:#ffffff;
+  a{
+    color:#ffffff;
+  }
+}
+/** icons */
+.fa-plus-circle{
+  color:$orange;
 }
