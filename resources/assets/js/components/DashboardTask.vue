@@ -14,28 +14,17 @@
     import appstore from '../app-store';
     export default {
         props:{
-            taskId:{
-                type: Number,
-                required: true
-            },
-            sectionId:{
-                type: Number,
-                required: true
-            },
-            projectId:{
+            task:{
                 required: true
             }
         },
         computed:{
-            task: function(){
-                return appstore.getTask(this.projectId, this.sectionId, this.taskId);
-            },
             priority : function () {
                 switch (this.task.priority_id){
                     case 1 :
                     case "1" :
                         return 'High';
-                    break;
+                        break;
                     case 2 :
                     case "2" :
                         return 'Medium';
@@ -66,24 +55,24 @@
             toggelModal: function(modalName){
                 Event.$emit(modalName);
                 Event.$emit('clickedTask', this.task, this.sectionId);
-            },
-            done: function () {
-                let self = this;
-                axios.put('/api/task/' + self.task.id + '/done' )
-                    .then(function (response) {
-                        /** update task in array */
-                        self.task.isDone();
-                        /** toggle addTask modal */
-                        Event.$emit('swalSuccess', 'Task Done, Yaaaay');
-                    })
-                    .catch(function (error) {
-                        /** if error keep modal open and display errors */
-                        if(error.response.data){
-                            self.errors.record(error.response.data);
-                            Event.$emit('updateTaskToggleLoading');
-                        }
-                    });
             }
+//            done: function () {
+//                let self = this;
+//                axios.put('/api/task/' + self.task.id + '/done' )
+//                    .then(function (response) {
+//                        /** update task in array */
+//                        self.task.isDone();
+//                        /** toggle addTask modal */
+//                        Event.$emit('swalSuccess', 'Task Done, Yaaaay');
+//                    })
+//                    .catch(function (error) {
+//                        /** if error keep modal open and display errors */
+//                        if(error.response.data){
+//                            self.errors.record(error.response.data);
+//                            Event.$emit('updateTaskToggleLoading');
+//                        }
+//                    });
+//            }
         },
         mounted() {
 

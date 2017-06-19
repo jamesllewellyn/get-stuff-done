@@ -1,25 +1,19 @@
 
-window._ = require('lodash');
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
+// window._ = require('lodash');
 
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios = axios;
 
-// window.axios.defaults.headers.common = {
-//     'X-CSRF-TOKEN': window.Laravel.csrfToken,
-//     'X-Requested-With': 'XMLHttpRequest'
-// };
 import Vue from 'vue';
 window.Vue = Vue;
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
-
+import moment from 'moment';
+window.moment = moment;
+import VueSweetAlert from 'vue-sweetalert';
+Vue.use(VueSweetAlert);
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just

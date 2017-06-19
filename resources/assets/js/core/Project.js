@@ -15,5 +15,11 @@ class Project{
     addSection(section){
         this.sections.push(new Section(section));
     }
+    getWorkingOnIt(){
+        let workingOnit =  this.sections.filter(function (section) {
+            return section.workingOnIt();
+        });
+        return workingOnit;
+    }
 }
 export default Project;

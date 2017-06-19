@@ -38,6 +38,11 @@ use Illuminate\Http\Request;
  * Task API
  **********************/
     /** Section store */
-    Route::resource('section', 'SectionController', ['only' => [ 'show','update', 'destroy']]);
+    Route::resource('section', 'SectionController', ['only' => [ 'show', 'destroy']]);
     /** Task store */
     Route::post('/project/{project}/section/{section}/task', ['uses'=>'TaskController@store', 'as'=>'Task.store'] );
+    /** Update task */
+    Route::put('/project/{project}/section/{section}/task/{task}', ['uses'=>'TaskController@update', 'as'=>'Task.update'] );
+    /** flag task as done */
+    Route::put('/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'Task.done'] );
+

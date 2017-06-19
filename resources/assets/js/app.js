@@ -61,12 +61,13 @@ const app = new Vue({
                     appstore.addProject(response.data.project);
                     /** toggle addProject modal */
                     Event.$emit('addProject');
+                    Event.$emit('addProjectToggleLoading');
                 })
                 .catch(function (error) {
-                    console.log(error);
                     /** if error keep modal open and display errors */
                     if(error.response.data){
                         self.errors.record(error.response.data);
+                        Event.$emit('addProjectToggleLoading');
                     }
                 });
         },
@@ -82,6 +83,19 @@ const app = new Vue({
                     self.addProject();
                     break;
             }
+        });
+        /** trigger success sweet alert */
+        Event.$on('swalSuccess', function(message) {
+            self.$swal({title: "Success",
+                text:  message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false }).then(
+                function () {},
+                function (dismiss) {
+                    if (dismiss === 'timer') {
+                    }
+                })
         });
     }
 });

@@ -100,7 +100,7 @@
 
                     </div>
                 </nav>
-                <transition name="fade" mode="out-in">
+                <transition name="fade" mode="out-in" v-bind:key="$route.params.id">
                     <router-view ></router-view>
                 </transition>
             </div>

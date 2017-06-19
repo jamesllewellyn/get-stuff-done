@@ -46,6 +46,12 @@
             Event.$on(this.modalName, function() {
                 self.isVisible = (self.isVisible == true ? false : true);
             });
+            Event.$on(this.modalName+'ToggleLoading', function() {
+                console.log(this.modalName);
+                console.log(self.isLoading);
+                self.isLoading = (self.isLoading == true ? false : true);
+                console.log(self.isLoading);
+            });
         },
         methods: {
             hideModal: function(){

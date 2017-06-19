@@ -12,8 +12,6 @@ let routes = [
     { path: '/project/:id', component: require('./views/app/Project.vue'),
         children: [
             {
-                // UserProfile will be rendered inside User's <router-view>
-                // when /user/:id/profile is matched
                 path: '',
                 component: require('./views/app/Project.vue')
             }

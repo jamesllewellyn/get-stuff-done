@@ -35,7 +35,7 @@ class TaskController extends Controller
         /** create new task */
         $task = Task::create([
             'name' => $request->get('name'),
-            'due_date' => Carbon::parse($request->get('due_date')),
+            'due_date' => $request->get('due_date'),
             'due_time' => $request->get('due_time'),
             'sort_order' => $sortOrder,
             'priority_id' => $request->get('priority_id'),
@@ -64,10 +64,10 @@ class TaskController extends Controller
     /**
      * update task data
      * @param \Illuminate\Http\Request $request
-     * @param Section $section
+     * @param Task $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task) {
+    public function update(Request $request,Project $project, Section $section, Task $task) {
         /** If section cant be found return error */
         if(!$task){
             return ['success' => false, 'message' => 'The requested task could not be found'];
@@ -76,10 +76,30 @@ class TaskController extends Controller
         $this->validate(Request(),$task->validation, $task->messages);
         /** update record */
         $task->name = $request->get('name');
-        $task->due_date =  Carbon::parse($request->get('due_date'));
+        $task->due_date =  $request->get('due_date');
+        $task->priority_id =  $request->get('priority_id');
+        $task->note = $request->get('note');
+        $task->sort_order = $request->get('sort_order');
+        $task->status_id = $request->get('status_id');
         $task->save();
         /** return success and updated task */
         return ['success' => true, 'message' => 'task has been updated', 'task' => $task];
+    }
+    /**
+     * Flag task as done
+     * @param Task $task
+     * @return \Illuminate\Http\Response
+     */
+    public function done(Task $task) {
+        /** If task cant be found return error */
+        if(!$task){
+            return ['success' => false, 'message' => 'The requested task could not be found'];
+        }
+        /** flag task as done */
+        $task->status_id = 1;
+        $task->save();
+        /** return success message */
+        return ['success' => true, 'message' => 'Task '.$task->name.' has been flagged as done'];
     }
 
     /**

@@ -83,3 +83,42 @@ h3{
 .fa-plus-circle{
   color:$orange;
 }
+.handle{
+  font-weight: bold;
+  margin-right: 0.5em;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+/** buttons **/
+.status{
+  .fa{
+    padding-top: 0.25em;
+    transition: color .3s ease;
+    color: #f2f4f6;
+      &:hover,  &.is-done{
+        color:$green;
+      }
+      &.is-started{
+        color:$yellow;
+      }
+      &.is-over-due{
+        color:$red;
+      }
+  }
+}
+
+.dropdown {
+  box-shadow: 0 0 8px #777;
+  display: none;
+  left: 0;
+  position: absolute;
+  top: 100%;
+  z-index: 1000;
+}
+
+.dropdown.is-open {
+  display: block;
+}

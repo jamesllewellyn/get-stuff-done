@@ -43,7 +43,37 @@ let appstore = {
                 section.addTask(task);
             }
         });
-
+    },
+   updateTask: function (projectId, sectionId, updatedTask) {
+       /** find project */
+        let project =  this.projects.filter(function (project) {
+            return project.id == projectId;
+        });
+        /** find section */
+        let section = project[0].sections.filter(function (section) {
+            return section.id == sectionId;
+        });
+        /** find task **/
+        section[0].tasks.filter(function (task) {
+            if(task.id == updatedTask.id){
+                task.update(updatedTask);
+            }
+        });
+    },
+    getTask(projectId, sectionId, taskId){
+       /** find project */
+        let project =  this.projects.filter(function (project) {
+            return project.id == projectId;
+        });
+        /** find section */
+        let section = project[0].sections.filter(function (section) {
+            return section.id == sectionId;
+        });
+        /** find task **/
+        let task = section[0].tasks.filter(function (task) {
+            return task.id == taskId;
+        });
+        return task[0];
     }
 }
 export default appstore
