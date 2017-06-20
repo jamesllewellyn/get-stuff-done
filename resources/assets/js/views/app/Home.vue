@@ -5,7 +5,7 @@
         </h1>
         <div class="has-text-right">
             <span class="tag is-orange is-medium">
-                <a  @click.prevent.stop="event('addProject')" class="orange">Add Project</a>
+                <a  @click.prevent.stop="toggleModal('addProject')" class="orange">Add Project</a>
             </span>
         </div>
         <!--<div class="tabs is-centered">-->
@@ -22,7 +22,7 @@
                     <div class="box">
                         <h3 class="has-text-centered">Working On It</h3>
                         <table class="table task-table">
-                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}" :change="onMove" @end="drag=false"  :element="'tbody'">
+                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
                                 <dashboardTask v-for="task in workingOnIt"  :task="task"  :key="task.id"></dashboardTask>
                             </draggable>
                         </table>
@@ -31,13 +31,21 @@
                 <div class=" column is-half">
                     <div class="box">
                         <h3 class="has-text-centered">Over Due</h3>
-
+                        <table class="table task-table">
+                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
+                                <dashboardTask v-for="task in overDue"  :task="task"  :key="task.id"></dashboardTask>
+                            </draggable>
+                        </table>
                     </div>
                 </div>
                 <div class=" column is-half">
                     <div class="box">
-                        <h3 class="has-text-centered">Deadlines coming</h3>
-
+                        <h3 class="has-text-centered">Deadlines Coming</h3>
+                        <table class="table task-table">
+                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
+                                <dashboardTask v-for="task in upComing"  :task="task"  :key="task.id"></dashboardTask>
+                            </draggable>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -195,7 +203,10 @@
             }
         },
         methods: {
-
+            /** trigger toggle modal event */
+            toggleModal: function(modalName){
+                Event.$emit(modalName);
+            }
         },
         mounted() {
         }

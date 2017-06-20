@@ -21132,6 +21132,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -21203,7 +21211,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return upComing;
         }
     },
-    methods: {},
+    methods: {
+        /** trigger toggle modal event */
+        toggleModal: function toggleModal(modalName) {
+            Event.$emit(modalName);
+        }
+    },
     mounted: function mounted() {}
 });
 
@@ -26684,7 +26697,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": function($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        _vm.event('addProject')
+        _vm.toggleModal('addProject')
       }
     }
   }, [_vm._v("Add Project")])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [_c('div', {
@@ -26702,7 +26715,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "options": {
         handle: '.handle'
       },
-      "change": _vm.onMove,
       "element": 'tbody'
     },
     on: {
@@ -26727,24 +26739,82 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "task": task
       }
     })
-  }))], 1)])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm._m(1)])])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  }))], 1)])]), _vm._v(" "), _c('div', {
     staticClass: " column is-half"
   }, [_c('div', {
     staticClass: "box"
   }, [_c('h3', {
     staticClass: "has-text-centered"
-  }, [_vm._v("Over Due")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  }, [_vm._v("Over Due")]), _vm._v(" "), _c('table', {
+    staticClass: "table task-table"
+  }, [_c('draggable', {
+    attrs: {
+      "options": {
+        handle: '.handle'
+      },
+      "element": 'tbody'
+    },
+    on: {
+      "start": function($event) {
+        _vm.drag = true
+      },
+      "end": function($event) {
+        _vm.drag = false
+      }
+    },
+    model: {
+      value: (_vm.workingOnIt),
+      callback: function($$v) {
+        _vm.workingOnIt = $$v
+      },
+      expression: "workingOnIt"
+    }
+  }, _vm._l((_vm.overDue), function(task) {
+    return _c('dashboardTask', {
+      key: task.id,
+      attrs: {
+        "task": task
+      }
+    })
+  }))], 1)])]), _vm._v(" "), _c('div', {
     staticClass: " column is-half"
   }, [_c('div', {
     staticClass: "box"
   }, [_c('h3', {
     staticClass: "has-text-centered"
-  }, [_vm._v("Deadlines coming")])])])
-}]}
+  }, [_vm._v("Deadlines Coming")]), _vm._v(" "), _c('table', {
+    staticClass: "table task-table"
+  }, [_c('draggable', {
+    attrs: {
+      "options": {
+        handle: '.handle'
+      },
+      "element": 'tbody'
+    },
+    on: {
+      "start": function($event) {
+        _vm.drag = true
+      },
+      "end": function($event) {
+        _vm.drag = false
+      }
+    },
+    model: {
+      value: (_vm.workingOnIt),
+      callback: function($$v) {
+        _vm.workingOnIt = $$v
+      },
+      expression: "workingOnIt"
+    }
+  }, _vm._l((_vm.upComing), function(task) {
+    return _c('dashboardTask', {
+      key: task.id,
+      attrs: {
+        "task": task
+      }
+    })
+  }))], 1)])])])])])
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

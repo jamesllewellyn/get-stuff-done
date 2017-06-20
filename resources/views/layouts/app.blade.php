@@ -115,14 +115,6 @@
                         </p>
                         <p class="help is-danger" v-text="errors.get('name')"></p>
                     </div>
-                    {{--<div class="field">--}}
-                        {{--<label class="label">Due Date</label>--}}
-                        {{--<p class="control">--}}
-                            {{--<datepicker :config="{ wrap: true }" v-model="newTask.due_date">--}}
-                            {{--</datepicker>--}}
-                        {{--</p>--}}
-                        {{--<p class="help is-danger" v-text="errors.get('name')"></p>--}}
-                    {{--</div>--}}
                 </form>
             </div>
         </modal>
