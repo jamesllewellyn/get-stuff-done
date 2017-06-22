@@ -47,7 +47,7 @@
                     </ul>
                     <hr/>
                     <p class="menu-label">
-                        Projects <a  @click.prevent.stop="toggelModal('addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
+                        Projects <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                     </p>
                     <ul class="menu-list">
                         <li v-for="project in projects">
@@ -106,20 +106,11 @@
             </div>
         </div>
         <modal modal-name="addProject" title="Add New Project">
-            <div slot="body">
-                <form>
-                    <div class="field">
-                        <label class="label">Project Name</label>
-                        <p class="control">
-                            <input class="input" type="text" name="name" placeholder="Project Name" v-model="newProject.name">
-                        </p>
-                        <p class="help is-danger" v-text="errors.get('name')"></p>
-                    </div>
-                </form>
-            </div>
+            <template slot="body">
+                <add-project></add-project>
+            </template>
         </modal>
     </div>
-
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

@@ -5,7 +5,7 @@
         </h1>
         <div class="has-text-right">
             <span class="tag is-orange is-medium">
-                <a  @click.prevent.stop="toggleModal('addProject')" class="orange">Add Project</a>
+                <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')" class="orange">Add Project</a>
             </span>
         </div>
         <!--<div class="tabs is-centered">-->
@@ -22,9 +22,9 @@
                     <div class="box">
                         <h3 class="has-text-centered">Working On It</h3>
                         <table class="table task-table">
-                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
-                                <dashboardTask v-for="task in workingOnIt"  :task="task"  :key="task.id"></dashboardTask>
-                            </draggable>
+                            <!--<draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">-->
+                                <!--<dashboardTask v-for="task in workingOnIt"  :task="task"  :key="task.id"></dashboardTask>-->
+                            <!--</draggable>-->
                         </table>
                     </div>
                 </div>
@@ -32,9 +32,9 @@
                     <div class="box">
                         <h3 class="has-text-centered">Over Due</h3>
                         <table class="table task-table">
-                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
-                                <dashboardTask v-for="task in overDue"  :task="task"  :key="task.id"></dashboardTask>
-                            </draggable>
+                            <!--<draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">-->
+                                <!--<dashboardTask v-for="task in overDue"  :task="task"  :key="task.id"></dashboardTask>-->
+                            <!--</draggable>-->
                         </table>
                     </div>
                 </div>
@@ -42,9 +42,9 @@
                     <div class="box">
                         <h3 class="has-text-centered">Deadlines Coming</h3>
                         <table class="table task-table">
-                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
-                                <dashboardTask v-for="task in upComing"  :task="task"  :key="task.id"></dashboardTask>
-                            </draggable>
+                            <!--<draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">-->
+                                <!--<dashboardTask v-for="task in upComing"  :task="task"  :key="task.id"></dashboardTask>-->
+                            <!--</draggable>-->
                         </table>
                     </div>
                 </div>
@@ -133,79 +133,62 @@
 </template>
 
 <script>
-    import appstore from '../../app-store';
-    import draggable from 'vuedraggable'
-    import dashboardTask from '../../components/DashboardTask.vue';
+    import store from '../../store';
+//    import draggable from 'vuedraggable'
+//    import dashboardTask from '../../components/DashboardTask.vue';
     export default {
         data() {
             return{
-                user: appstore.user,
-                projects: appstore.projects
+//                user: appstore.user,
+//                projects: appstore.projects
             }
         },
         components: {
-            dashboardTask , draggable
+//            dashboardTask , draggable
         },
         computed: {
             /**
              * todo: Refactor all of theses methods to remove loops in loops
              * **/
             workingOnIt: function(){
-                let workingOn = [];
-                let projectId = '';
-                let sectionId = '';
-                /** todo: this is bad :( refactor ASAP **/
-                this.projects.forEach(function (project) {
-                    projectId = project.id;
-                    project.sections.forEach( function(section){
-                        sectionId = section.id;
-                        section.tasks.forEach(function (task) {
-                            if(task.status_id == 2){
-                                task.projectId = projectId;
-                                task.sectionId = sectionId;
-                                workingOn.push(task);
-                            }
-                        });
-                    });
-                });
-                return workingOn;
+                return store.getters.getWorkingOnIt();
             },
-            overDue: function(){
-                let overDue = [];
-                let now = moment();
-                /** todo: this is bad :( refactor ASAP **/
-                this.projects.forEach(function (project) {
-                    project.sections.forEach( function(section){
-                        section.tasks.forEach(function (task) {
-                            if( moment(task.due_date).isBefore( now ) ){
-                                overDue.push(task);
-                            }
-                        });
-                    });
-                });
-                return overDue;
-            },
-            upComing: function(){
-                let upComing = [];
-                let now = moment();
-                let newWeek = moment().days(7);
-                /** todo: this is bad :( refactor ASAP **/
-                this.projects.forEach(function (project) {
-                    project.sections.forEach( function(section){
-                        section.tasks.forEach(function (task) {
-                            if(moment(task.due_date).isBetween(now, newWeek) ){
-                                upComing.push(task);
-                            }
-                        });
-                    });
-                });
-                return upComing;
-            }
+//            overDue: function(){
+//                let overDue = [];
+//                let now = moment();
+//                /** todo: this is bad :( refactor ASAP **/
+//                this.projects.forEach(function (project) {
+//                    project.sections.forEach( function(section){
+//                        section.tasks.forEach(function (task) {
+//                            if( moment(task.due_date).isBefore( now ) ){
+//                                overDue.push(task);
+//                            }
+//                        });
+//                    });
+//                });
+//                return overDue;
+//            },
+//            upComing: function(){
+//                let upComing = [];
+//                let now = moment();
+//                let newWeek = moment().days(7);
+//                /** todo: this is bad :( refactor ASAP **/
+//                this.projects.forEach(function (project) {
+//                    project.sections.forEach( function(section){
+//                        section.tasks.forEach(function (task) {
+//                            if(moment(task.due_date).isBetween(now, newWeek) ){
+//                                upComing.push(task);
+//                            }
+//                        });
+//                    });
+//                });
+//                return upComing;
+//            }
         },
         methods: {
             /** trigger toggle modal event */
-            toggleModal: function(modalName){
-                Event.$emit(modalName);
+            triggerEvent: function(eventName, payload){
+                Event.$emit(eventName, payload);
             }
         },
         mounted() {

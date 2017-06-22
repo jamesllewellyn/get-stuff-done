@@ -43,6 +43,6 @@ class StatusTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('status');
     }
 }

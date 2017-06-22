@@ -1,30 +1,23 @@
 <template>
     <transition name="modal" mode="out-in">
-        <div class="modal" :class="isVisible ? 'is-active' : '' " v-if="isVisible">
+        <div class="modal" :class="modal.isVisible ? 'is-active' : '' " v-if="modal.isVisible">
             <div class="modal-background"  @click="hideModal()"></div>
             <div class="modal-card modal-container">
                 <header class="modal-card-head">
                     <p class="modal-card-title" v-text="title"></p>
                     <button class="delete" @click="hideModal()"></button>
                 </header>
-                <section class="modal-card-body">
-                    <slot name="body"></slot>
-                </section>
-                <footer class="modal-card-foot">
-                    <a class="button is-success" :class="{ 'is-loading': isLoading}" @click="onSubmit()">Save changes</a>
-                    <a class="button"  @click="hideModal()">Cancel</a>
-                </footer>
+                <slot name="body"></slot>
             </div>
         </div>
     </transition>
 </template>
 
 <script>
-
+    import store from '../store';
     export default {
         data() {
             return{
-                isVisible : false
             }
         },
         props: {
@@ -36,30 +29,21 @@
                 type: String,
                 required: true
             },
-            isLoading:{
-                type: Boolean,
-                default: false
-            },
+        },
+        computed:{
+            modal: function(){
+                return store.getters.getModalByName(this.modalName);
+            }
         },
         created: function() {
-            let self = this;
-            Event.$on(this.modalName, function() {
-                self.isVisible = (self.isVisible == true ? false : true);
-            });
-            Event.$on(this.modalName+'ToggleLoading', function() {
-                console.log(this.modalName);
-                console.log(self.isLoading);
-                self.isLoading = (self.isLoading == true ? false : true);
-                console.log(self.isLoading);
-            });
+            store.commit('ADD_MODAL',  { name:  this.modalName })
         },
         methods: {
             hideModal: function(){
-                this.isVisible = false;
+                store.commit('TOGGLE_MODAL_IS_VISIBLE', {name : this.modalName});
             },
-            onSubmit: function(){
-                this.isLoading = true;
-                Event.$emit('modalSubmit', this.modalName);
+            buttonLoading:function(){
+
             }
         }
     }

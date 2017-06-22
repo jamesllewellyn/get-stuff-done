@@ -4,17 +4,17 @@
             <span class="handle" aria-hidden="true">: :</span>
             <a class="status" @click.prevent.stop="done()"><i class="fa fa-circle" aria-hidden="true" :class="status"></i> </a>
         </td>
-        <td class="is-centered-text"><a @click.prevent.stop="toggelModal('updateTask')">{{task.name}}</a></td>
+        <td class="is-centered-text"><a @click.prevent.stop="showTask()">{{task.name}}</a></td>
         <td class="is-centered-text">{{priority}} </td>
         <td class="is-centered-text">{{ due_date }}</td>
     </tr>
 </template>
 
 <script>
-    import appstore from '../app-store';
+    import store from '../store';
     export default {
         props:{
-            taskId:{
+            id:{
                 type: Number,
                 required: true
             },
@@ -28,7 +28,7 @@
         },
         computed:{
             task: function(){
-                return appstore.getTask(this.projectId, this.sectionId, this.taskId);
+                return store.getters.getTaskById({projectId :this.projectId, sectionId: this.sectionId, id: this.id});
             },
             priority : function () {
                 switch (this.task.priority_id){
@@ -63,26 +63,26 @@
             }
         },
         methods:{
-            toggelModal: function(modalName){
-                Event.$emit(modalName);
-                Event.$emit('clickedTask', this.task, this.sectionId);
+            showTask: function(){
+                Event.$emit('toggleModal','updateTask');
+                Event.$emit('clickedTask',this.sectionId, this.id);
             },
             done: function () {
-                let self = this;
-                axios.put('/api/task/' + self.task.id + '/done' )
-                    .then(function (response) {
-                        /** update task in array */
-                        self.task.isDone();
-                        /** toggle addTask modal */
-                        Event.$emit('swalSuccess', 'Task Done, Yaaaay');
-                    })
-                    .catch(function (error) {
-                        /** if error keep modal open and display errors */
-                        if(error.response.data){
-                            self.errors.record(error.response.data);
-                            Event.$emit('updateTaskToggleLoading');
-                        }
-                    });
+//                let self = this;
+//                axios.put('/api/task/' + self.task.id + '/done' )
+//                    .then(function (response) {
+//                        /** update task in array */
+//                        self.task.isDone();
+//                        /** toggle addTask modal */
+//                        Event.$emit('swalSuccess', 'Task Done, Yaaaay');
+//                    })
+//                    .catch(function (error) {
+//                        /** if error keep modal open and display errors */
+//                        if(error.response.data){
+//                            self.errors.record(error.response.data);
+//                            Event.$emit('updateTaskToggleLoading');
+//                        }
+//                    });
             }
         },
         mounted() {
