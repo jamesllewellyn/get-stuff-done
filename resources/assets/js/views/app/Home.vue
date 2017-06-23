@@ -22,9 +22,9 @@
                     <div class="box">
                         <h3 class="has-text-centered">Working On It</h3>
                         <table class="table task-table">
-                            <!--<draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">-->
-                                <!--<dashboardTask v-for="task in workingOnIt"  :task="task"  :key="task.id"></dashboardTask>-->
-                            <!--</draggable>-->
+                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
+                                <dashboardTask v-for="task in workingOnIt"  :id="task.id" :task="task" :key="task.id"></dashboardTask>
+                            </draggable>
                         </table>
                     </div>
                 </div>
@@ -32,9 +32,9 @@
                     <div class="box">
                         <h3 class="has-text-centered">Over Due</h3>
                         <table class="table task-table">
-                            <!--<draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">-->
-                                <!--<dashboardTask v-for="task in overDue"  :task="task"  :key="task.id"></dashboardTask>-->
-                            <!--</draggable>-->
+                            <draggable v-model="overDue" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
+                                <dashboardTask v-for="task in overDue"  :task="task" :id="task.id" :key="task.id"></dashboardTask>
+                            </draggable>
                         </table>
                     </div>
                 </div>
@@ -42,148 +42,40 @@
                     <div class="box">
                         <h3 class="has-text-centered">Deadlines Coming</h3>
                         <table class="table task-table">
-                            <!--<draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">-->
-                                <!--<dashboardTask v-for="task in upComing"  :task="task"  :key="task.id"></dashboardTask>-->
-                            <!--</draggable>-->
+                            <draggable v-model="upComing" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'tbody'">
+                                <dashboardTask v-for="task in upComing"  :task="task" :id="task.id"   :key="task.id"></dashboardTask>
+                            </draggable>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-
-
-    <!--<div class="tabs is-toggle is-marginless">-->
-        <!--<ul>-->
-            <!--<li class="is-active">-->
-                <!--<a>-->
-                    <!--<span>Today </span>-->
-                    <!--<span class="tag">20</span>-->
-                <!--</a>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<a class="is-danger">-->
-                    <!--<span>Stuff Not Finished</span>-->
-                    <!--<span class="tag is-danger">3</span>-->
-                <!--</a>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<a>-->
-                    <!--<span>New Stuff</span>-->
-                    <!--<span class="tag is-success">1</span>-->
-                <!--</a>-->
-            <!--</li>-->
-        <!--</ul>-->
-    <!--</div>-->
-    <!--<div>-->
-        <!--<div class="box">-->
-            <!--<h3><i class="fa fa-caret-down caret" aria-hidden="true"></i>To Do First <span class="tag ">5</span></h3>-->
-            <!--<table class="table task-table">-->
-                <!--<tbody>-->
-                <!--<tr>-->
-                    <!--<td>-->
-                        <!--<i class="fa fa-sort" aria-hidden="true"></i>-->
-                        <!--<a href="#"><i class="fa fa-check-circle-o" aria-hidden="true"></i> </a>-->
-                    <!--</td>-->
-                    <!--<td>Get out of bed</td>-->
-                    <!--<td><a href="#">#Morning</a></td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>-->
-                        <!--<i class="fa fa-sort" aria-hidden="true"></i>-->
-                        <!--<a href="#"><i class="fa fa-check-circle-o" aria-hidden="true"></i> </a>-->
-                    <!--</td>-->
-                    <!--<td >Have a shower</td>-->
-                    <!--<td><a href="#">#Morning</a></td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>-->
-                        <!--<i class="fa fa-sort" aria-hidden="true"></i>-->
-                        <!--<a href="#"><i class="fa fa-check-circle-o" aria-hidden="true"></i>-->
-                        <!--</a>-->
-                    <!--</td>-->
-                    <!--<td ><p>Get Dressed</p></td>-->
-                    <!--<td><a href="#">#Morning</a></td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>-->
-                        <!--<i class="fa fa-sort" aria-hidden="true"></i>-->
-                        <!--<a href="#"><i class="fa fa-check-circle-o" aria-hidden="true"></i> </a>-->
-                    <!--</td>-->
-                    <!--<td >Eat Breakfast</td>-->
-                    <!--<td><a href="#">#Morning</a></td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>-->
-                        <!--<i class="fa fa-sort" aria-hidden="true"></i>-->
-                        <!--<a href="#"><i class="fa fa-check-circle-o" aria-hidden="true"></i> </a>-->
-                    <!--</td>-->
-                    <!--<td >Brush Teeth</td>-->
-                    <!--<td><a href="#">#Morning</a></td>-->
-                <!--</tr>-->
-                <!--</tbody>-->
-            <!--</table>-->
-            <!--<h3><i class="fa fa-caret-right caret" aria-hidden="true"></i>To Do Later <span class="tag ">8</span></h3>-->
-            <!--<h3><i class="fa fa-caret-right caret" aria-hidden="true"></i>To Do If I Have Time <span class="tag ">2</span></h3>-->
-            <!--<h3><i class="fa fa-caret-right caret" aria-hidden="true"></i>Moved To Tomorrow <span class="tag ">0</span></h3>-->
-            <!--<h3><i class="fa fa-caret-right caret" aria-hidden="true"></i>Done <span class="tag ">2</span></h3>-->
-
-        <!--</div>-->
-    <!--</div>-->
     </div>
 </template>
 
 <script>
     import store from '../../store';
-//    import draggable from 'vuedraggable'
-//    import dashboardTask from '../../components/DashboardTask.vue';
+    import draggable from 'vuedraggable'
+    import dashboardTask from '../../components/DashboardTask.vue';
     export default {
         data() {
             return{
-//                user: appstore.user,
-//                projects: appstore.projects
+
             }
         },
         components: {
-//            dashboardTask , draggable
+            dashboardTask, draggable
         },
         computed: {
-            /**
-             * todo: Refactor all of theses methods to remove loops in loops
-             * **/
             workingOnIt: function(){
-                return store.getters.getWorkingOnIt();
+                return store.getters.getWorkingOnIt;
             },
-//            overDue: function(){
-//                let overDue = [];
-//                let now = moment();
-//                /** todo: this is bad :( refactor ASAP **/
-//                this.projects.forEach(function (project) {
-//                    project.sections.forEach( function(section){
-//                        section.tasks.forEach(function (task) {
-//                            if( moment(task.due_date).isBefore( now ) ){
-//                                overDue.push(task);
-//                            }
-//                        });
-//                    });
-//                });
-//                return overDue;
-//            },
-//            upComing: function(){
-//                let upComing = [];
-//                let now = moment();
-//                let newWeek = moment().days(7);
-//                /** todo: this is bad :( refactor ASAP **/
-//                this.projects.forEach(function (project) {
-//                    project.sections.forEach( function(section){
-//                        section.tasks.forEach(function (task) {
-//                            if(moment(task.due_date).isBetween(now, newWeek) ){
-//                                upComing.push(task);
-//                            }
-//                        });
-//                    });
-//                });
-//                return upComing;
-//            }
+            overDue: function(){
+                return store.getters.getOverDue;
+            },
+            upComing: function(){
+                return store.getters.getUpComing;
+            }
         },
         methods: {
             /** trigger toggle modal event */

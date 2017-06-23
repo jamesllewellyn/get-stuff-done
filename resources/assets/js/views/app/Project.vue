@@ -51,16 +51,18 @@
         data() {
             return{
                 /** current section id */
-                id:'',
                 sectionId: '',
                 taskId:''
             }
         },
         components:{ProjectSection, Modal, AddSection , AddTask, UpdateTask},
         computed: {
+            id: function(){
+                return this.$route.params.id;
+            },
             project: function() {
                 /** get  project via route param */
-                return store.getters.getProjectById(this.$route.params.id);
+                return store.getters.getProjectById(this.id);
             }
         },
         methods: {
@@ -92,7 +94,7 @@
         mounted() {
             let self = this;
             /** set id from route param **/
-            this.id = this.$route.params.id;
+
             Event.$on('clickedSection', function(id) {
                 self.sectionId = id;
             });

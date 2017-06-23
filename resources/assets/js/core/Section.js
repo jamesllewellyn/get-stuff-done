@@ -17,13 +17,13 @@ class Section{
         this.tasks.push(new Task(task));
         return true;
     }
-    getWorkingOnIt(){
-        let workingOnit =  this.tasks.filter(function (task) {
-            if(task.status_id = 2){
-                return task;
-            }
-        });
-        return workingOnit;
-    }
+    // getWorkingOnIt(){
+    //     let workingOnit =  this.tasks.filter(function (task) {
+    //         if(task.status_id = 2){
+    //             return task;
+    //         }
+    //     });
+    //     return workingOnit;
+    // }
 }
 export default Section;

@@ -230,7 +230,7 @@ const store = new Vuex.Store({
         /***********************
          * Task Getters
          **********************/
-        getTaskById: (state, getters) => ({projectId, sectionId, id}) => {
+        getTaskByIds: (state, getters) => ({projectId, sectionId, id}) => {
             /** cast ids to int **/
             let pId = parseInt(projectId);
             let sId = parseInt(sectionId);
@@ -242,14 +242,58 @@ const store = new Vuex.Store({
             /** find and return task **/
             return state.projects[pIdx].sections[sIdx].tasks.find(task => task.id === tId);
         },
-        getWorkingOnIt: (state) =>  {
-            return 'hi';
-            // return state.projects.filter(
-            //     project => project.sections.filter(
-            //         section => section.tasks.filter
-            //         (task => task.status_id == 2)
-            //     )
-            // );
+        getTask: state => (id) =>{
+           let task =  state.projects.forEach(function (project) {
+                 project.sections.forEach(function (section) {
+                    return section.tasks.find(task => task.id === id);
+                });
+            });
+           re
+        },
+        getWorkingOnIt: state => {
+           let workingOnIt = [];
+            state.projects.forEach(function (project) {
+               project.sections.forEach(function (section) {
+                   section.tasks.forEach(function(task){
+                        if(task.status_id === 2){workingOnIt.push(task);}
+                   });
+               });
+           });
+            return workingOnIt;
+        },
+        getOverDue: state => {
+           let overDue = [];
+           let now = moment();
+            state.projects.forEach(function (project) {
+                project.sections.forEach(function (section) {
+                    section.tasks.forEach(function(task){
+                       if( moment(task.due_date).isBefore( now ) ){
+                           overDue.push(task);
+                       }
+                    });
+                });
+            });
+            return overDue;
+        },
+        getUpComing: state => {
+           let upComing = [];
+           let now = moment();
+           let nextWeek = moment().add(7, 'days');
+
+            state.projects.forEach(function (project) {
+                project.sections.forEach(function (section) {
+                    section.tasks.forEach(function(task){
+                        console.log(now);
+                        console.log(nextWeek);
+                        console.log(task.due_date);
+                        console.log(moment(task.due_date).isBetween(now, nextWeek));
+                        if(moment(task.due_date).isBetween(now, nextWeek) ){
+                               upComing.push(task);
+                           }
+                    });
+                });
+            });
+            return upComing;
         },
         /***********************
          * Modal Getters

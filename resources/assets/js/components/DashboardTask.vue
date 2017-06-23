@@ -11,14 +11,20 @@
 </template>
 
 <script>
-    import appstore from '../app-store';
+    import store from '../store';
     export default {
         props:{
+            id:{
+                required: true
+            },
             task:{
                 required: true
             }
         },
         computed:{
+//            task: function(){
+//                return store.getters.getTaskById({projectId :this.projectId, sectionId: this.sectionId, id: this.id});
+//            },
             priority : function () {
                 switch (this.task.priority_id){
                     case 1 :
