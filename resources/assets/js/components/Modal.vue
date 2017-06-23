@@ -42,9 +42,6 @@
             hideModal: function(){
                 store.commit('TOGGLE_MODAL_IS_VISIBLE', {name : this.modalName});
             },
-            buttonLoading:function(){
-
-            }
         }
     }
 </script>

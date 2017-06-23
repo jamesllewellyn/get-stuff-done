@@ -22,6 +22,7 @@
             }
         },
         computed:{
+            /** todo: use this to get task from store instead of passing it in **/
 //            task: function(){
 //                return store.getters.getTaskById({projectId :this.projectId, sectionId: this.sectionId, id: this.id});
 //            },

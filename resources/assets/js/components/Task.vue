@@ -49,6 +49,7 @@
             },
             status: function(){
                 let now = moment();
+                /** todo: clean this up **/
                 if(this.task.status_id == 1){
                     return  'is-done';
                 }
@@ -68,21 +69,7 @@
                 Event.$emit('clickedTask',this.sectionId, this.id);
             },
             done: function () {
-//                let self = this;
-//                axios.put('/api/task/' + self.task.id + '/done' )
-//                    .then(function (response) {
-//                        /** update task in array */
-//                        self.task.isDone();
-//                        /** toggle addTask modal */
-//                        Event.$emit('swalSuccess', 'Task Done, Yaaaay');
-//                    })
-//                    .catch(function (error) {
-//                        /** if error keep modal open and display errors */
-//                        if(error.response.data){
-//                            self.errors.record(error.response.data);
-//                            Event.$emit('updateTaskToggleLoading');
-//                        }
-//                    });
+                /** todo: move this into store **/
             }
         },
         mounted() {

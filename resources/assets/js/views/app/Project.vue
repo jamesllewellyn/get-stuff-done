@@ -50,7 +50,6 @@
     export default {
         data() {
             return{
-                /** current section id */
                 sectionId: '',
                 taskId:''
             }
@@ -66,26 +65,6 @@
             }
         },
         methods: {
-
-//            updateTask: function(){
-//                let self = this;
-//                axios.put('/api/project/'+ self.project.id +'/section/' + self.sectionId + '/task/' + self.editTask.id , self.editTask )
-//                    .then(function (response) {
-//                        /** update task in array */
-//                        appstore.updateTask(self.project.id, self.sectionId, response.data.task);
-//                        /** toggle addTask modal */
-//                        Event.$emit('updateTask');
-//                        /** toggle modal save button loading state  */
-//                        Event.$emit('updateTaskToggleLoading');
-//                    })
-//                    .catch(function (error) {
-//                        /** if error keep modal open and display errors */
-//                        if(error.response.data){
-//                            self.errors.record(error.response.data);
-//                            Event.$emit('updateTaskToggleLoading');
-//                        }
-//                    });
-//            },
             /** trigger event */
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);
@@ -93,7 +72,6 @@
         },
         mounted() {
             let self = this;
-            /** set id from route param **/
 
             Event.$on('clickedSection', function(id) {
                 self.sectionId = id;

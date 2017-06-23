@@ -243,15 +243,16 @@ const store = new Vuex.Store({
             return state.projects[pIdx].sections[sIdx].tasks.find(task => task.id === tId);
         },
         getTask: state => (id) =>{
-           let task =  state.projects.forEach(function (project) {
+            /** todo: Refactor this with load dash and git working**/
+            let task =  state.projects.forEach(function (project) {
                  project.sections.forEach(function (section) {
                     return section.tasks.find(task => task.id === id);
                 });
             });
-           re
         },
         getWorkingOnIt: state => {
            let workingOnIt = [];
+            /** todo: Refactor this with load dash **/
             state.projects.forEach(function (project) {
                project.sections.forEach(function (section) {
                    section.tasks.forEach(function(task){
@@ -264,6 +265,7 @@ const store = new Vuex.Store({
         getOverDue: state => {
            let overDue = [];
            let now = moment();
+            /** todo: Refactor this with load dash **/
             state.projects.forEach(function (project) {
                 project.sections.forEach(function (section) {
                     section.tasks.forEach(function(task){
@@ -279,7 +281,7 @@ const store = new Vuex.Store({
            let upComing = [];
            let now = moment();
            let nextWeek = moment().add(7, 'days');
-
+            /** todo: Refactor this with load dash **/
             state.projects.forEach(function (project) {
                 project.sections.forEach(function (section) {
                     section.tasks.forEach(function(task){
