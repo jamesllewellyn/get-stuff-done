@@ -285,13 +285,9 @@ const store = new Vuex.Store({
             state.projects.forEach(function (project) {
                 project.sections.forEach(function (section) {
                     section.tasks.forEach(function(task){
-                        console.log(now);
-                        console.log(nextWeek);
-                        console.log(task.due_date);
-                        console.log(moment(task.due_date).isBetween(now, nextWeek));
                         if(moment(task.due_date).isBetween(now, nextWeek) ){
                                upComing.push(task);
-                           }
+                         }
                     });
                 });
             });
