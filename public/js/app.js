@@ -5197,6 +5197,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Section Getters
          **********************/
+        getSections: function getSections(state, getters) {
+            return _.flatten(state.projects.map(function (project) {
+                return project.sections;
+            }));
+        },
         getSectionById: function getSectionById(state, getters) {
             return function (_ref24) {
                 var projectId = _ref24.projectId,
@@ -5218,6 +5223,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Task Getters
          **********************/
+        getTasks: function getTasks(state, getters) {
+            return _.flatten(getters.getSections.map(function (section) {
+                return section.tasks;
+            }));
+        },
         getTaskByIds: function getTaskByIds(state, getters) {
             return function (_ref25) {
                 var projectId = _ref25.projectId,
@@ -5242,63 +5252,29 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 });
             };
         },
-        getTask: function getTask(state) {
+        getTask: function getTask(state, getters) {
             return function (id) {
-                return state.projects.forEach(function (project) {
-                    return project.sections.forEach(function (section) {
-                        return section.tasks.find(function (task) {
-                            return task.id === id;
-                        });
-                    });
+                getters.getTasks.find(function (task) {
+                    return task.id === id;
                 });
             };
         },
-        getWorkingOnIt: function getWorkingOnIt(state) {
-            var workingOnIt = [];
-            state.projects.forEach(function (project) {
-                project.sections.forEach(function (section) {
-                    section.tasks.forEach(function (task) {
-                        if (task.status_id === 2) {
-                            workingOnIt.push(task);
-                        }
-                    });
-                });
-            });
-            return workingOnIt;
+        getWorkingOnIt: function getWorkingOnIt(state, getters) {
+            return _.filter(getters.getTasks, ['status_id', 2]);
         },
-        getOverDue: function getOverDue(state) {
-            var overDue = [];
+        getOverDue: function getOverDue(state, getters) {
             var now = moment();
-            state.projects.forEach(function (project) {
-                project.sections.forEach(function (section) {
-                    section.tasks.forEach(function (task) {
-                        if (moment(task.due_date).isBefore(now)) {
-                            overDue.push(task);
-                        }
-                    });
-                });
+            return _.filter(getters.getTasks, function (task) {
+                return moment(task.due_date).isBefore(now);
             });
-            return overDue;
         },
-        getUpComing: function getUpComing(state) {
+        getUpComing: function getUpComing(state, getters) {
             var upComing = [];
             var now = moment();
             var nextWeek = moment().add(7, 'days');
-
-            state.projects.forEach(function (project) {
-                project.sections.forEach(function (section) {
-                    section.tasks.forEach(function (task) {
-                        console.log(now);
-                        console.log(nextWeek);
-                        console.log(task.due_date);
-                        console.log(moment(task.due_date).isBetween(now, nextWeek));
-                        if (moment(task.due_date).isBetween(now, nextWeek)) {
-                            upComing.push(task);
-                        }
-                    });
-                });
+            return _.filter(getters.getTasks, function (task) {
+                return moment(task.due_date).isBetween(now, nextWeek);
             });
-            return upComing;
         },
         /***********************
          * Modal Getters
@@ -5358,15 +5334,6 @@ var Section = function () {
             this.tasks.push(new __WEBPACK_IMPORTED_MODULE_0__Task__["a" /* default */](task));
             return true;
         }
-        // getWorkingOnIt(){
-        //     let workingOnit =  this.tasks.filter(function (task) {
-        //         if(task.status_id = 2){
-        //             return task;
-        //         }
-        //     });
-        //     return workingOnit;
-        // }
-
     }]);
 
     return Section;
@@ -5571,13 +5538,6 @@ var Project = function () {
         value: function addSection(section) {
             this.sections.push(new __WEBPACK_IMPORTED_MODULE_0__Section__["a" /* default */](section));
         }
-        // getWorkingOnIt(){
-        //     let workingOnit =  this.sections.filter(function (section) {
-        //         return section.workingOnIt();
-        //     });
-        //     return workingOnit;
-        // }
-
     }]);
 
     return Project;
@@ -21941,6 +21901,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     computed: {
+        /** todo: use this to get task from store instead of passing it in **/
         //            task: function(){
         //                return store.getters.getTaskById({projectId :this.projectId, sectionId: this.sectionId, id: this.id});
         //            },
@@ -22052,8 +22013,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         hideModal: function hideModal() {
             __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].commit('TOGGLE_MODAL_IS_VISIBLE', { name: this.modalName });
-        },
-        buttonLoading: function buttonLoading() {}
+        }
     }
 });
 
@@ -22171,6 +22131,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         status: function status() {
             var now = moment();
+            /** todo: clean this up **/
             if (this.task.status_id == 1) {
                 return 'is-done';
             }
@@ -22190,21 +22151,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Event.$emit('clickedTask', this.sectionId, this.id);
         },
         done: function done() {
-            //                let self = this;
-            //                axios.put('/api/task/' + self.task.id + '/done' )
-            //                    .then(function (response) {
-            //                        /** update task in array */
-            //                        self.task.isDone();
-            //                        /** toggle addTask modal */
-            //                        Event.$emit('swalSuccess', 'Task Done, Yaaaay');
-            //                    })
-            //                    .catch(function (error) {
-            //                        /** if error keep modal open and display errors */
-            //                        if(error.response.data){
-            //                            self.errors.record(error.response.data);
-            //                            Event.$emit('updateTaskToggleLoading');
-            //                        }
-            //                    });
+            /** todo: move this into store **/
         }
     },
     mounted: function mounted() {}
@@ -22718,7 +22665,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            /** current section id */
             sectionId: '',
             taskId: ''
         };
@@ -22735,26 +22681,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-
-        //            updateTask: function(){
-        //                let self = this;
-        //                axios.put('/api/project/'+ self.project.id +'/section/' + self.sectionId + '/task/' + self.editTask.id , self.editTask )
-        //                    .then(function (response) {
-        //                        /** update task in array */
-        //                        appstore.updateTask(self.project.id, self.sectionId, response.data.task);
-        //                        /** toggle addTask modal */
-        //                        Event.$emit('updateTask');
-        //                        /** toggle modal save button loading state  */
-        //                        Event.$emit('updateTaskToggleLoading');
-        //                    })
-        //                    .catch(function (error) {
-        //                        /** if error keep modal open and display errors */
-        //                        if(error.response.data){
-        //                            self.errors.record(error.response.data);
-        //                            Event.$emit('updateTaskToggleLoading');
-        //                        }
-        //                    });
-        //            },
         /** trigger event */
         triggerEvent: function triggerEvent(eventName, payload) {
             Event.$emit(eventName, payload);
@@ -22762,7 +22688,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         var self = this;
-        /** set id from route param **/
 
         Event.$on('clickedSection', function (id) {
             self.sectionId = id;

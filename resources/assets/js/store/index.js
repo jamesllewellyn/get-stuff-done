@@ -218,6 +218,10 @@ const store = new Vuex.Store({
         /***********************
          * Section Getters
          **********************/
+        /** returns all project sections flattered into one array **/
+        getSections: (state, getters) => {
+            return _.flatten( state.projects.map(project => project.sections) );
+        },
         getSectionById: (state, getters) => ({projectId, sectionId}) => {
             /** cast ids to int **/
             let pId = parseInt(projectId);
@@ -230,6 +234,11 @@ const store = new Vuex.Store({
         /***********************
          * Task Getters
          **********************/
+        /** returns all the user task**/
+        getTasks: (state, getters) => {
+            return _.flatten( getters.getSections.map(section => section.tasks) );
+        },
+        /** returns a task **/
         getTaskByIds: (state, getters) => ({projectId, sectionId, id}) => {
             /** cast ids to int **/
             let pId = parseInt(projectId);
@@ -242,56 +251,25 @@ const store = new Vuex.Store({
             /** find and return task **/
             return state.projects[pIdx].sections[sIdx].tasks.find(task => task.id === tId);
         },
-        getTask: state => (id) =>{
-            /** todo: Refactor this with load dash and git working**/
-            let task =  state.projects.forEach(function (project) {
-                 project.sections.forEach(function (section) {
-                    return section.tasks.find(task => task.id === id);
-                });
-            });
+        /** returns a task **/
+        getTask: (state, getters) => (id) =>{
+            getters.getTasks.find(task => task.id === id);
         },
-        getWorkingOnIt: state => {
-           let workingOnIt = [];
-            /** todo: Refactor this with load dash **/
-            state.projects.forEach(function (project) {
-               project.sections.forEach(function (section) {
-                   section.tasks.forEach(function(task){
-                        if(task.status_id === 2){workingOnIt.push(task);}
-                   });
-               });
-           });
-            return workingOnIt;
+        /** filters getTasks() and returns tasks currently been worked on **/
+        getWorkingOnIt: (state, getters) => {
+            return _.filter(getters.getTasks, ['status_id', 2]);
         },
-        getOverDue: state => {
-           let overDue = [];
-           let now = moment();
-            /** todo: Refactor this with load dash **/
-            state.projects.forEach(function (project) {
-                project.sections.forEach(function (section) {
-                    section.tasks.forEach(function(task){
-                       if( moment(task.due_date).isBefore( now ) ){
-                           overDue.push(task);
-                       }
-                    });
-                });
-            });
-            return overDue;
+        /** filters getTasks() and returns tasks that are over due **/
+        getOverDue: (state, getters) => {
+            let now = moment();
+            return _.filter(getters.getTasks,  function(task) { return moment(task.due_date).isBefore( now ); });
         },
-        getUpComing: state => {
+        /** filters getTasks() and returns tasks which deadlines are within the next week **/
+        getUpComing: (state, getters) => {
            let upComing = [];
            let now = moment();
            let nextWeek = moment().add(7, 'days');
-            /** todo: Refactor this with load dash **/
-            state.projects.forEach(function (project) {
-                project.sections.forEach(function (section) {
-                    section.tasks.forEach(function(task){
-                        if(moment(task.due_date).isBetween(now, nextWeek) ){
-                               upComing.push(task);
-                         }
-                    });
-                });
-            });
-            return upComing;
+           return _.filter(getters.getTasks,  function(task) { return moment(task.due_date).isBetween(now, nextWeek); });
         },
         /***********************
          * Modal Getters
