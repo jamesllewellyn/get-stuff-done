@@ -110,6 +110,7 @@
                 <add-project></add-project>
             </template>
         </modal>
+        <notifications />
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

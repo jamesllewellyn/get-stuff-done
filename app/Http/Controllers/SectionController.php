@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use App\Task;
 use Illuminate\Http\Request;
 use App\Section;
 
@@ -62,6 +63,31 @@ class SectionController extends Controller
         $section->save();
         /** return success and updated project */
         return ['success' => true, 'message' => 'section has been updated', 'section' => $section];
+    }
+    /**
+     * update section data
+     * @param \Illuminate\Http\Request $request
+     * @param Section $section
+     * @return \Illuminate\Http\Response
+     */
+    public function reorderTasks(Request $request, Project $project, Section $section) {
+        /** If section cant be found return error */
+        if(!$section){
+            return ['success' => false, 'message' => 'The requested section could not be found'];
+        }
+        /** Get tasks from request */
+        $tasks = $request->get('tasks');
+        if(!$tasks){
+            return ['success' => false, 'message' => 'Request did not contain tasks'];
+        }
+        /** :Todo validation to make sure that tasks belong to section and project **/
+        foreach ($tasks as $t) {
+            $task = Task::find($t['id']);
+            $task->sort_order = $t['sort_order'];
+            $task->save();
+        }
+        /** return success and updated project */
+        return ['success' => true, 'message' => 'section task have been updated'];
     }
 
     /**

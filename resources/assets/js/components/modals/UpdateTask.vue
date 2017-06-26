@@ -82,7 +82,7 @@
                 return store.getters.getModalByName(this.modalName).isLoading;
             },
             task:function(){
-                return store.getters.getTaskById({projectId : this.projectId, sectionId : this.sectionId, id : this.id});
+                return store.getters.getTask(this.id);
             }
         },
         methods: {

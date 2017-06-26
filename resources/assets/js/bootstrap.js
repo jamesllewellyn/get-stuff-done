@@ -12,8 +12,8 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 import moment from 'moment';
 window.moment = moment;
-import VueSweetAlert from 'vue-sweetalert';
-Vue.use(VueSweetAlert);
+import Notifications from 'vue-notification';
+Vue.use(Notifications);
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just

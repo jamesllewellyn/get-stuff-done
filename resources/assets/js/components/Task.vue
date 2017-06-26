@@ -28,7 +28,7 @@
         },
         computed:{
             task: function(){
-                return store.getters.getTaskById({projectId :this.projectId, sectionId: this.sectionId, id: this.id});
+                return store.getters.getTask(this.id);
             },
             priority : function () {
                 switch (this.task.priority_id){

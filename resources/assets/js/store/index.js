@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Project from '../core/Project';
 import Section from '../core/Section';
 import Task from '../core/Task';
+
 const store = new Vuex.Store({
     state: {
         projects: [],
@@ -70,6 +71,17 @@ const store = new Vuex.Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addSection'});
             });
         },
+        UPDATE_SECTION_TASKS_SORT_ORDER: function ({ commit } ,{projectId, section, tasks}) {
+            axios.put('/api/project/'+ projectId + '/section/'+ section.id + '/tasks/reorder', tasks)
+                .then(function (response) {
+                    // /**  **/
+                    commit('UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS', { projectId: projectId, section: section, tasks : tasks});
+                })
+                .catch(function (error) {
+                    // /** clear button loading state*/
+                    // commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addSection'});
+                });
+        },
         /***********************
          * Task Actions
          **********************/
@@ -128,6 +140,8 @@ const store = new Vuex.Store({
         ADD_PROJECT_SUCCESS: (state, { project }) => {
             /** add new project to data array*/
             state.projects.push(project);
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'New project has been created');
         },
         ADD_PROJECT_FAILURE: (state, { errors }) => {
             /** add form errors */
@@ -143,6 +157,8 @@ const store = new Vuex.Store({
             let idx = state.projects.map(project => project.id).indexOf(id);
             /** add new project to data array*/
             state.projects[idx].sections.push( new Section(section) );
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'New section has been created');
         },
         ADD_SECTION_FAILURE: (state, { errors }) => {
             /** add form errors */
@@ -160,6 +176,8 @@ const store = new Vuex.Store({
             let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(sId);
             /** add new task to data array **/
             state.projects[pIdx].sections[sIdx].tasks.push( new Task(task) );
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'New task has been added');
         },
         ADD_TASK_FAILURE: (state, { errors }) => {
             /** add form errors */
@@ -176,10 +194,23 @@ const store = new Vuex.Store({
             let tIdx = state.projects[pIdx].sections[sIdx].tasks.map(tasks => task.id).indexOf(tId);
             /** update task to data array **/
             state.projects[pIdx].sections[sIdx].tasks[tIdx] = new Task(task);
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'Task has been updated');
         },
         UPDATE_TASK_FAILURE: (state, { errors }) => {
             /** add form errors */
             state.formErrors = errors;
+        },
+        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: (state, { projectId, section, tasks }) => {
+            /** get project index **/
+            let pIdx = state.projects.map(project => project.id).indexOf(projectId);
+            let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(section.id);
+            tasks.forEach(function(t){
+                let tIdx = state.projects[pIdx].sections[sIdx].tasks.map(tasks => task.id).indexOf(t.id);
+                state.projects[pIdx].sections[sIdx].tasks[tIdx].sort_order = t.sort_order;
+            });
+            Event.$emit('notify','success', 'Success', 'Task sort order has been updated');
+
         },
         /***********************
          * Modal Mutations

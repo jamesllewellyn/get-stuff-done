@@ -28,6 +28,7 @@
     "bulma": "^0.4.2",
     "moment": "^2.18.1",
     "vue-bulma-datepicker": "^1.3.5",
+    "vue-notification": "^1.2.3",
     "vue-sweetalert": "^0.1.17",
     "vuedraggable": "^2.13.1",
     "vuex": "^2.3.1"

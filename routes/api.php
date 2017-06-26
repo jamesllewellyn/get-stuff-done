@@ -33,6 +33,8 @@ use Illuminate\Http\Request;
     Route::resource('section', 'SectionController', ['only' => [ 'show','update', 'destroy']]);
     /** Section store */
     Route::post('/project/{project}/section', ['uses'=>'SectionController@store', 'as'=>'Section.store'] );
+    /** reorder section tasks */
+    Route::put('/project/{project}/section/{section}/tasks/reorder', ['uses'=>'SectionController@reorderTasks', 'as'=>'Section.reorderTasks'] );
 
 /***********************
  * Task API

@@ -38,15 +38,12 @@
 </template>
 
 <script>
-//    import appstore from '../../app-store';
     import store from '../../store';
     import AddSection from '../../components/modals/AddSection.vue';
     import AddTask from '../../components/modals/AddTask.vue';
     import UpdateTask from '../../components/modals/UpdateTask.vue';
     import ProjectSection from '../../components/Section';
     import Modal from '../../components/Modal.vue';
-    import Section from '../../core/Section';
-    import Task from '../../core/Task';
     export default {
         data() {
             return{
