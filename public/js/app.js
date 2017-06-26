@@ -5197,6 +5197,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Section Getters
          **********************/
+        /** returns all project sections flattered into one array **/
         getSections: function getSections(state, getters) {
             return _.flatten(state.projects.map(function (project) {
                 return project.sections;
@@ -5223,12 +5224,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Task Getters
          **********************/
+        /** returns all the user task**/
         getTasks: function getTasks(state, getters) {
             return _.flatten(getters.getSections.map(function (section) {
                 return section.tasks;
             }));
         },
-        getTaskByIds: function getTaskByIds(state, getters) {
+        /** returns a task **/
+        getTaskById: function getTaskById(state, getters) {
             return function (_ref25) {
                 var projectId = _ref25.projectId,
                     sectionId = _ref25.sectionId,
@@ -5252,22 +5255,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 });
             };
         },
+        /** returns a task **/
         getTask: function getTask(state, getters) {
             return function (id) {
-                getters.getTasks.find(function (task) {
+                return getters.getTasks.find(function (task) {
                     return task.id === id;
                 });
             };
         },
+        /** filters getTasks() and returns tasks currently been worked on **/
         getWorkingOnIt: function getWorkingOnIt(state, getters) {
             return _.filter(getters.getTasks, ['status_id', 2]);
         },
+        /** filters getTasks() and returns tasks that are over due **/
         getOverDue: function getOverDue(state, getters) {
             var now = moment();
             return _.filter(getters.getTasks, function (task) {
                 return moment(task.due_date).isBefore(now);
             });
         },
+        /** filters getTasks() and returns tasks which deadlines are within the next week **/
         getUpComing: function getUpComing(state, getters) {
             var upComing = [];
             var now = moment();
@@ -21895,16 +21902,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: {
         id: {
             required: true
-        },
-        task: {
-            required: true
         }
     },
     computed: {
-        /** todo: use this to get task from store instead of passing it in **/
-        //            task: function(){
-        //                return store.getters.getTaskById({projectId :this.projectId, sectionId: this.sectionId, id: this.id});
-        //            },
+        task: function task() {
+            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].getters.getTask(this.id);
+        },
         priority: function priority() {
             switch (this.task.priority_id) {
                 case 1:

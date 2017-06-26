@@ -239,7 +239,7 @@ const store = new Vuex.Store({
             return _.flatten( getters.getSections.map(section => section.tasks) );
         },
         /** returns a task **/
-        getTaskByIds: (state, getters) => ({projectId, sectionId, id}) => {
+        getTaskById: (state, getters) => ({projectId, sectionId, id}) => {
             /** cast ids to int **/
             let pId = parseInt(projectId);
             let sId = parseInt(sectionId);
@@ -253,7 +253,7 @@ const store = new Vuex.Store({
         },
         /** returns a task **/
         getTask: (state, getters) => (id) =>{
-            getters.getTasks.find(task => task.id === id);
+            return getters.getTasks.find(task => task.id === id);
         },
         /** filters getTasks() and returns tasks currently been worked on **/
         getWorkingOnIt: (state, getters) => {
