@@ -4992,6 +4992,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 tasks = _ref7.tasks;
 
             axios.put('/api/project/' + projectId + '/section/' + section.id + '/tasks/reorder', { tasks: tasks }).then(function (response) {
+                console.log(response);
                 // /**  **/
                 commit('UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS', { projectId: projectId, section: section, tasks: tasks });
             }).catch(function (error) {
@@ -5168,19 +5169,21 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 section = _ref22.section,
                 tasks = _ref22.tasks;
 
+            /** cast projectId to in **/
+            var pId = parseInt(projectId);
             /** get project index **/
             var pIdx = state.projects.map(function (project) {
                 return project.id;
-            }).indexOf(projectId);
+            }).indexOf(pId);
+            /** get section index **/
             var sIdx = state.projects[pIdx].sections.map(function (section) {
                 return section.id;
             }).indexOf(section.id);
-            tasks.forEach(function (t) {
-                var tIdx = state.projects[pIdx].sections[sIdx].tasks.map(function (tasks) {
-                    return task.id;
-                }).indexOf(t.id);
-                state.projects[pIdx].sections[sIdx].tasks[tIdx].sort_order = t.sort_order;
+            /** reorder tasks by sort_order and update project object **/
+            state.projects[pIdx].sections[sIdx].tasks = _.sortBy(tasks, function (task) {
+                return task.sort_order;
             });
+            /** emit success message **/
             Event.$emit('notify', 'success', 'Success', 'Task sort order has been updated');
         },
         /***********************
@@ -17105,7 +17108,7 @@ module.exports = Component.exports
 
 "use strict";
 /**
-  * vue-router v2.5.3
+  * vue-router v2.6.0
   * (c) 2017 Evan You
   * @license MIT
   */
@@ -17151,7 +17154,7 @@ var View = {
     // has been toggled inactive but kept-alive.
     var depth = 0;
     var inactive = false;
-    while (parent) {
+    while (parent && parent._routerRoot !== parent) {
       if (parent.$vnode && parent.$vnode.data.routerView) {
         depth++;
       }
@@ -17302,7 +17305,7 @@ function stringifyQuery (obj) {
 
     if (Array.isArray(val)) {
       var result = [];
-      val.slice().forEach(function (val2) {
+      val.forEach(function (val2) {
         if (val2 === undefined) {
           return
         }
@@ -17406,7 +17409,15 @@ function isObjectEqual (a, b) {
   if (aKeys.length !== bKeys.length) {
     return false
   }
-  return aKeys.every(function (key) { return String(a[key]) === String(b[key]); })
+  return aKeys.every(function (key) {
+    var aVal = a[key];
+    var bVal = b[key];
+    // check nested equality
+    if (typeof aVal === 'object' && typeof bVal === 'object') {
+      return isObjectEqual(aVal, bVal)
+    }
+    return String(aVal) === String(bVal)
+  })
 }
 
 function isIncludedRoute (current, target) {
@@ -17537,7 +17548,7 @@ var Link = {
 
 function guardEvent (e) {
   // don't redirect with control keys
-  if (e.metaKey || e.ctrlKey || e.shiftKey) { return }
+  if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) { return }
   // don't redirect when preventDefault called
   if (e.defaultPrevented) { return }
   // don't redirect on right click
@@ -17577,14 +17588,6 @@ function install (Vue) {
 
   _Vue = Vue;
 
-  Object.defineProperty(Vue.prototype, '$router', {
-    get: function get () { return this.$root._router }
-  });
-
-  Object.defineProperty(Vue.prototype, '$route', {
-    get: function get () { return this.$root._route }
-  });
-
   var isDef = function (v) { return v !== undefined; };
 
   var registerInstance = function (vm, callVal) {
@@ -17597,15 +17600,26 @@ function install (Vue) {
   Vue.mixin({
     beforeCreate: function beforeCreate () {
       if (isDef(this.$options.router)) {
+        this._routerRoot = this;
         this._router = this.$options.router;
         this._router.init(this);
         Vue.util.defineReactive(this, '_route', this._router.history.current);
+      } else {
+        this._routerRoot = (this.$parent && this.$parent._routerRoot) || this;
       }
       registerInstance(this, this);
     },
     destroyed: function destroyed () {
       registerInstance(this);
     }
+  });
+
+  Object.defineProperty(Vue.prototype, '$router', {
+    get: function get () { return this._routerRoot._router }
+  });
+
+  Object.defineProperty(Vue.prototype, '$route', {
+    get: function get () { return this._routerRoot._route }
   });
 
   Vue.component('router-view', View);
@@ -18200,9 +18214,15 @@ function addRouteRecord (
   }
 
   var normalizedPath = normalizePath(path, parent);
+  var pathToRegexpOptions = route.pathToRegexpOptions || {};
+
+  if (typeof route.caseSensitive === 'boolean') {
+    pathToRegexpOptions.sensitive = route.caseSensitive;
+  }
+
   var record = {
     path: normalizedPath,
-    regex: compileRouteRegex(normalizedPath),
+    regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
     components: route.components || { default: route.component },
     instances: {},
     name: name,
@@ -18219,11 +18239,11 @@ function addRouteRecord (
   };
 
   if (route.children) {
-    // Warn if route is named and has a default child route.
+    // Warn if route is named, does not redirect and has a default child route.
     // If users navigate to this route by name, the default child will
     // not be rendered (GH Issue #629)
     if (true) {
-      if (route.name && route.children.some(function (child) { return /^\/?$/.test(child.path); })) {
+      if (route.name && !route.redirect && route.children.some(function (child) { return /^\/?$/.test(child.path); })) {
         warn(
           false,
           "Named Route '" + (route.name) + "' has a default child route. " +
@@ -18243,21 +18263,24 @@ function addRouteRecord (
   }
 
   if (route.alias !== undefined) {
-    if (Array.isArray(route.alias)) {
-      route.alias.forEach(function (alias) {
-        var aliasRoute = {
-          path: alias,
-          children: route.children
-        };
-        addRouteRecord(pathList, pathMap, nameMap, aliasRoute, parent, record.path);
-      });
-    } else {
+    var aliases = Array.isArray(route.alias)
+      ? route.alias
+      : [route.alias];
+
+    aliases.forEach(function (alias) {
       var aliasRoute = {
-        path: route.alias,
+        path: alias,
         children: route.children
       };
-      addRouteRecord(pathList, pathMap, nameMap, aliasRoute, parent, record.path);
-    }
+      addRouteRecord(
+        pathList,
+        pathMap,
+        nameMap,
+        aliasRoute,
+        parent,
+        record.path || '/' // matchAs
+      );
+    });
   }
 
   if (!pathMap[record.path]) {
@@ -18278,8 +18301,8 @@ function addRouteRecord (
   }
 }
 
-function compileRouteRegex (path) {
-  var regex = index(path);
+function compileRouteRegex (path, pathToRegexpOptions) {
+  var regex = index(path, [], pathToRegexpOptions);
   if (true) {
     var keys = {};
     regex.keys.forEach(function (key) {
@@ -18320,7 +18343,7 @@ function normalizeLocation (
     if (current.name) {
       next.name = current.name;
       next.params = params;
-    } else if (current.matched) {
+    } else if (current.matched.length) {
       var rawPath = current.matched[current.matched.length - 1].path;
       next.path = fillParams(rawPath, params, ("path " + (current.path)));
     } else if (true) {
@@ -18390,6 +18413,7 @@ function createMatcher (
       if (true) {
         warn(record, ("Route with name '" + name + "' does not exist"));
       }
+      if (!record) { return _createRoute(null, location) }
       var paramNames = record.regex.keys
         .filter(function (key) { return !key.optional; })
         .map(function (key) { return key.name; });
@@ -18600,7 +18624,9 @@ function handleScroll (
     if (isObject && typeof shouldScroll.selector === 'string') {
       var el = document.querySelector(shouldScroll.selector);
       if (el) {
-        position = getElementPosition(el);
+        var offset = shouldScroll.offset && typeof shouldScroll.offset === 'object' ? shouldScroll.offset : {};
+        offset = normalizeOffset(offset);
+        position = getElementPosition(el, offset);
       } else if (isValidPosition(shouldScroll)) {
         position = normalizePosition(shouldScroll);
       }
@@ -18631,13 +18657,13 @@ function getScrollPosition () {
   }
 }
 
-function getElementPosition (el) {
+function getElementPosition (el, offset) {
   var docEl = document.documentElement;
   var docRect = docEl.getBoundingClientRect();
   var elRect = el.getBoundingClientRect();
   return {
-    x: elRect.left - docRect.left,
-    y: elRect.top - docRect.top
+    x: elRect.left - docRect.left - offset.x,
+    y: elRect.top - docRect.top - offset.y
   }
 }
 
@@ -18649,6 +18675,13 @@ function normalizePosition (obj) {
   return {
     x: isNumber(obj.x) ? obj.x : window.pageXOffset,
     y: isNumber(obj.y) ? obj.y : window.pageYOffset
+  }
+}
+
+function normalizeOffset (obj) {
+  return {
+    x: isNumber(obj.x) ? obj.x : 0,
+    y: isNumber(obj.y) ? obj.y : 0
   }
 }
 
@@ -18904,6 +18937,8 @@ function normalizeBase (base) {
       // respect <base> tag
       var baseEl = document.querySelector('base');
       base = (baseEl && baseEl.getAttribute('href')) || '/';
+      // strip full URL origin
+      base = base.replace(/^https?:\/\/[^\/]+/, '');
     } else {
       base = '/';
     }
@@ -19114,9 +19149,12 @@ function flatten (arr) {
 function once (fn) {
   var called = false;
   return function () {
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
+
     if (called) { return }
     called = true;
-    return fn.apply(this, arguments)
+    return fn.apply(this, args)
   }
 }
 
@@ -19140,9 +19178,10 @@ var HTML5History = (function (History$$1) {
     }
 
     window.addEventListener('popstate', function (e) {
+      var current = this$1.current;
       this$1.transitionTo(getLocation(this$1.base), function (route) {
         if (expectScroll) {
-          handleScroll(router, route, this$1.current, true);
+          handleScroll(router, route, current, true);
         }
       });
     });
@@ -19298,10 +19337,10 @@ function pushHash (path) {
 }
 
 function replaceHash (path) {
-  var i = window.location.href.indexOf('#');
-  window.location.replace(
-    window.location.href.slice(0, i >= 0 ? i : 0) + '#' + path
-  );
+  var href = window.location.href;
+  var i = href.indexOf('#');
+  var base = i >= 0 ? href.slice(0, i) : href;
+  window.location.replace((base + "#" + path));
 }
 
 /*  */
@@ -19377,7 +19416,7 @@ var VueRouter = function VueRouter (options) {
   this.matcher = createMatcher(options.routes || [], this);
 
   var mode = options.mode || 'hash';
-  this.fallback = mode === 'history' && !supportsPushState;
+  this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false;
   if (this.fallback) {
     mode = 'hash';
   }
@@ -19561,7 +19600,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '2.5.3';
+VueRouter.version = '2.6.0';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);
@@ -29294,11 +29333,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
 
     function insertNodeAt(fatherNode, node, position) {
-      if (position < fatherNode.children.length) {
-        fatherNode.insertBefore(node, fatherNode.children[position]);
-      } else {
-        fatherNode.appendChild(node);
-      }
+      var refNode = position === 0 ? fatherNode.children[0] : fatherNode.children[position - 1].nextSibling;
+      fatherNode.insertBefore(node, refNode);
     }
 
     function computeVmIndex(vnodes, element) {
@@ -29307,7 +29343,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }).indexOf(element);
     }
 
-    function _computeIndexes(slots, children) {
+    function _computeIndexes(slots, children, isTransition) {
       if (!slots) {
         return [];
       }
@@ -29315,9 +29351,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var elmFromNodes = slots.map(function (elt) {
         return elt.elm;
       });
-      return [].concat(_toConsumableArray(children)).map(function (elt) {
+      var rawIndexes = [].concat(_toConsumableArray(children)).map(function (elt) {
         return elmFromNodes.indexOf(elt);
       });
+      return isTransition ? rawIndexes.filter(function (ind) {
+        return ind !== -1;
+      }) : rawIndexes;
     }
 
     function emit(evtName, evtData) {
@@ -29390,13 +29429,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
       },
       render: function render(h) {
-        if (this.$slots.default && this.$slots.default.length === 1) {
-          var child = this.$slots.default[0];
+        var slots = this.$slots.default;
+        if (slots && slots.length === 1) {
+          var child = slots[0];
           if (child.componentOptions && child.componentOptions.tag === "transition-group") {
             this.transitionMode = true;
           }
         }
-        return h(this.element, null, this.$slots.default);
+        var children = slots;
+        var footer = this.$slots.footer;
+
+        if (footer) {
+          children = slots ? [].concat(_toConsumableArray(slots), _toConsumableArray(footer)) : [].concat(_toConsumableArray(footer));
+        }
+        return h(this.element, null, children);
       },
       mounted: function mounted() {
         var _this3 = this;
@@ -29468,11 +29514,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           var _this4 = this;
 
           this.$nextTick(function () {
-            _this4.visibleIndexes = _computeIndexes(_this4.getChildrenNodes(), _this4.rootContainer.children);
+            _this4.visibleIndexes = _computeIndexes(_this4.getChildrenNodes(), _this4.rootContainer.children, _this4.transitionMode);
           });
         },
         getUnderlyingVm: function getUnderlyingVm(htmlElt) {
-          var index = computeVmIndex(this.getChildrenNodes(), htmlElt);
+          var index = computeVmIndex(this.getChildrenNodes() || [], htmlElt);
+          if (index === -1) {
+            //Edge case during move callback: related element might be
+            //an element different from collection
+            return null;
+          }
           var element = this.realList[index];
           return { index: index, element: element };
         },
@@ -29526,7 +29577,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           var context = { list: list, component: component };
           if (to !== related && list && component.getUnderlyingVm) {
             var destination = component.getUnderlyingVm(related);
-            return _extends(destination, context);
+            if (destination) {
+              return _extends(destination, context);
+            }
           }
 
           return context;
@@ -31708,6 +31761,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Task_vue__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Task_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(3);
+//
+//
 //
 //
 //
@@ -54263,14 +54318,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "aria-hidden": "true"
     }
-  })])]), _vm._v(" "), _c('table', {
-    staticClass: "table task-table"
-  }, [_c('draggable', {
+  })])]), _vm._v(" "), _c('table', {}, [_c('draggable', {
+    staticClass: "table task-table",
     attrs: {
       "options": {
         handle: '.handle'
       },
-      "element": 'tbody'
+      "element": 'table'
     },
     on: {
       "start": function($event) {
@@ -54287,16 +54341,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "tasks"
     }
+  }, [_c('transition-group', {
+    attrs: {
+      "tag": 'tbody',
+      "name": "reorder"
+    }
   }, _vm._l((_vm.tasks), function(task) {
     return _c('task', {
       key: task.id,
+      staticClass: "reorder-item",
       attrs: {
         "sectionId": _vm.section.id,
         "projectId": _vm.projectId,
         "id": task.id
       }
     })
-  }))], 1)])])
+  }))], 1)], 1)])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

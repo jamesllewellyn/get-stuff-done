@@ -72,8 +72,9 @@ const store = new Vuex.Store({
             });
         },
         UPDATE_SECTION_TASKS_SORT_ORDER: function ({ commit } ,{projectId, section, tasks}) {
-            axios.put('/api/project/'+ projectId + '/section/'+ section.id + '/tasks/reorder', tasks)
+            axios.put('/api/project/'+ projectId + '/section/'+ section.id + '/tasks/reorder', {tasks : tasks})
                 .then(function (response) {
+                    console.log(response);
                     // /**  **/
                     commit('UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS', { projectId: projectId, section: section, tasks : tasks});
                 })
@@ -202,13 +203,15 @@ const store = new Vuex.Store({
             state.formErrors = errors;
         },
         UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: (state, { projectId, section, tasks }) => {
+            /** cast projectId to in **/
+            let pId =  parseInt(projectId);
             /** get project index **/
-            let pIdx = state.projects.map(project => project.id).indexOf(projectId);
+            let pIdx = state.projects.map(project => project.id).indexOf(pId);
+            /** get section index **/
             let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(section.id);
-            tasks.forEach(function(t){
-                let tIdx = state.projects[pIdx].sections[sIdx].tasks.map(tasks => task.id).indexOf(t.id);
-                state.projects[pIdx].sections[sIdx].tasks[tIdx].sort_order = t.sort_order;
-            });
+            /** reorder tasks by sort_order and update project object **/
+            state.projects[pIdx].sections[sIdx].tasks = _.sortBy(tasks, function(task) { return task.sort_order; });
+            /** emit success message **/
             Event.$emit('notify','success', 'Success', 'Task sort order has been updated');
 
         },

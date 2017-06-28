@@ -44,3 +44,14 @@
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+.reorder-item {
+  //padding: 4px;
+  //margin-top: 4px;
+  //border: solid 1px;
+  transition: all 0.5s;
+}
+
+.reorder-enter, .reorder-active {
+  opacity: 0;
+}
