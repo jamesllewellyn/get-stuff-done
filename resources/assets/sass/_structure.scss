@@ -79,6 +79,9 @@ h3{
     color:#ffffff;
   }
 }
+.bold{
+  font-weight: bold;
+}
 /** icons */
 .fa-plus-circle{
   color:$orange;
@@ -121,6 +124,52 @@ h3{
 
 .dropdown.is-open {
   display: block;
+}
+
+/** Task **/
+.task{
+  z-index: 5;
+  width: 65%;
+  display: block;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  position: absolute;
+  padding: 2em;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  .header{
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #dbdbdb;
+    h3{
+      font-size: 2.75em;
+      .status{
+        i{
+          padding-top: 0.75em;
+        }
+      }
+    }
+  }
+  .body{
+    p{
+      font-size: 1.25em;
+    }
+    .task-updates{
+      textarea{
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #dbdbdb;
+      }
+    }
+  }
+}
+.task-background{
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  z-index: 4;
 }
 
 /** notifications  **/

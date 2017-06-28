@@ -3,6 +3,7 @@ import router from './app-routes';
 import store from './store';
 import AddProject from './components/modals/AddProject.vue';
 import Modal from './components/Modal.vue';
+import Task from './components/Task.vue';
 
 window.Event = new Vue();
 import { mapState, mapGetters } from 'vuex'
@@ -16,7 +17,7 @@ const app = new Vue({
          ])
     ,
     components : {
-        Modal, AddProject,
+        Modal, AddProject, Task
     },
     methods: {
         /** trigger toggle modal event */
@@ -39,7 +40,5 @@ const app = new Vue({
                 text: text
             });
         });
-
-
     }
 });

@@ -5,7 +5,7 @@
          <table class="">
              <draggable v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >
                  <transition-group :tag="'tbody'" name="reorder">
-                    <task v-for="task in tasks" class="reorder-item"  :sectionId="section.id" :projectId="projectId" :id="task.id"  :key="task.id"></task>
+                    <task-list v-for="task in tasks" class="reorder-item"  :sectionId="section.id" :projectId="projectId" :id="task.id"  :key="task.id"></task-list>
                  </transition-group>
              </draggable>
          </table>
@@ -15,7 +15,7 @@
 
 <script>
     import draggable from 'vuedraggable'
-    import Task from './Task.vue';
+    import TaskList from './TaskList.vue';
     import store from '../store';
     export default {
         props: {
@@ -23,7 +23,7 @@
             projectId: '',
         },
         components: {
-          Task , draggable
+            TaskList , draggable
         },
         computed:{
             section: function() {
@@ -43,7 +43,6 @@
                     this.$store.dispatch('UPDATE_SECTION_TASKS_SORT_ORDER', {projectId: this.projectId, section : this.section, tasks :tasks})
                 }
             }
-
         },
         methods:{
             /** trigger event */
