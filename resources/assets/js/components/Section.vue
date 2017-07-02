@@ -2,11 +2,12 @@
  <div class=" column is-half">
      <div class="box">
          <h3 class="has-text-centered">{{section.name}}<a  @click.prevent.stop="addTask()"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a></h3>
-         <draggable v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >
+         <draggable v-if="tasks.length != 0" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >
              <transition-group :tag="'tbody'" name="reorder">
                 <task-list v-for="task in tasks" class="reorder-item"  :sectionId="section.id" :projectId="projectId" :id="task.id"  :key="task.id"></task-list>
              </transition-group>
          </draggable>
+         <notification v-else :status="'info'">This section currently has no tasks</notification>
      </div>
  </div>
 </template>
@@ -14,6 +15,7 @@
 <script>
     import draggable from 'vuedraggable'
     import TaskList from './TaskList.vue';
+    import Notification from './Notification.vue';
     import store from '../store';
     export default {
         props: {
@@ -21,7 +23,7 @@
             projectId: '',
         },
         components: {
-            TaskList , draggable
+            TaskList , draggable , Notification
         },
         computed:{
             section: function() {
