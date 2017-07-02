@@ -52,3 +52,16 @@
 .reorder-enter, .reorder-active {
   opacity: 0;
 }
+
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.75s;
+}
+.slide-enter, .task-leave-to /* .list-leave-active for <2.1.8 */ {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-leave-active {
+  opacity: 0;
+  transform: translateX(30px);
+}

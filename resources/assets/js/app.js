@@ -17,7 +17,7 @@ const app = new Vue({
          ])
     ,
     components : {
-        Modal, AddProject, Task
+        Task, Modal, AddProject
     },
     methods: {
         /** trigger toggle modal event */

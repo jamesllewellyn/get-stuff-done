@@ -74,7 +74,6 @@ const store = new Vuex.Store({
         UPDATE_SECTION_TASKS_SORT_ORDER: function ({ commit } ,{projectId, section, tasks}) {
             axios.put('/api/project/'+ projectId + '/section/'+ section.id + '/tasks/reorder', {tasks : tasks})
                 .then(function (response) {
-                    console.log(response);
                     // /**  **/
                     commit('UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS', { projectId: projectId, section: section, tasks : tasks});
                 })
@@ -104,15 +103,15 @@ const store = new Vuex.Store({
                     commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addTask'});
                 });
         },
-        UPDATE_TASK: function ({ commit } ,{projectId, sectionId, id, task}) {
-            axios.put('/api/project/'+ projectId +'/section/' + sectionId + '/task/' + id, task)
+        UPDATE_TASK: function ({ commit } ,{id, task}) {
+            axios.put('/api/task/' + id, task)
                 .then(function (response) {
                     /**  **/
-                    commit('UPDATE_TASK_SUCCESS', { projectId: projectId, sectionId: sectionId, id: id, task: response.data.task });
+                    commit('UPDATE_TASK_SUCCESS', { projectId: response.data.projectId, sectionId: response.data.sectionId, id: id, task: response.data.task });
                     /** clear button loading state*/
-                    commit('REMOVE_BUTTON_LOADING_STATE', {name : 'updateTask'});
+                    // commit('REMOVE_BUTTON_LOADING_STATE', {name : 'updateTask'});
                     /** close modal */
-                    commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'updateTask'});
+                    // commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'updateTask'});
                 })
                 .catch(function (error) {
                     if(error.response.data){
@@ -194,9 +193,9 @@ const store = new Vuex.Store({
             let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(sId);
             let tIdx = state.projects[pIdx].sections[sIdx].tasks.map(tasks => task.id).indexOf(tId);
             /** update task to data array **/
-            state.projects[pIdx].sections[sIdx].tasks[tIdx] = new Task(task);
+            state.projects[pIdx].sections[sIdx].tasks[tIdx] = task;
             /** notify user of success **/
-            Event.$emit('notify','success', 'Success', 'Task has been updated');
+           // Event.$emit('notify','success', 'Success', 'Task has been updated');
         },
         UPDATE_TASK_FAILURE: (state, { errors }) => {
             /** add form errors */
@@ -211,9 +210,6 @@ const store = new Vuex.Store({
             let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(section.id);
             /** reorder tasks by sort_order and update project object **/
             state.projects[pIdx].sections[sIdx].tasks = _.sortBy(tasks, function(task) { return task.sort_order; });
-            /** emit success message **/
-            Event.$emit('notify','success', 'Success', 'Task sort order has been updated');
-
         },
         /***********************
          * Modal Mutations
@@ -296,14 +292,15 @@ const store = new Vuex.Store({
         /** filters getTasks() and returns tasks that are over due **/
         getOverDue: (state, getters) => {
             let now = moment();
-            return _.filter(getters.getTasks,  function(task) { return moment(task.due_date).isBefore( now ); });
+            /** todo: simplify filter **/
+            return _.filter(getters.getTasks,  function(task) { return moment(task.due_date).isBefore( now ) && task.status_id === null; });
         },
         /** filters getTasks() and returns tasks which deadlines are within the next week **/
         getUpComing: (state, getters) => {
            let upComing = [];
            let now = moment();
            let nextWeek = moment().add(7, 'days');
-           return _.filter(getters.getTasks,  function(task) { return moment(task.due_date).isBetween(now, nextWeek); });
+           return _.filter(getters.getTasks,  function(task) { return moment(task.due_date).isBetween(now, nextWeek) && task.status_id === null; });
         },
         /***********************
          * Modal Getters

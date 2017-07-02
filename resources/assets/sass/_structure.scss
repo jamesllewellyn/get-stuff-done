@@ -129,7 +129,7 @@ h3{
 /** Task **/
 .task{
   z-index: 5;
-  width: 65%;
+  width: 50%;
   display: block;
   right: 0;
   bottom: 0;
@@ -141,13 +141,17 @@ h3{
     padding-bottom: 1em;
     margin-bottom: 1em;
     border-bottom: 1px solid #dbdbdb;
-    h3{
-      font-size: 2.75em;
-      .status{
-        i{
-          padding-top: 0.75em;
-        }
+    position: relative;
+    .status{
+      i{
+        padding-top: .85em;
+        margin-right: 0.5em;
       }
+    }
+    .fa-times{
+      position:absolute;
+      left:0;
+      top:0;
     }
   }
   .body{
@@ -170,8 +174,36 @@ h3{
   top:0;
   bottom:0;
   z-index: 4;
+  min-height: 100vh;
 }
-
+/** forms **/
+input{
+  font-family: $font-family !important;
+  border:none !important;
+  font-size: 1.25em;
+  box-shadow: none !important;
+  &.input-title{
+    font-size: 2.75em;
+  }
+  &.input-date{
+    font-size: 1.25em;
+  }
+  &:focus{
+    outline:none;
+    border-bottom: 1px solid $orange !important;
+  }
+}
+.select, select{
+  width: 100%;
+}
+textarea{
+  border: none;
+  width: 100%;
+  min-height: 10em;
+  font-family: $font-family;
+  font-size: 1.25em;
+  color: #363636 !important;
+}
 /** notifications  **/
 .vue-notification {
   padding: 20px ;

@@ -34,7 +34,6 @@
                 <update-task :projectId="id" :sectionId="sectionId" :id="taskId"></update-task>
             </template>
         </Modal>
-        <task></task>
     </div>
 </template>
 
@@ -45,7 +44,6 @@
     import UpdateTask from '../../components/modals/UpdateTask.vue';
     import ProjectSection from '../../components/Section';
     import Modal from '../../components/Modal.vue';
-    import Task from '../../components/Task.vue'
     export default {
         data() {
             return{
@@ -53,7 +51,7 @@
                 taskId:''
             }
         },
-        components:{ProjectSection, Modal, AddSection , AddTask, UpdateTask,Task},
+        components:{ProjectSection, Modal, AddSection , AddTask, UpdateTask},
         computed: {
             id: function(){
                 return this.$route.params.id;

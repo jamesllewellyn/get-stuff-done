@@ -67,11 +67,15 @@ class TaskController extends Controller
      * @param Task $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Project $project, Section $section, Task $task) {
+    public function update(Request $request,Task $task) {
         /** If section cant be found return error */
         if(!$task){
             return ['success' => false, 'message' => 'The requested task could not be found'];
         }
+        /** find section **/
+        $section = $task->section()->first();
+        /** find project **/
+        $project = $task->project()->first();
         /** validate the task data */
         $this->validate(Request(),$task->validation, $task->messages);
         /** update record */
@@ -83,7 +87,7 @@ class TaskController extends Controller
         $task->status_id = $request->get('status_id');
         $task->save();
         /** return success and updated task */
-        return ['success' => true, 'message' => 'task has been updated', 'task' => $task];
+        return ['success' => true, 'message' => 'task has been updated', 'task' => $task, 'projectId' => $project->id, 'sectionId' => $section->id];
     }
     /**
      * Flag task as done

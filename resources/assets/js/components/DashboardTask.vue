@@ -1,10 +1,10 @@
 <template>
-    <tr :class="task.done ? 'strikeout' : ''">
+    <tr>
         <td>
             <span class="handle" aria-hidden="true">: :</span>
             <a class="status" @click.prevent.stop="done()"><i class="fa fa-circle" aria-hidden="true" :class="status"></i> </a>
         </td>
-        <td class="is-centered-text"><a @click.prevent.stop="toggelModal('updateTask')">{{task.name}}</a></td>
+        <td class="is-centered-text"><a @click.prevent.stop="showTask()">{{task.name}}</a></td>
         <td class="is-centered-text">{{priority}} </td>
         <td class="is-centered-text">{{ due_date }}</td>
     </tr>
@@ -44,11 +44,6 @@
                 if(this.task.status_id == 1){
                     return  'is-done';
                 }
-
-                if(this.task.status_id == 2){
-                    return 'is-started';
-                }
-
                 if( moment(this.task.due_date).isBefore(now) ){
                     return 'is-over-due';
                 }
@@ -58,7 +53,10 @@
             toggelModal: function(modalName){
                 Event.$emit(modalName);
                 Event.$emit('clickedTask', this.task, this.sectionId);
-            }
+            },
+            showTask: function(){
+                Event.$emit('showTask',this.id);
+            },
 //            done: function () {
 //                let self = this;
 //                axios.put('/api/task/' + self.task.id + '/done' )

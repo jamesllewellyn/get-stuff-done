@@ -104,6 +104,7 @@
                     <router-view ></router-view>
                 </transition>
             </div>
+            <task></task>
         </div>
         <modal modal-name="addProject" title="Add New Project">
             <template slot="body">
@@ -111,7 +112,6 @@
             </template>
         </modal>
         <notifications />
-
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

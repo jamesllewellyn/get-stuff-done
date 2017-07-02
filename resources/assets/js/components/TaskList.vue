@@ -66,7 +66,6 @@
         methods:{
             showTask: function(){
                 Event.$emit('showTask',this.id);
-//                Event.$emit('clickedTask',this.sectionId, this.id);
             },
             done: function () {
                 /** todo: move this into store **/
