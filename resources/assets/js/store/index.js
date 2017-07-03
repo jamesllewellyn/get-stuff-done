@@ -92,6 +92,16 @@ const store = new Vuex.Store({
                     // commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addSection'});
                 });
         },
+        UPDATE_SECTION: function ({ commit } ,{id, section}) {
+            axios.put('/api/section/' + id, section)
+                .then(function (response) {
+                    /**  **/
+                    commit('UPDATE_SECTION_SUCCESS', { id: id, project: response.data.project, section: response.data.section });
+                })
+                .catch(function (error) {
+                    commit('UPDATE_SECTION_FAILURE');
+                });
+        },
         /***********************
          * Task Actions
          **********************/
@@ -187,6 +197,23 @@ const store = new Vuex.Store({
         ADD_SECTION_FAILURE: (state, { errors }) => {
             /** add form errors */
             state.formErrors = errors;
+        },
+        UPDATE_SECTION_SUCCESS: (state, { id, project, section }) => {
+            /** cast id to int **/
+            let sId = parseInt(id);
+            let pId = parseInt(project.id);
+            /** get project index **/
+            let pIdx = state.projects.map(project => project.id).indexOf(pId);
+            /** get section index **/
+            let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(sId);
+            /** update project name **/
+            state.projects[pIdx].sections[sIdx].name = section.name;
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'Section name has been updated');
+        },
+        UPDATE_SECTION_FAILURE: (state) => {
+            Event.$emit('notify','error', 'Whoops', 'Section name couldn\'t be updated');
+
         },
         /***********************
          * Section Mutations

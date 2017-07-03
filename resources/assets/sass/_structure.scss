@@ -182,10 +182,13 @@ input{
   border:none !important;
   font-size: 1.25em;
   box-shadow: none !important;
-  &.title{
+  &.project-title{
     background: none;
     font-weight:400;
     line-height: 1.125;
+  }
+  &.section-title{
+    font-size: 1.5em;
   }
   &.input-title{
     font-size: 2.75em;

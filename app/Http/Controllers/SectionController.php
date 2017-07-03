@@ -58,11 +58,13 @@ class SectionController extends Controller
         }
         /** validate the section data */
         $this->validate(Request(),$section->validation, $section->messages);
+        /** get project  */
+        $project = $section->project()->first();
         /** update record */
         $section->name = $request->get('name');
         $section->save();
         /** return success and updated project */
-        return ['success' => true, 'message' => 'section has been updated', 'section' => $section];
+        return ['success' => true, 'message' => 'section has been updated', 'project' => $project,'section' => $section,];
     }
     /**
      * update section data
