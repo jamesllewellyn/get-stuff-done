@@ -32391,6 +32391,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuedraggable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_DashboardTask_vue__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_DashboardTask_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_DashboardTask_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Notification_vue__ = __webpack_require__(186);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Notification_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Notification_vue__);
 //
 //
 //
@@ -32450,8 +32452,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
+
 
 
 
@@ -32462,7 +32463,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     components: {
-        dashboardTask: __WEBPACK_IMPORTED_MODULE_2__components_DashboardTask_vue___default.a, draggable: __WEBPACK_IMPORTED_MODULE_1_vuedraggable___default.a
+        dashboardTask: __WEBPACK_IMPORTED_MODULE_2__components_DashboardTask_vue___default.a, draggable: __WEBPACK_IMPORTED_MODULE_1_vuedraggable___default.a, Notification: __WEBPACK_IMPORTED_MODULE_3__components_Notification_vue___default.a
     },
     computed: {
         workingOnIt: {
@@ -55215,9 +55216,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "box"
   }, [_c('h3', {
     staticClass: "has-text-centered"
-  }, [_vm._v("Working On It")]), _vm._v(" "), _c('table', {
-    staticClass: "table task-table"
-  }, [_c('draggable', {
+  }, [_vm._v("Working On It")]), _vm._v(" "), (_vm.workingOnIt.length != 0) ? _c('draggable', {
     attrs: {
       "options": {
         handle: '.handle',
@@ -55253,15 +55252,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "task": task
       }
     })
-  }))], 1)], 1)])]), _vm._v(" "), _c('div', {
+  }))], 1) : _c('notification', {
+    attrs: {
+      "status": 'warning'
+    }
+  }, [_vm._v("You currently aren't working on anything")])], 1)]), _vm._v(" "), _c('div', {
     staticClass: " column is-half"
   }, [_c('div', {
     staticClass: "box"
   }, [_c('h3', {
     staticClass: "has-text-centered"
-  }, [_vm._v("Over Due")]), _vm._v(" "), _c('table', {
-    staticClass: "table task-table"
-  }, [_c('draggable', {
+  }, [_vm._v("Over Due")]), _vm._v(" "), (_vm.overDue.length != 0) ? _c('draggable', {
     attrs: {
       "options": {
         handle: '.handle',
@@ -55297,15 +55298,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "id": task.id
       }
     })
-  }))], 1)], 1)])]), _vm._v(" "), _c('div', {
+  }))], 1) : _c('notification', {
+    attrs: {
+      "status": 'success'
+    }
+  }, [_vm._v("You current have no pending over due tasks")])], 1)]), _vm._v(" "), _c('div', {
     staticClass: " column is-half"
   }, [_c('div', {
     staticClass: "box"
   }, [_c('h3', {
     staticClass: "has-text-centered"
-  }, [_vm._v("Deadlines Coming")]), _vm._v(" "), _c('table', {
-    staticClass: "table task-table"
-  }, [_c('draggable', {
+  }, [_vm._v("Deadlines Coming")]), _vm._v(" "), (_vm.upComing.length != 0) ? _c('draggable', {
     attrs: {
       "options": {
         handle: '.handle',
@@ -55341,7 +55344,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "id": task.id
       }
     })
-  }))], 1)], 1)])])])])])
+  }))], 1) : _c('notification', {
+    attrs: {
+      "status": 'success'
+    }
+  }, [_vm._v("All upcoming tasks are being worked on")])], 1)])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

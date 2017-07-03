@@ -21,37 +21,35 @@
                 <div class=" column is-full">
                     <div class="box">
                         <h3 class="has-text-centered">Working On It</h3>
-                        <table class="table task-table">
-                            <draggable v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false" :element="'table'">
-                                <transition-group :tag="'tbody'" name="reorder">
-                                    <dashboardTask v-for="task in workingOnIt"  :id="task.id" :task="task" :key="task.id"></dashboardTask>
-                                </transition-group>
-                            </draggable>
-                        </table>
+                        <draggable v-if="workingOnIt.length != 0" v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false" :element="'table'">
+                            <transition-group :tag="'tbody'" name="reorder">
+                                <dashboardTask v-for="task in workingOnIt"  :id="task.id" :task="task" :key="task.id"></dashboardTask>
+                            </transition-group>
+                        </draggable>
+                        <notification v-else :status="'warning'">You currently aren't working on anything</notification>
+
                     </div>
                 </div>
                 <div class=" column is-half">
                     <div class="box">
                         <h3 class="has-text-centered">Over Due</h3>
-                        <table class="table task-table">
-                            <draggable v-model="overDue" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false"  :element="'table'">
-                                <transition-group :tag="'tbody'" name="reorder">
-                                    <dashboardTask v-for="task in overDue"  :task="task" :id="task.id" :key="task.id"></dashboardTask>
-                                </transition-group>
-                            </draggable>
-                        </table>
+                        <draggable v-if="overDue.length != 0" v-model="overDue" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false"  :element="'table'">
+                            <transition-group :tag="'tbody'" name="reorder">
+                                <dashboardTask v-for="task in overDue"  :task="task" :id="task.id" :key="task.id"></dashboardTask>
+                            </transition-group>
+                        </draggable>
+                        <notification v-else :status="'success'">You current have no pending over due tasks</notification>
                     </div>
                 </div>
                 <div class=" column is-half">
                     <div class="box">
                         <h3 class="has-text-centered">Deadlines Coming</h3>
-                        <table class="table task-table">
-                            <draggable v-model="upComing" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false"  :element="'table'">
-                                <transition-group :tag="'tbody'" name="reorder">
-                                    <dashboardTask v-for="task in upComing"  :task="task" :id="task.id"   :key="task.id"></dashboardTask>
-                                </transition-group>
-                            </draggable>
-                        </table>
+                        <draggable v-if="upComing.length != 0" v-model="upComing" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false"  :element="'table'">
+                            <transition-group :tag="'tbody'" name="reorder">
+                                <dashboardTask v-for="task in upComing"  :task="task" :id="task.id"   :key="task.id"></dashboardTask>
+                            </transition-group>
+                        </draggable>
+                        <notification v-else :status="'success'">All upcoming tasks are being worked on</notification>
                     </div>
                 </div>
             </div>
@@ -63,6 +61,7 @@
     import store from '../../store';
     import draggable from 'vuedraggable'
     import dashboardTask from '../../components/DashboardTask.vue';
+    import Notification from '../../components/Notification.vue';
     export default {
         data() {
             return{
@@ -70,7 +69,7 @@
             }
         },
         components: {
-            dashboardTask, draggable
+            dashboardTask, draggable, Notification
         },
         computed: {
             workingOnIt:{
