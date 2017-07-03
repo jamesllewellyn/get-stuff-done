@@ -50,6 +50,16 @@ const store = new Vuex.Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addProject'});
             });
         },
+        UPDATE_PROJECT: function ({ commit } ,{id, project}) {
+            axios.put('/api/project/' + id, project)
+                .then(function (response) {
+                    /**  **/
+                    commit('UPDATE_PROJECT_SUCCESS', { id: id, project: response.data.project });
+                })
+                .catch(function (error) {
+                   commit('UPDATE_PROJECT_FAILURE');
+                });
+        },
         /***********************
          * Section Actions
          **********************/
@@ -147,6 +157,20 @@ const store = new Vuex.Store({
             /** add form errors */
             state.formErrors = errors;
         },
+        UPDATE_PROJECT_SUCCESS: (state, { id, project }) => {
+            /** cast id to int **/
+            let pId = parseInt(id);
+            /** get project index **/
+            let pIdx = state.projects.map(project => project.id).indexOf(pId);
+            /** update project name **/
+            state.projects[pIdx].name = project.name;
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'Project name has been updated');
+        },
+        UPDATE_PROJECT_FAILURE: (state) => {
+            Event.$emit('notify','error', 'Whoops', 'Project name couldn\'t be updated');
+
+        },
         /***********************
          * Section Mutations
          **********************/
@@ -194,8 +218,6 @@ const store = new Vuex.Store({
             let tIdx = state.projects[pIdx].sections[sIdx].tasks.map(tasks => task.id).indexOf(tId);
             /** update task to data array **/
             state.projects[pIdx].sections[sIdx].tasks[tIdx] = task;
-            /** notify user of success **/
-           // Event.$emit('notify','success', 'Success', 'Task has been updated');
         },
         UPDATE_TASK_FAILURE: (state, { errors }) => {
             /** add form errors */

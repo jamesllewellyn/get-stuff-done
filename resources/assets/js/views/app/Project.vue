@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 class="title" v-if="project.name" >{{project.name}}</h1>
+        <input class="title" type="text" name="name" placeholder="Task Name" @change="updateProject" v-model="project.name">
         <div class="has-text-right">
             <span class="tag is-orange is-medium">
                 <a  @click.prevent.stop="triggerEvent('toggleModal','addSection')" class="orange">Add Section</a>
@@ -65,7 +65,10 @@
             /** trigger event */
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);
-            }
+            },
+            updateProject:function(){
+                this.$store.dispatch('UPDATE_PROJECT', {id: this.id, project :this.project})
+            },
         },
         mounted() {
             let self = this;

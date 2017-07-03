@@ -4962,13 +4962,25 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addProject' });
             });
         },
+        UPDATE_PROJECT: function UPDATE_PROJECT(_ref4, _ref5) {
+            var commit = _ref4.commit;
+            var id = _ref5.id,
+                project = _ref5.project;
+
+            axios.put('/api/project/' + id, project).then(function (response) {
+                /**  **/
+                commit('UPDATE_PROJECT_SUCCESS', { id: id, project: response.data.project });
+            }).catch(function (error) {
+                commit('UPDATE_PROJECT_FAILURE');
+            });
+        },
         /***********************
          * Section Actions
          **********************/
-        ADD_NEW_SECTION: function ADD_NEW_SECTION(_ref4, _ref5) {
-            var commit = _ref4.commit;
-            var projectId = _ref5.projectId,
-                section = _ref5.section;
+        ADD_NEW_SECTION: function ADD_NEW_SECTION(_ref6, _ref7) {
+            var commit = _ref6.commit;
+            var projectId = _ref7.projectId,
+                section = _ref7.section;
 
             axios.post('/api/project/' + projectId + '/section/', section).then(function (response) {
                 /**  **/
@@ -4985,11 +4997,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addSection' });
             });
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER: function UPDATE_SECTION_TASKS_SORT_ORDER(_ref6, _ref7) {
-            var commit = _ref6.commit;
-            var projectId = _ref7.projectId,
-                section = _ref7.section,
-                tasks = _ref7.tasks;
+        UPDATE_SECTION_TASKS_SORT_ORDER: function UPDATE_SECTION_TASKS_SORT_ORDER(_ref8, _ref9) {
+            var commit = _ref8.commit;
+            var projectId = _ref9.projectId,
+                section = _ref9.section,
+                tasks = _ref9.tasks;
 
             axios.put('/api/project/' + projectId + '/section/' + section.id + '/tasks/reorder', { tasks: tasks }).then(function (response) {
                 // /**  **/
@@ -5002,11 +5014,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Task Actions
          **********************/
-        ADD_NEW_TASK: function ADD_NEW_TASK(_ref8, _ref9) {
-            var commit = _ref8.commit;
-            var projectId = _ref9.projectId,
-                sectionId = _ref9.sectionId,
-                task = _ref9.task;
+        ADD_NEW_TASK: function ADD_NEW_TASK(_ref10, _ref11) {
+            var commit = _ref10.commit;
+            var projectId = _ref11.projectId,
+                sectionId = _ref11.sectionId,
+                task = _ref11.task;
 
             axios.post('/api/project/' + projectId + '/section/' + sectionId + '/task', task).then(function (response) {
                 /**  **/
@@ -5023,10 +5035,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addTask' });
             });
         },
-        UPDATE_TASK: function UPDATE_TASK(_ref10, _ref11) {
-            var commit = _ref10.commit;
-            var id = _ref11.id,
-                task = _ref11.task;
+        UPDATE_TASK: function UPDATE_TASK(_ref12, _ref13) {
+            var commit = _ref12.commit;
+            var id = _ref13.id,
+                task = _ref13.task;
 
             axios.put('/api/task/' + id, task).then(function (response) {
                 /**  **/
@@ -5048,41 +5060,59 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * User Mutations
          **********************/
-        SET_USER: function SET_USER(state, _ref12) {
-            var user = _ref12.user;
+        SET_USER: function SET_USER(state, _ref14) {
+            var user = _ref14.user;
 
             state.user = user;
         },
         /***********************
          * Project Mutations
          **********************/
-        SET_PROJECT_LIST: function SET_PROJECT_LIST(state, _ref13) {
-            var projects = _ref13.projects;
+        SET_PROJECT_LIST: function SET_PROJECT_LIST(state, _ref15) {
+            var projects = _ref15.projects;
 
             projects.forEach(function (project) {
                 state.projects.push(new __WEBPACK_IMPORTED_MODULE_1__core_Project__["a" /* default */](project));
             });
         },
-        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref14) {
-            var project = _ref14.project;
+        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref16) {
+            var project = _ref16.project;
 
             /** add new project to data array*/
             state.projects.push(project);
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New project has been created');
         },
-        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref15) {
-            var errors = _ref15.errors;
+        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref17) {
+            var errors = _ref17.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
+        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref18) {
+            var id = _ref18.id,
+                project = _ref18.project;
+
+            /** cast id to int **/
+            var pId = parseInt(id);
+            /** get project index **/
+            var pIdx = state.projects.map(function (project) {
+                return project.id;
+            }).indexOf(pId);
+            /** update project name **/
+            state.projects[pIdx].name = project.name;
+            /** notify user of success **/
+            Event.$emit('notify', 'success', 'Success', 'Project name has been updated');
+        },
+        UPDATE_PROJECT_FAILURE: function UPDATE_PROJECT_FAILURE(state) {
+            Event.$emit('notify', 'error', 'Whoops', 'Project name couldn\'t be updated');
+        },
         /***********************
          * Section Mutations
          **********************/
-        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref16) {
-            var projectId = _ref16.projectId,
-                section = _ref16.section;
+        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref19) {
+            var projectId = _ref19.projectId,
+                section = _ref19.section;
 
             /** cast id to int **/
             var id = parseInt(projectId);
@@ -5095,8 +5125,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New section has been created');
         },
-        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref17) {
-            var errors = _ref17.errors;
+        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref20) {
+            var errors = _ref20.errors;
 
             /** add form errors */
             state.formErrors = errors;
@@ -5104,10 +5134,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Section Mutations
          **********************/
-        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref18) {
-            var projectId = _ref18.projectId,
-                sectionId = _ref18.sectionId,
-                task = _ref18.task;
+        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref21) {
+            var projectId = _ref21.projectId,
+                sectionId = _ref21.sectionId,
+                task = _ref21.task;
 
             /** cast id to int **/
             var pId = parseInt(projectId);
@@ -5124,17 +5154,17 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
-        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref19) {
-            var errors = _ref19.errors;
+        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref22) {
+            var errors = _ref22.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref20) {
-            var projectId = _ref20.projectId,
-                sectionId = _ref20.sectionId,
-                id = _ref20.id,
-                task = _ref20.task;
+        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref23) {
+            var projectId = _ref23.projectId,
+                sectionId = _ref23.sectionId,
+                id = _ref23.id,
+                task = _ref23.task;
 
             /** cast id to int **/
             var pId = parseInt(projectId);
@@ -5152,19 +5182,17 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
             }).indexOf(tId);
             /** update task to data array **/
             state.projects[pIdx].sections[sIdx].tasks[tIdx] = task;
-            /** notify user of success **/
-            // Event.$emit('notify','success', 'Success', 'Task has been updated');
         },
-        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref21) {
-            var errors = _ref21.errors;
+        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref24) {
+            var errors = _ref24.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref22) {
-            var projectId = _ref22.projectId,
-                section = _ref22.section,
-                tasks = _ref22.tasks;
+        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref25) {
+            var projectId = _ref25.projectId,
+                section = _ref25.section,
+                tasks = _ref25.tasks;
 
             /** cast projectId to in **/
             var pId = parseInt(projectId);
@@ -5184,29 +5212,29 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         /***********************
          * Modal Mutations
          **********************/
-        ADD_MODAL: function ADD_MODAL(state, _ref23) {
-            var name = _ref23.name;
+        ADD_MODAL: function ADD_MODAL(state, _ref26) {
+            var name = _ref26.name;
 
             state.modals.push({ name: name, isVisible: false, isLoading: false });
         },
-        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref24) {
-            var name = _ref24.name;
+        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref27) {
+            var name = _ref27.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isVisible = !state.modals[idx].isVisible;
         },
-        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref25) {
-            var name = _ref25.name;
+        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref28) {
+            var name = _ref28.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isLoading = true;
         },
-        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref26) {
-            var name = _ref26.name;
+        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref29) {
+            var name = _ref29.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -5245,9 +5273,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
             }));
         },
         getSectionById: function getSectionById(state, getters) {
-            return function (_ref27) {
-                var projectId = _ref27.projectId,
-                    sectionId = _ref27.sectionId;
+            return function (_ref30) {
+                var projectId = _ref30.projectId,
+                    sectionId = _ref30.sectionId;
 
                 /** cast ids to int **/
                 var pId = parseInt(projectId);
@@ -5273,10 +5301,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         },
         /** returns a task **/
         getTaskById: function getTaskById(state, getters) {
-            return function (_ref28) {
-                var projectId = _ref28.projectId,
-                    sectionId = _ref28.sectionId,
-                    id = _ref28.id;
+            return function (_ref31) {
+                var projectId = _ref31.projectId,
+                    sectionId = _ref31.sectionId,
+                    id = _ref31.id;
 
                 /** cast ids to int **/
                 var pId = parseInt(projectId);
@@ -32589,6 +32617,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         /** trigger event */
         triggerEvent: function triggerEvent(eventName, payload) {
             Event.$emit(eventName, payload);
+        },
+        updateProject: function updateProject() {
+            this.$store.dispatch('UPDATE_PROJECT', { id: this.id, project: this.project });
         }
     },
     mounted: function mounted() {
@@ -55115,9 +55146,30 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "container"
-  }, [(_vm.project.name) ? _c('h1', {
-    staticClass: "title"
-  }, [_vm._v(_vm._s(_vm.project.name))]) : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.project.name),
+      expression: "project.name"
+    }],
+    staticClass: "title",
+    attrs: {
+      "type": "text",
+      "name": "name",
+      "placeholder": "Task Name"
+    },
+    domProps: {
+      "value": (_vm.project.name)
+    },
+    on: {
+      "change": _vm.updateProject,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.project.name = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
     staticClass: "has-text-right"
   }, [_c('span', {
     staticClass: "tag is-orange is-medium"
