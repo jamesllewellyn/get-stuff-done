@@ -3,26 +3,40 @@ body{
   font-family: $font-family;
   font-weight: 400;
 }
+html {font-size: 0.85em;}
+//p, .p {margin-bottom: 1.3em;}
+
+h1, h2, h3, h4 {
+  font-weight: inherit;
+  line-height: 1.2;
+}
+
+h1, .h1 {
+  margin-top: 0;
+  font-size: 2.074em;
+}
+
+h2, .h2 {font-size: 1.728em;}
+
+h3, .h3 {font-size: 1.44em;}
+
+h4 {font-size: 1.2em;}
 /** Sidebar menu */
 aside{
-
   background-color: #ffffff;
   .side-menu{
-    padding-top:20px;
-    .menu-label{
-      margin-left:1em;
-    }
     .fa-user{
-      font-size: 60px;
+      //font-size: 60px;
     }
     .menu-list{
       a{
-        padding:1em 0.75em;
+        padding:0.8em 0.75em;
         transition: all .3s ease;
+        //font-size:0.85em;
         &.is-active{
           background-color:#ffffff;
           font-weight: bold;
-          border-left:5px solid $orange;
+          border-left:3px solid $orange;
           color:#4a4a4a ;
         }
         &:hover{
@@ -69,9 +83,7 @@ h3{
     margin-top: 1em;
   }
 }
-.title{
-  padding-top:1em;
-}
+
 .is-orange{
   background-color: $orange;
   color:#ffffff;
@@ -98,7 +110,6 @@ h3{
 /** buttons **/
 .status{
   .fa{
-    padding-top: 0.25em;
     transition: color .3s ease;
     color: #f2f4f6;
       &:hover,  &.is-done{
@@ -182,16 +193,8 @@ input{
   border:none !important;
   font-size: 1.25em;
   box-shadow: none !important;
-  &.project-title{
+  &.clear-background{
     background: none;
-    font-weight:400;
-    line-height: 1.125;
-  }
-  &.section-title{
-    font-size: 1.5em;
-  }
-  &.input-title{
-    font-size: 2.75em;
   }
   &.input-date{
     font-size: 1.25em;
@@ -240,7 +243,8 @@ textarea{
 }
 .notification{
   border: 1px solid #dbdbdb;
-
+  padding:1em;
+  margin-top:0.5em;
   &.warn {
     border-left: 5px solid #ff7739;
   }

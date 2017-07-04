@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="home">
         <h1 class="title">
             Dashboard
         </h1>
@@ -8,17 +8,10 @@
                 <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')" class="orange">Add Project</a>
             </span>
         </div>
-        <!--<div class="tabs is-centered">-->
-            <!--<ul>-->
-                <!--<li class="is-active"><a>List</a></li>-->
-                <!--<li><a>Calender</a></li>-->
-                <!--<li><a>Chats</a></li>-->
-            <!--</ul>-->
-        <!--</div>-->
         <hr />
         <div>
             <div class="columns is-multiline">
-                <div class=" column is-full">
+                <div class="column is-full">
                     <div class="box">
                         <h3 class="has-text-centered">Working On It</h3>
                         <draggable v-if="workingOnIt.length != 0" v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle', group:'tasks'}"  @end="drag=false" :element="'table'">

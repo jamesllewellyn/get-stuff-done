@@ -3,7 +3,7 @@
      <div class="box">
          <div class="level">
              <div class="level-left">
-                 <input class="section-title" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="section.name">
+                 <input class="clear-background title h3" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="section.name">
              </div>
              <div class="level-right">
                  <a  @click.prevent.stop="addTask()"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>

@@ -18,8 +18,8 @@
 </head>
 <body>
     <div id="app">
-        <div class="columns layout-cols">
-            <aside class="column is-2 is-hidden-mobile hero menu is-fullheight">
+        <section class="main-content columns is-fullheight">
+            <aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
                 <div class="side-menu">
                     <div class="has-text-centered">
                         <img src="cowboy.png" alt="">
@@ -41,7 +41,7 @@
                         </li>
                         <li>
                             <router-link exact active-class="is-active" tag="a" to="/profile" >
-                               My Profile
+                                My Profile
                             </router-link>
                         </li>
                     </ul>
@@ -58,54 +58,13 @@
                     </ul>
                 </div>
             </aside>
-            <div class="column content">
-                <nav class="nav" id="top">
-                    <div class="container">
-                        <div class="nav-left">
-                            <a class="nav-item" href="{{ url('/') }}">
-                                <!-- Branding Image -->
-                                {{ config('app.name', 'Laravel') }}
-                            </a>
-                        </div>
-                        <span class="nav-toggle">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        </span>
-                        <div class="nav-right nav-menu is-hidden-tablet">
-                            <a class="nav-item is-tab is-active">
-                                Menu 1
-                            </a>
-                            <a class="nav-item is-tab">
-                                Menu 2
-                            </a>
-                            <a class="nav-item is-tab">
-                                Menu 3
-                            </a>
-                            <a class="nav-item is-tab">
-                                Menu 4
-                            </a>
-                        </div>
-                        <!-- Authentication Links -->
-                        <div class="nav-right">
-                            <a class="nav-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                {{ csrf_field() }}
-                            </form>
-                        </div>
-
-                    </div>
-                </nav>
+            <div class="container column is-10">
                 <transition name="fade" mode="out-in" v-bind:key="$route.params.id">
                     <router-view ></router-view>
                 </transition>
             </div>
             <task></task>
-        </div>
+        </section>
         <modal modal-name="addProject" title="Add New Project">
             <template slot="body">
                 <add-project></add-project>

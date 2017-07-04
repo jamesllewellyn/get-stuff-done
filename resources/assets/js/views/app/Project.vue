@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <input class="title project-title" type="text" name="name" placeholder="Project Name" @change="updateProject" v-model="project.name">
+    <div class="project">
+        <input class="title clear-background h1" type="text" name="name" placeholder="Project Name" @change="updateProject" v-model="project.name">
         <div class="has-text-right">
             <span class="tag is-orange is-medium">
                 <a  @click.prevent.stop="triggerEvent('toggleModal','addSection')" class="orange">Add Section</a>
