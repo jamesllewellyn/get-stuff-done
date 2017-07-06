@@ -2,10 +2,10 @@
     <div class="task-wrapper">
         <div class="task-background is-fullheight" v-if="isVisible" @click="hideTask"></div>
         <transition name="slide">
-            <aside class="task hero is-fullheight" v-if="isVisible">
+            <aside class="task hero is-fullheight has-shadow" v-if="isVisible">
                 <div class="header">
                     <span class="status has-text-left"><i class="fa fa-circle" :class="status" aria-hidden="true"></i></span>
-                    <input class="input-title" type="text" name="name" placeholder="Task Name" @change="updateTask" v-model="task.name">
+                    <input class="clear-background title h2" type="text" name="name" placeholder="Task Name" @change="updateTask" v-model="task.name">
                     <h3> </h3>
                     <p class="is-pulled-left"> created by <strong>You </strong> </p>
                     <p class="has-text-right"> created on <strong v-text="convertDate(task.created_at)"></strong> </p>

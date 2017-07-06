@@ -55335,6 +55335,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h3', {
     staticClass: "has-text-centered"
   }, [_vm._v("Working On It")]), _vm._v(" "), (_vm.workingOnIt.length != 0) ? _c('draggable', {
+    staticClass: "table task-table",
     attrs: {
       "options": {
         handle: '.handle',
@@ -55381,6 +55382,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h3', {
     staticClass: "has-text-centered"
   }, [_vm._v("Over Due")]), _vm._v(" "), (_vm.overDue.length != 0) ? _c('draggable', {
+    staticClass: "table task-table",
     attrs: {
       "options": {
         handle: '.handle',
@@ -55427,6 +55429,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h3', {
     staticClass: "has-text-centered"
   }, [_vm._v("Deadlines Coming")]), _vm._v(" "), (_vm.upComing.length != 0) ? _c('draggable', {
+    staticClass: "table task-table",
     attrs: {
       "options": {
         handle: '.handle',
@@ -55605,7 +55608,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "slide"
     }
   }, [(_vm.isVisible) ? _c('aside', {
-    staticClass: "task hero is-fullheight"
+    staticClass: "task hero is-fullheight has-shadow"
   }, [_c('div', {
     staticClass: "header"
   }, [_c('span', {
@@ -55623,7 +55626,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       value: (_vm.task.name),
       expression: "task.name"
     }],
-    staticClass: "input-title",
+    staticClass: "clear-background title h2",
     attrs: {
       "type": "text",
       "name": "name",

@@ -28,7 +28,7 @@ class SectionController extends Controller
         /** create new section */
         $section = Section::create(['name' => $request->get('name'), 'project_id' => $project->id]);
         /** return success and stored section */
-        return ['success' => true, 'message' => 'section has been created', 'section' => $section];
+        return response()->json(['success' => true, 'message' => 'section has been created', 'section' => $section]);
     }
 
     /**
@@ -39,10 +39,10 @@ class SectionController extends Controller
     public function show(Section $section) {
         /** If section cant be found return error */
         if(!$section){
-            return ['success' => false, 'message' => 'The requested section could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested section could not be found']);
         }
         /** return success and requested section */
-        return ['success' => true, 'message' => 'section has been found', 'project' => $section];
+        return response()->json(['success' => true, 'message' => 'section has been found', 'project' => $section]);
     }
 
     /**
@@ -54,7 +54,7 @@ class SectionController extends Controller
     public function update(Request $request, Section $section) {
         /** If section cant be found return error */
         if(!$section){
-            return ['success' => false, 'message' => 'The requested section could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested section could not be found']);
         }
         /** validate the section data */
         $this->validate(Request(),$section->validation, $section->messages);
@@ -64,7 +64,7 @@ class SectionController extends Controller
         $section->name = $request->get('name');
         $section->save();
         /** return success and updated project */
-        return ['success' => true, 'message' => 'section has been updated', 'project' => $project,'section' => $section,];
+        return response()->json(['success' => true, 'message' => 'section has been updated', 'project' => $project,'section' => $section]);
     }
     /**
      * update section data
@@ -75,12 +75,12 @@ class SectionController extends Controller
     public function reorderTasks(Request $request, Project $project, Section $section) {
         /** If section cant be found return error */
         if(!$section){
-            return ['success' => false, 'message' => 'The requested section could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested section could not be found']);
         }
         /** Get tasks from request */
         $tasks = $request->get('tasks');
         if(!$tasks){
-            return ['success' => false, 'message' => 'Request did not contain tasks'];
+            return response()->json(['success' => false, 'message' => 'Request did not contain tasks']);
         }
         /** :Todo validation to make sure that tasks belong to section and project **/
         foreach ($tasks as $t) {
@@ -89,7 +89,7 @@ class SectionController extends Controller
             $task->save();
         }
         /** return success and updated project */
-        return ['success' => true, 'message' => 'section task have been updated'];
+        return response()->json(['success' => true, 'message' => 'section task have been updated']);
     }
 
     /**
@@ -100,11 +100,11 @@ class SectionController extends Controller
     public function destroy(Section $section) {
         /** If section cant be found return error */
         if(!$section){
-            return ['success' => false, 'message' => 'The requested section could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested section could not be found']);
         }
         /** delete project */
         $section->delete();
         /** return success message */
-        return ['success' => true, 'message' => 'Section '.$section->name.' has been successfully deleted'];
+        return response()->json(['success' => true, 'message' => 'Section '.$section->name.' has been successfully deleted']);
     }
 }

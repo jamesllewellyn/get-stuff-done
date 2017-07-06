@@ -18,8 +18,21 @@
 </head>
 <body>
     <div id="app">
-        <section class="main-content columns is-fullheight">
-            <aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
+        <nav class="nav is-hidden-desktop">
+            <div class="container">
+                <label for="menu-toggle" class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+                <div class="nav-right">
+                    <a class="nav-item">
+                        {{--Getting Stuff Done--}}
+                    </a>
+                </div>
+        </nav>
+        <section class="main-content columns">
+            <aside class="column is-2 is-narrow-mobile is-fullheight  section is-hidden-touch hero">
                 <div class="side-menu">
                     <div class="has-text-centered">
                         <img src="cowboy.png" alt="">
@@ -58,7 +71,7 @@
                     </ul>
                 </div>
             </aside>
-            <div class="container column is-10">
+            <div class="container column is-10 hero">
                 <transition name="fade" mode="out-in" v-bind:key="$route.params.id">
                     <router-view ></router-view>
                 </transition>

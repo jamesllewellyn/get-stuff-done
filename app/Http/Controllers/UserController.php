@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function index(Request $request) {
         /** return current logged in user */
-        return $request->user();
+        return response()->json($request->user());
     }
 
     /**
@@ -37,7 +37,7 @@ class UserController extends Controller
     public function update(Request $request, Project $project) {
         /** If project cant be found return error */
         if(!$project){
-            return ['success' => false, 'message' => 'The requested project could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
         }
         /** validate the request data */
         $this->validate(Request(),$project->validation, $project->messages);
@@ -45,7 +45,7 @@ class UserController extends Controller
         $project->name = $request->get('name');
         $project->save();
         /** return success and updated project */
-        return ['success' => true, 'message' => 'project has been updated', 'project' => $project];
+        return response()->json(['success' => true, 'message' => 'project has been updated', 'project' => $project]);
     }
 
     /**
@@ -56,12 +56,12 @@ class UserController extends Controller
     public function destroy(User $user) {
         /** If user cant be found return error */
         if(!$user){
-            return ['success' => false, 'message' => 'The requested user could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested user could not be found']);
         }
         /** delete user */
         $user->delete();
         /** return success message */
-        return ['success' => true, 'message' => 'User '.$user->name.' has been successfully deleted'];
+        return response()->json(['success' => true, 'message' => 'User '.$user->name.' has been successfully deleted']);
     }
 
     /**
@@ -72,9 +72,9 @@ class UserController extends Controller
     public function projects(User $user) {
         /** If user cant be found return error */
         if(!$user){
-            return ['success' => false, 'message' => 'The requested user could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested user could not be found']);
         }
         /** return success message */
-        return $user->projects()->with('sections', 'sections.tasks')->get();
+        return response()->json($user->projects()->with('sections', 'sections.tasks')->get());
     }
 }

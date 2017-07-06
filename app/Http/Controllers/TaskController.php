@@ -44,7 +44,7 @@ class TaskController extends Controller
         /** create SectionTask join */
         SectionTask::create(['section_id' => $section->id, 'task_id' => $task->id]);
         /** return success and stored task */
-        return ['success' => true, 'message' => 'New task has been added to '.$section->name , 'task' => $task];
+        return response()->json(['success' => true, 'message' => 'New task has been added to '.$section->name , 'task' => $task]);
     }
 
     /**
@@ -55,10 +55,10 @@ class TaskController extends Controller
     public function show(Task $task) {
         /** If task cant be found return error */
         if(!$task){
-            return ['success' => false, 'message' => 'The requested task could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
         }
         /** return success and requested task */
-        return ['success' => true, 'message' => 'task has been found', 'task' => $task];
+        return response()->json(['success' => true, 'message' => 'task has been found', 'task' => $task]);
     }
 
     /**
@@ -70,7 +70,7 @@ class TaskController extends Controller
     public function update(Request $request,Task $task) {
         /** If section cant be found return error */
         if(!$task){
-            return ['success' => false, 'message' => 'The requested task could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
         }
         /** find section **/
         $section = $task->section()->first();
@@ -87,7 +87,7 @@ class TaskController extends Controller
         $task->status_id = $request->get('status_id');
         $task->save();
         /** return success and updated task */
-        return ['success' => true, 'message' => 'task has been updated', 'task' => $task, 'projectId' => $project->id, 'sectionId' => $section->id];
+        return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task, 'projectId' => $project->id, 'sectionId' => $section->id]);
     }
     /**
      * Flag task as done
@@ -97,13 +97,13 @@ class TaskController extends Controller
     public function done(Task $task) {
         /** If task cant be found return error */
         if(!$task){
-            return ['success' => false, 'message' => 'The requested task could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
         }
         /** flag task as done */
         $task->status_id = 1;
         $task->save();
         /** return success message */
-        return ['success' => true, 'message' => 'Task '.$task->name.' has been flagged as done'];
+        return response()->json(['success' => true, 'message' => 'Task '.$task->name.' has been flagged as done']);
     }
 
     /**
@@ -114,11 +114,11 @@ class TaskController extends Controller
     public function destroy(Task $task) {
         /** If task cant be found return error */
         if(!$task){
-            return ['success' => false, 'message' => 'The requested task could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
         }
         /** delete project */
         $task->delete();
         /** return success message */
-        return ['success' => true, 'message' => 'Task '.$task->name.' has been successfully deleted'];
+        return response()->json(['success' => true, 'message' => 'Task '.$task->name.' has been successfully deleted']);
     }
 }

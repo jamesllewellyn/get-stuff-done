@@ -18,7 +18,7 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return Project::all();
+        return response()->json(Project::all());
     }
     /**
      * Store new project
@@ -34,7 +34,7 @@ class ProjectController extends Controller
         /** create new user_project join */
         UserProject::create(['user_id' =>  Auth::user()->id, 'project_id' => $project->id]);
         /** return success and stored project */
-        return ['success' => true, 'message' => 'project has been created', 'project' => $project];
+        return response()->json(['success' => true, 'message' => 'project has been created', 'project' => $project]);
     }
 
     /**
@@ -45,10 +45,10 @@ class ProjectController extends Controller
     public function show(Project $project) {
         /** If project cant be found return error */
         if(!$project){
-            return ['success' => false, 'message' => 'The requested project could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
         }
         /** return success and requested project */
-        return ['success' => true, 'message' => 'project has been found', 'project' => $project];
+        return response()->json(['success' => true, 'message' => 'project has been found', 'project' => $project]);
     }
 
     /**
@@ -60,10 +60,10 @@ class ProjectController extends Controller
     public function sections(Request $request, Project $project) {
         /** If project cant be found return error */
         if(!$project){
-            return ['success' => false, 'message' => 'The requested project could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
         }
         /** return project sections */
-        return $project->sections()->get();
+        return response()->json($project->sections()->get());
     }
 
     /**
@@ -75,7 +75,7 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project) {
         /** If project cant be found return error */
         if(!$project){
-            return ['success' => false, 'message' => 'The requested project could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
         }
         /** validate the request data */
         $this->validate(Request(),$project->validation, $project->messages);
@@ -83,7 +83,7 @@ class ProjectController extends Controller
         $project->name = $request->get('name');
         $project->save();
         /** return success and updated project */
-        return ['success' => true, 'message' => 'project has been updated', 'project' => $project];
+        return response()->json(['success' => true, 'message' => 'project has been updated', 'project' => $project]);
     }
 
     /**
@@ -94,11 +94,11 @@ class ProjectController extends Controller
     public function destroy(Project $project) {
         /** If project cant be found return error */
         if(!$project){
-            return ['success' => false, 'message' => 'The requested project could not be found'];
+            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
         }
         /** delete project */
         $project->delete();
         /** return success message */
-        return ['success' => true, 'message' => 'Project '.$project->name.' has been successfully deleted'];
+        return response()->json(['success' => true, 'message' => 'Project '.$project->name.' has been successfully deleted']);
     }
 }
