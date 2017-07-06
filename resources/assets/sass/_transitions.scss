@@ -65,3 +65,16 @@
   opacity: 0;
   transform: translateX(30px);
 }
+
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all 0.75s;
+}
+.slide-left-enter, .task-left-leave-to /* .list-leave-active for <2.1.8 */ {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translateX(-30px);
+}

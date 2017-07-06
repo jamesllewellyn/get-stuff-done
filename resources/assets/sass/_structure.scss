@@ -51,10 +51,21 @@ aside{
     }
   }
 }
+.mobile-side-nav{
+  z-index: 5;
+  width: 90% !important;
+  display: block;
+  left: 0;
+  bottom: 0;
+  top:  0;
+  position: absolute;
+}
 /** top nav */
-.nav{
-
-  //border-bottom: 1px solid #dbdbdb;
+.navbar{
+  .navbar-burger{
+    margin-left:0;
+    margin-top:0.5em;
+  }
 }
 .container{
   padding: 10px 20px;
@@ -79,7 +90,10 @@ h3{
   border-top: 1px solid #dbdbdb;
   border-bottom: 1px solid #dbdbdb;
 }
-
+/** page */
+.header{
+  padding-top: 1em;
+}
 /** typography */
 .content{
   .box{

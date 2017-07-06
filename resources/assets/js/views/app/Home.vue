@@ -1,12 +1,18 @@
 <template>
     <div class="home">
-        <h1 class="title">
-            Dashboard
-        </h1>
-        <div class="has-text-right">
+        <div class="level header is-mobile">
+            <div class="level-left">
+                <h1 class="title">
+                    Dashboard
+                </h1>
+            </div>
+            <div class="level-right">
+                <div class="has-text-right">
             <span class="tag is-orange is-medium">
                 <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')" class="orange">Add Project</a>
             </span>
+                </div>
+            </div>
         </div>
         <hr />
         <div>

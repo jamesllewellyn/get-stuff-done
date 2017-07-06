@@ -8,7 +8,8 @@ const store = new Vuex.Store({
         projects: [],
         user:{},
         formErrors: {},
-        modals:[]
+        modals:[],
+        navVisible: false
     },
     actions: {
         /***********************
@@ -269,6 +270,8 @@ const store = new Vuex.Store({
         TOGGLE_MODAL_IS_VISIBLE: (state,{name}) =>{
             let idx = state.modals.map(modal => modal.name).indexOf(name);
             state.modals[idx].isVisible = !state.modals[idx].isVisible;
+            /** clear all form errors **/
+            state.formErrors = '';
         },
         SET_BUTTON_TO_LOADING: (state,{name}) =>{
             let idx = state.modals.map(modal => modal.name).indexOf(name);
@@ -277,7 +280,13 @@ const store = new Vuex.Store({
         REMOVE_BUTTON_LOADING_STATE: (state,{name}) =>{
             let idx = state.modals.map(modal => modal.name).indexOf(name);
             state.modals[idx].isLoading = false;
-        }
+        },
+        /***********************
+         * Nav Mutations
+         **********************/
+        TOGGLE_NAV_IS_VISIBLE: (state) =>{
+            state.navVisible = !state.navVisible;
+        },
     },
     getters: {
         openProjects: state => {

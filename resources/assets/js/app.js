@@ -4,7 +4,7 @@ import store from './store';
 import AddProject from './components/modals/AddProject.vue';
 import Modal from './components/Modal.vue';
 import Task from './components/Task.vue';
-
+import navigation from './components/Nav.vue';
 window.Event = new Vue();
 import { mapState, mapGetters } from 'vuex'
 const app = new Vue({
@@ -13,11 +13,11 @@ const app = new Vue({
     store,
     computed:
         mapState([
-            'projects', 'user'
+            'projects', 'user', 'navVisible'
          ])
     ,
     components : {
-        Task, Modal, AddProject
+        Task, Modal, AddProject, navigation
     },
     methods: {
         /** trigger toggle modal event */
@@ -39,6 +39,9 @@ const app = new Vue({
                 title: title,
                 text: text
             });
+        });
+        Event.$on('showNav', function() {
+            store.commit('TOGGLE_NAV_IS_VISIBLE');
         });
     }
 });

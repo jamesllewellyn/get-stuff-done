@@ -4918,7 +4918,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
         projects: [],
         user: {},
         formErrors: {},
-        modals: []
+        modals: [],
+        navVisible: false
     },
     actions: {
         /***********************
@@ -5260,6 +5261,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isVisible = !state.modals[idx].isVisible;
+            /** clear all form errors **/
+            state.formErrors = '';
         },
         SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref31) {
             var name = _ref31.name;
@@ -5276,6 +5279,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* default */].Store({
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isLoading = false;
+        },
+        /***********************
+         * Nav Mutations
+         **********************/
+        TOGGLE_NAV_IS_VISIBLE: function TOGGLE_NAV_IS_VISIBLE(state) {
+            state.navVisible = !state.navVisible;
         }
     },
     getters: {
@@ -17202,7 +17211,7 @@ module.exports = Component.exports
 
 "use strict";
 /**
-  * vue-router v2.6.0
+  * vue-router v2.7.0
   * (c) 2017 Evan You
   * @license MIT
   */
@@ -17218,6 +17227,10 @@ function warn (condition, message) {
   if ("development" !== 'production' && !condition) {
     typeof console !== 'undefined' && console.warn(("[vue-router] " + message));
   }
+}
+
+function isError (err) {
+  return Object.prototype.toString.call(err).indexOf('Error') > -1
 }
 
 var View = {
@@ -17721,7 +17734,7 @@ function install (Vue) {
 
   var strats = Vue.config.optionMergeStrategies;
   // use the same hook merging strategy for route hooks
-  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.created;
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created;
 }
 
 /*  */
@@ -18861,6 +18874,107 @@ function runQueue (queue, fn, cb) {
 
 /*  */
 
+function resolveAsyncComponents (matched) {
+  return function (to, from, next) {
+    var hasAsync = false;
+    var pending = 0;
+    var error = null;
+
+    flatMapComponents(matched, function (def, _, match, key) {
+      // if it's a function and doesn't have cid attached,
+      // assume it's an async component resolve function.
+      // we are not using Vue's default async resolving mechanism because
+      // we want to halt the navigation until the incoming component has been
+      // resolved.
+      if (typeof def === 'function' && def.cid === undefined) {
+        hasAsync = true;
+        pending++;
+
+        var resolve = once(function (resolvedDef) {
+          if (resolvedDef.__esModule && resolvedDef.default) {
+            resolvedDef = resolvedDef.default;
+          }
+          // save resolved on async factory in case it's used elsewhere
+          def.resolved = typeof resolvedDef === 'function'
+            ? resolvedDef
+            : _Vue.extend(resolvedDef);
+          match.components[key] = resolvedDef;
+          pending--;
+          if (pending <= 0) {
+            next();
+          }
+        });
+
+        var reject = once(function (reason) {
+          var msg = "Failed to resolve async component " + key + ": " + reason;
+          "development" !== 'production' && warn(false, msg);
+          if (!error) {
+            error = isError(reason)
+              ? reason
+              : new Error(msg);
+            next(error);
+          }
+        });
+
+        var res;
+        try {
+          res = def(resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+        if (res) {
+          if (typeof res.then === 'function') {
+            res.then(resolve, reject);
+          } else {
+            // new syntax in Vue 2.3
+            var comp = res.component;
+            if (comp && typeof comp.then === 'function') {
+              comp.then(resolve, reject);
+            }
+          }
+        }
+      }
+    });
+
+    if (!hasAsync) { next(); }
+  }
+}
+
+function flatMapComponents (
+  matched,
+  fn
+) {
+  return flatten(matched.map(function (m) {
+    return Object.keys(m.components).map(function (key) { return fn(
+      m.components[key],
+      m.instances[key],
+      m, key
+    ); })
+  }))
+}
+
+function flatten (arr) {
+  return Array.prototype.concat.apply([], arr)
+}
+
+// in Webpack 2, require.ensure now also returns a Promise
+// so the resolve/reject functions may get called an extra time
+// if the user uses an arrow function shorthand that happens to
+// return that Promise.
+function once (fn) {
+  var called = false;
+  return function () {
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
+
+    if (called) { return }
+    called = true;
+    return fn.apply(this, args)
+  }
+}
+
+/*  */
+
 var History = function History (router, base) {
   this.router = router;
   this.base = normalizeBase(base);
@@ -19154,106 +19268,6 @@ function poll (
       poll(cb, instances, key, isValid);
     }, 16);
   }
-}
-
-function resolveAsyncComponents (matched) {
-  return function (to, from, next) {
-    var hasAsync = false;
-    var pending = 0;
-    var error = null;
-
-    flatMapComponents(matched, function (def, _, match, key) {
-      // if it's a function and doesn't have cid attached,
-      // assume it's an async component resolve function.
-      // we are not using Vue's default async resolving mechanism because
-      // we want to halt the navigation until the incoming component has been
-      // resolved.
-      if (typeof def === 'function' && def.cid === undefined) {
-        hasAsync = true;
-        pending++;
-
-        var resolve = once(function (resolvedDef) {
-          // save resolved on async factory in case it's used elsewhere
-          def.resolved = typeof resolvedDef === 'function'
-            ? resolvedDef
-            : _Vue.extend(resolvedDef);
-          match.components[key] = resolvedDef;
-          pending--;
-          if (pending <= 0) {
-            next();
-          }
-        });
-
-        var reject = once(function (reason) {
-          var msg = "Failed to resolve async component " + key + ": " + reason;
-          "development" !== 'production' && warn(false, msg);
-          if (!error) {
-            error = isError(reason)
-              ? reason
-              : new Error(msg);
-            next(error);
-          }
-        });
-
-        var res;
-        try {
-          res = def(resolve, reject);
-        } catch (e) {
-          reject(e);
-        }
-        if (res) {
-          if (typeof res.then === 'function') {
-            res.then(resolve, reject);
-          } else {
-            // new syntax in Vue 2.3
-            var comp = res.component;
-            if (comp && typeof comp.then === 'function') {
-              comp.then(resolve, reject);
-            }
-          }
-        }
-      }
-    });
-
-    if (!hasAsync) { next(); }
-  }
-}
-
-function flatMapComponents (
-  matched,
-  fn
-) {
-  return flatten(matched.map(function (m) {
-    return Object.keys(m.components).map(function (key) { return fn(
-      m.components[key],
-      m.instances[key],
-      m, key
-    ); })
-  }))
-}
-
-function flatten (arr) {
-  return Array.prototype.concat.apply([], arr)
-}
-
-// in Webpack 2, require.ensure now also returns a Promise
-// so the resolve/reject functions may get called an extra time
-// if the user uses an arrow function shorthand that happens to
-// return that Promise.
-function once (fn) {
-  var called = false;
-  return function () {
-    var args = [], len = arguments.length;
-    while ( len-- ) args[ len ] = arguments[ len ];
-
-    if (called) { return }
-    called = true;
-    return fn.apply(this, args)
-  }
-}
-
-function isError (err) {
-  return Object.prototype.toString.call(err).indexOf('Error') > -1
 }
 
 /*  */
@@ -19694,7 +19708,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '2.6.0';
+VueRouter.version = '2.7.0';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);
@@ -30664,7 +30678,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Task_vue__ = __webpack_require__(188);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Task_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuex__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Nav_vue__ = __webpack_require__(218);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Nav_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_Nav_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vuex__ = __webpack_require__(137);
 
 
 
@@ -30678,10 +30694,10 @@ var app = new Vue({
     el: '#app',
     router: __WEBPACK_IMPORTED_MODULE_1__app_routes__["a" /* default */],
     store: __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */],
-    computed: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* mapState */])(['projects', 'user']),
+    computed: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_7_vuex__["a" /* mapState */])(['projects', 'user', 'navVisible']),
 
     components: {
-        Task: __WEBPACK_IMPORTED_MODULE_5__components_Task_vue___default.a, Modal: __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue___default.a, AddProject: __WEBPACK_IMPORTED_MODULE_3__components_modals_AddProject_vue___default.a
+        Task: __WEBPACK_IMPORTED_MODULE_5__components_Task_vue___default.a, Modal: __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue___default.a, AddProject: __WEBPACK_IMPORTED_MODULE_3__components_modals_AddProject_vue___default.a, navigation: __WEBPACK_IMPORTED_MODULE_6__components_Nav_vue___default.a
     },
     methods: {
         /** trigger toggle modal event */
@@ -30703,6 +30719,9 @@ var app = new Vue({
                 title: title,
                 text: text
             });
+        });
+        Event.$on('showNav', function () {
+            __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */].commit('TOGGLE_NAV_IS_VISIBLE');
         });
     }
 });
@@ -32553,6 +32572,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -32622,6 +32647,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Section___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Section__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue__ = __webpack_require__(130);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Modal_vue__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -55212,6 +55243,10 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "project"
+  }, [_c('div', {
+    staticClass: "level header is-mobile"
+  }, [_c('div', {
+    staticClass: "level-left"
   }, [_c('input', {
     directives: [{
       name: "model",
@@ -55235,7 +55270,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.project.name = $event.target.value
       }
     }
-  }), _vm._v(" "), _c('div', {
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "level-right"
+  }, [_c('div', {
     staticClass: "has-text-right"
   }, [_c('span', {
     staticClass: "tag is-orange is-medium"
@@ -55248,7 +55285,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.triggerEvent('toggleModal', 'addSection')
       }
     }
-  }, [_vm._v("Add Section")])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [_c('div', {
+  }, [_vm._v("Add Section")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [_c('div', {
     staticClass: "columns is-multiline"
   }, _vm._l((_vm.project.sections), function(section) {
     return _c('project-section', {
@@ -55311,9 +55348,11 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "home"
-  }, [_c('h1', {
-    staticClass: "title"
-  }, [_vm._v("\n        Dashboard\n    ")]), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "level header is-mobile"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "level-right"
+  }, [_c('div', {
     staticClass: "has-text-right"
   }, [_c('span', {
     staticClass: "tag is-orange is-medium"
@@ -55326,7 +55365,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.triggerEvent('toggleModal', 'addProject')
       }
     }
-  }, [_vm._v("Add Project")])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [_c('div', {
+  }, [_vm._v("Add Project")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [_c('div', {
     staticClass: "columns is-multiline"
   }, [_c('div', {
     staticClass: "column is-full"
@@ -55470,7 +55509,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "status": 'success'
     }
   }, [_vm._v("All upcoming tasks are being worked on")])], 1)])])])])
-},staticRenderFns: []}
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "level-left"
+  }, [_c('h1', {
+    staticClass: "title"
+  }, [_vm._v("\n                Dashboard\n            ")])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -61688,6 +61733,220 @@ module.exports = function listToStyles (parentId, list) {
 __webpack_require__(140);
 module.exports = __webpack_require__(141);
 
+
+/***/ }),
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        projects: {
+            required: true
+        },
+        user: {
+            required: true
+        },
+        addClass: {
+            required: false
+        },
+        isMobileNav: {
+            required: false,
+            default: false
+        }
+    },
+    methods: {
+        triggerEvent: function triggerEvent(eventName) {
+            Event.$emit(eventName);
+        }
+    },
+    mounted: function mounted() {
+        //            console.log('Nav mounted.')
+    }
+});
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(217),
+  /* template */
+  __webpack_require__(219),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/laravel-tasks/resources/assets/js/components/Nav.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Nav.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-402cbc1e", Component.options)
+  } else {
+    hotAPI.reload("data-v-402cbc1e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('aside', {
+    staticClass: "column is-2 is-fullheight hero",
+    class: _vm.addClass
+  }, [_c('div', {
+    staticClass: "side-menu"
+  }, [(_vm.isMobileNav) ? _c('div', {
+    staticClass: "navbar-burger is-pulled-left is-active",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        _vm.triggerEvent('showNav')
+      }
+    }
+  }, [_c('span'), _vm._v(" "), _c('span'), _vm._v(" "), _c('span')]) : _vm._e(), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "has-text-centered"
+  }, [_c('a', {
+    staticClass: "has-text-centered",
+    attrs: {
+      "href": "#",
+      "role": "button",
+      "aria-expanded": "false"
+    }
+  }, [_c('span', {
+    domProps: {
+      "textContent": _vm._s(_vm.user.name)
+    }
+  }, [_c('span', {
+    staticClass: "caret"
+  })])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
+    staticClass: "menu-label"
+  }, [_vm._v("\n            General\n        ")]), _vm._v(" "), _c('ul', {
+    staticClass: "menu-list"
+  }, [_c('li', [_c('router-link', {
+    attrs: {
+      "exact": "",
+      "active-class": "is-active",
+      "tag": "a",
+      "to": "/"
+    }
+  }, [_vm._v("\n                    Dashboard\n                ")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
+    attrs: {
+      "exact": "",
+      "active-class": "is-active",
+      "tag": "a",
+      "to": "/profile"
+    }
+  }, [_vm._v("\n                    My Profile\n                ")])], 1)]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
+    staticClass: "menu-label"
+  }, [_vm._v("\n            Projects "), _c('a', {
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        _vm.triggerEvent('toggleModal', 'addProject')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-plus-circle is-pulled-right align-vertical",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])]), _vm._v(" "), _c('ul', {
+    staticClass: "menu-list"
+  }, _vm._l((_vm.projects), function(project) {
+    return _c('li', [_c('router-link', {
+      attrs: {
+        "exact": "",
+        "active-class": "is-active",
+        "tag": "a",
+        "to": '/project/' + project.id
+      }
+    }, [_vm._v("\n                    " + _vm._s(project.name) + "\n                ")])], 1)
+  }))])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "has-text-centered"
+  }, [_c('img', {
+    attrs: {
+      "src": "cowboy.png",
+      "alt": ""
+    }
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-402cbc1e", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
