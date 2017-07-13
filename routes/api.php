@@ -19,6 +19,10 @@ use Illuminate\Http\Request;
     Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show','update', 'destroy']]);
     /** get users projects */
     Route::get('/user/{user}/projects', ['uses'=>'UserController@projects', 'as'=>'User.projects'] );
+    /** set users avatar */
+    Route::post('/user/{user}/avatar', ['uses'=>'UserController@avatar', 'as'=>'User.store.avatar'] );
+
+
 /***********************
  * Project API
  **********************/

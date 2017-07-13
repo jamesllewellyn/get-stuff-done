@@ -1,6 +1,6 @@
 <template>
     <div class="task-wrapper">
-        <div class="task-background is-fullheight" v-if="isVisible" @click="hideTask"></div>
+        <div class="task-background modal-background is-fullheight" v-if="isVisible" @click="hideTask"></div>
         <transition name="slide">
             <aside class="task hero is-fullheight has-shadow" v-if="isVisible">
                 <div class="header">

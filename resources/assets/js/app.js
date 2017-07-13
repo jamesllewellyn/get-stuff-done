@@ -4,6 +4,7 @@ import store from './store';
 import AddProject from './components/modals/AddProject.vue';
 import Modal from './components/Modal.vue';
 import Task from './components/Task.vue';
+import Profile from './components/Profile.vue';
 import navigation from './components/Nav.vue';
 window.Event = new Vue();
 import { mapState, mapGetters } from 'vuex'
@@ -13,11 +14,11 @@ const app = new Vue({
     store,
     computed:
         mapState([
-            'projects', 'user', 'navVisible'
+            'projects', 'user', 'navVisible', 'profileVisible'
          ])
     ,
     components : {
-        Task, Modal, AddProject, navigation
+        Task, Modal, AddProject, navigation , Profile
     },
     methods: {
         /** trigger toggle modal event */
@@ -40,8 +41,11 @@ const app = new Vue({
                 text: text
             });
         });
-        Event.$on('showNav', function() {
+        Event.$on('toggleNav', function() {
             store.commit('TOGGLE_NAV_IS_VISIBLE');
+        });
+        Event.$on('toggleProfile', function() {
+            store.commit('TOGGLE_PROFILE_IS_VISIBLE');
         });
     }
 });

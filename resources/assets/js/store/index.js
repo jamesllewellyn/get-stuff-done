@@ -9,7 +9,8 @@ const store = new Vuex.Store({
         user:{},
         formErrors: {},
         modals:[],
-        navVisible: false
+        navVisible: false,
+        profileVisible: false,
     },
     actions: {
         /***********************
@@ -22,6 +23,22 @@ const store = new Vuex.Store({
             }, (err) => {
                 console.log(err)
             });
+        },
+        ADD_USER_AVATAR:function({commit, state}, base64 ){
+            axios.post('/api/user/'+state.user.id+'/avatar', {base64 : base64})
+                .then(function (response) {
+                    /** call success */
+                    commit('ADD_USER_AVATAR_SUCCESS');
+                    /** close modal */
+                    commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'uploadAvatar'});
+                })
+                .catch(function (error) {
+                    // if(error.response.data){
+                    //     commit('ADD_PROJECT_FAILURE', { errors:  error.response.data });
+                    // }
+                    // /** clear button loading state*/
+                    // commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addProject'});
+                });
         },
         /***********************
          * Project Actions
@@ -149,6 +166,9 @@ const store = new Vuex.Store({
          **********************/
         SET_USER: (state, { user }) => {
             state.user = user;
+        },
+        ADD_USER_AVATAR_SUCCESS: (state) => {
+            Event.$emit('notify','success', 'Success', 'Your avatar has been updated');
         },
         /***********************
          * Project Mutations
@@ -287,6 +307,12 @@ const store = new Vuex.Store({
         TOGGLE_NAV_IS_VISIBLE: (state) =>{
             state.navVisible = !state.navVisible;
         },
+        /***********************
+         * Profile Mutations
+         **********************/
+        TOGGLE_PROFILE_IS_VISIBLE:(state)=>{
+            state.profileVisible = !state.profileVisible;
+        }
     },
     getters: {
         openProjects: state => {

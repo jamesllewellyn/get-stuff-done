@@ -17,7 +17,7 @@
     <div id="app">
         <nav class="navbar is-hidden-desktop">
             <div class="navbar-brand">
-                <div class="navbar-burger is-pulled-left" @click.prevent.stop="triggerEvent('showNav')">
+                <div class="navbar-burger is-pulled-left" @click.prevent.stop="triggerEvent('toggleNav')">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -32,7 +32,7 @@
         <section class="main-content columns">
 
             <transition name="slide-left">
-                <navigation v-if="navVisible" :add-class="'mobile-side-nav'" :projects="projects" :user="user" :is-mobile-nav="true"></navigation>
+                <navigation v-if="navVisible" :add-class="'mobile-side-nav is-hidden-desktop'" :projects="projects" :user="user" :is-mobile-nav="true"></navigation>
             </transition>
 
             <navigation :add-class="'is-hidden-touch'" :projects="projects" :user="user"></navigation>
@@ -43,13 +43,14 @@
                 </transition>
             </div>
             <task></task>
+            <profile></profile>
         </section>
         <modal modal-name="addProject" title="Add New Project">
             <template slot="body">
                 <add-project></add-project>
             </template>
         </modal>
-        <notifications />
+        <notifications></notifications>
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

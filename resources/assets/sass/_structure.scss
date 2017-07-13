@@ -7,7 +7,7 @@ body{
   background-color:inherit;
 }
 html {font-size: 0.85em;}
-//p, .p {margin-bottom: 1.3em;}
+
 
 h1, h2, h3, h4 {
   font-weight: inherit;
@@ -51,6 +51,26 @@ aside{
     }
   }
 }
+.has-dropdown{
+  .navbar-dropdown{
+    border-radius: 5px;
+    border: 1px solid #dbdbdb;
+    top:auto;
+    min-width:auto;
+    left:25px;
+    background-color: white;
+    box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
+    display: none;
+    font-size: 0.875rem;
+    position: absolute;
+    z-index: 20;
+  }
+  &:hover{
+    .navbar-dropdown{
+      display:block!important;
+    }
+  }
+}
 .mobile-side-nav{
   z-index: 5;
   width: 90% !important;
@@ -59,6 +79,9 @@ aside{
   bottom: 0;
   top:  0;
   position: absolute;
+  @include tablet() {
+    width: 50%!important;
+  }
 }
 /** top nav */
 .navbar{
@@ -157,7 +180,7 @@ h3{
 /** Task **/
 .task{
   z-index: 5;
-  width: 50%;
+  width: 90%;
   display: block;
   right: 0;
   bottom: 0;
@@ -165,6 +188,9 @@ h3{
   position: absolute;
   padding: 2em;
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  @include tablet() {
+    width: 50%;
+  }
   .header{
     padding-bottom: 1em;
     margin-bottom: 1em;
@@ -270,11 +296,17 @@ textarea{
   &.warn {
     border-left: 5px solid #ff7739;
   }
-
   &.info {
     border-left: 5px solid $brand-info;
   }
   &.success {
     border-left: 5px solid $brand-success;
   }
+}
+/** Image Cropper */
+.vue-cropper{
+  min-height:400px;
+}
+.circle{
+  border-radius: 50%;
 }

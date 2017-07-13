@@ -36,7 +36,6 @@
             }
         },
         created: function() {
-            console.log('Modal mounted');
             store.commit('ADD_MODAL',  { name:  this.modalName })
         },
         methods: {

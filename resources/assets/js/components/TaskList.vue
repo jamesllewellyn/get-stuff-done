@@ -1,7 +1,7 @@
 <template>
     <tr :class="task.done ? 'strikeout' : ''">
         <td>
-            <span class="handle" aria-hidden="true">: :</span>
+            <span class="handle is-hidden-mobile" aria-hidden="true">: :</span>
             <a class="status" @click.prevent.stop="done()"><i class="fa fa-circle" aria-hidden="true" :class="status"></i> </a>
         </td>
         <td class="is-centered-text"><a @click.prevent.stop="showTask()">{{task.name}}</a></td>

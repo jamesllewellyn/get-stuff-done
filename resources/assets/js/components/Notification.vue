@@ -11,8 +11,5 @@
               required : true
           }
         },
-        mounted() {
-            console.log('Component mounted.')
-        }
     }
 </script>
