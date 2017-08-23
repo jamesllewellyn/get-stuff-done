@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\AssignedTask;
 use App\Section;
 use App\Task;
-use App\SectionTask;
 use App\Project;
-use Carbon\Carbon;
+use App\Team;
+use App\UserTask;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class TaskController extends Controller
 {
@@ -18,13 +21,35 @@ class TaskController extends Controller
     }
 
     /**
-     * Store new task
+     * Check user can access task
+     *
      * @param \Illuminate\Http\Request $request
+     * @param \App\Team $team
+     * @param \App\Project $project
+     * @param \App\Section $section
+     * @param \App\Task $task
+     * @return \Illuminate\Http\Response
+     */
+    public function canAccess(Request $request, Team $team, Project $project, Section $section, Task $task){
+        /** authorize user has access to task */
+        $this->authorize('access-task', [$team, $project, $section, $task]);
+        /** return success */
+        return response()->json(['success' => true, 'message' => 'user can access task', 'task' => $task]);
+    }
+
+    /**
+     * Store new task
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Team $team
      * @param Project $project
      * @param Section $section
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Project $project, Section $section) {
+    public function store(Request $request,Team $team, Project $project, Section $section) {
+        /** authorize user has access to section */
+        $this->authorize('access-section',[$team, $project,$section]);
+        /** create ne task model */
         $task =  new Task();
         /** validate the request data */
         $this->validate(Request(),$task->validation, $task->messages);
@@ -34,71 +59,95 @@ class TaskController extends Controller
         $sortOrder = count($currentTasks) + 1;
         /** create new task */
         $task = Task::create([
+            'section_id' => $section->id,
             'name' => $request->get('name'),
             'due_date' => $request->get('due_date'),
             'due_time' => $request->get('due_time'),
             'sort_order' => $sortOrder,
-            'priority_id' => $request->get('priority_id'),
-            'note' => $request->get('note'),
+            'priority_id' => $request->get('priority_id')['id'], /** vue-select component returns an object */
+            'note' => $request->get('note')
         ]);
-        /** create SectionTask join */
-        SectionTask::create(['section_id' => $section->id, 'task_id' => $task->id]);
+        /** assign task to users */
+        if($request->has('users')){
+            /**get users from request*/
+            $userIds = array_pluck($request->users, 'id');
+            /** add users to task */
+            $task->assignedUsers()->attach($userIds);
+            /** get logged in user */
+            $loggedBy =  Auth::user();
+            /** get all assigned users that are not user creating task */
+            $users = $task->assignedUsers()->where('users.id', '<>', $loggedBy->id )->get();
+            /** notify users they have been added to task */
+            Notification::send($users, new AssignedTask($team, $task, $loggedBy));
+        }
         /** return success and stored task */
         return response()->json(['success' => true, 'message' => 'New task has been added to '.$section->name , 'task' => $task]);
     }
 
     /**
      * get task data
+     *
+     * @param Team $team
+     * @param Project $project
+     * @param Section $section
      * @param Task $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task) {
-        /** If task cant be found return error */
-        if(!$task){
-            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
-        }
+    public function show(Team $team, Project $project, Section $section, Task $task) {
+        /** authorize user has access to task */
+        $this->authorize('access-section', [ $team, $project,$section, $task]);
+        /** Get users assigned to task  */
+        $task->assigned_users = $task->assignedUsers()->get();
         /** return success and requested task */
         return response()->json(['success' => true, 'message' => 'task has been found', 'task' => $task]);
     }
 
     /**
      * update task data
+     *
      * @param \Illuminate\Http\Request $request
+     * @param Team $team
+     * @param Project $project
+     * @param Section $section
      * @param Task $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Task $task) {
-        /** If section cant be found return error */
-        if(!$task){
-            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
-        }
-        /** find section **/
-        $section = $task->section()->first();
-        /** find project **/
-        $project = $task->project()->first();
+    public function update(Request $request, Team $team, Project $project, Section $section, Task $task) {
+        /** authorize user has access to task */
+        $this->authorize('access-task', [$team, $project, $section, $task]);
         /** validate the task data */
         $this->validate(Request(),$task->validation, $task->messages);
         /** update record */
-        $task->name = $request->get('name');
-        $task->due_date =  $request->get('due_date');
-        $task->priority_id =  $request->get('priority_id');
-        $task->note = $request->get('note');
-        $task->sort_order = $request->get('sort_order');
-        $task->status_id = $request->get('status_id');
+        $task->name = $request->name;
+        $task->due_date =  $request->due_date;
+        $task->note = $request->note;
+        $task->sort_order = $request->sort_order;
+        if($request->has('priority_id')) {
+            $task->priority_id = $request->priority_id['id'];  /** vue-select component returns an object */
+        }
+        if($request->has('status_id')){
+            $task->status_id = $request->status_id['id'];  /** vue-select component returns an object */
+        }
         $task->save();
+        /** get assigned userIds from request */
+        $userIds = array_pluck($request->users, 'id');
+        /** sync users assigned to task */
+        $task->assignedUsers()->sync($userIds);
         /** return success and updated task */
-        return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task, 'projectId' => $project->id, 'sectionId' => $section->id]);
+        return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task]);
     }
     /**
      * Flag task as done
+     *
+     * @param Team $team
+     * @param Project $project
+     * @param Section $section
      * @param Task $task
      * @return \Illuminate\Http\Response
      */
-    public function done(Task $task) {
-        /** If task cant be found return error */
-        if(!$task){
-            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
-        }
+    public function done(Team $team, Project $project, Section $section, Task $task) {
+        /** authorize user has access to task */
+        $this->authorize('access-task', [$team, $project,$section, $task]);
         /** flag task as done */
         $task->status_id = 1;
         $task->save();
@@ -108,14 +157,16 @@ class TaskController extends Controller
 
     /**
      * Delete task
+     *
+     * @param Team $team
+     * @param Project $project
+     * @param Section $section
      * @param Task $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task) {
-        /** If task cant be found return error */
-        if(!$task){
-            return response()->json(['success' => false, 'message' => 'The requested task could not be found']);
-        }
+    public function destroy(Team $team, Project $project, Section $section,Task $task) {
+        /** authorize user has access to task */
+        $this->authorize('access-task', [$team, $project,$section, $task]);
         /** delete project */
         $task->delete();
         /** return success message */

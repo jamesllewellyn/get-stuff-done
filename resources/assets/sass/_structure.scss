@@ -1,3 +1,6 @@
+[v-cloak] {
+  display: none;
+}
 body{
   background-color:$body-bg;
   font-family: $font-family;
@@ -24,12 +27,20 @@ h2, .h2 {font-size: 1.728em;}
 h3, .h3 {font-size: 1.44em;}
 
 h4 {font-size: 1.2em;}
+
+.blokk{
+  font-family: 'blokk' !important;
+  color:#dbdbdb;
+}
 /** Sidebar menu */
 aside{
   background-color: #ffffff !important;
   .side-menu{
     .fa-user{
       //font-size: 60px;
+    }
+    .menu-label, .multi-select{
+      padding-left:0.25em;
     }
     .menu-list{
       a{
@@ -71,6 +82,7 @@ aside{
     }
   }
 }
+
 .mobile-side-nav{
   z-index: 5;
   width: 90% !important;
@@ -118,11 +130,16 @@ h3{
   padding-top: 1em;
 }
 /** typography */
-.content{
   .box{
-    margin-top: 1em;
+    &.place-holder{
+      box-shadow: none !important;
+      background-color: #f1f2f3;
+      border: rgba(10, 10, 10, 0.1) solid 1px;
+      .fa-circle{
+        color:#dbdbdb;
+      }
+    }
   }
-}
 
 .is-orange{
   background-color: $orange;
@@ -250,9 +267,15 @@ input{
     border-bottom: 1px solid $orange !important;
   }
 }
+.table{
+  &.place-holder{
+    background: none !important;
+  }
+}
 .select, select{
   width: 100%;
 }
+
 textarea{
   width: 100%;
   min-height: 10em;
@@ -270,22 +293,22 @@ textarea{
 
   font-size: 16px !important;
 
-  color: #ffffff;
-  background: #44A4FC;
+  color: #4a4a4a !important;
+  background-color: whitesmoke !important;
   border-left: 5px solid #187FE7;
 
   &.warn {
-    background: $brand-warning;
+    //background: $brand-warning;
     border-left-color:darken($brand-warning, 10%);
   }
 
   &.error {
-    background: $brand-danger;
+    //background: $brand-danger;
     border-left-color: darken($brand-danger, 10%);
   }
 
   &.success {
-    background: $brand-success !important;
+    //background: $brand-success !important;
     border-left-color: darken($brand-success, 10%) !important;
   }
 }
@@ -309,4 +332,38 @@ textarea{
 }
 .circle{
   border-radius: 50%;
+}
+.logo{
+  width:100px;
+  margin-top:0.5em;
+}
+.small-avatar{
+  width:50px;
+}
+
+/** ajax loader */
+
+.main-content {
+  position: relative;
+}
+.vue-simple-spinner-wrap {
+  //width: 50%;
+  //height: 50%;
+  //overflow: auto;
+  //margin: auto;
+  //position: absolute;
+  //top: 0; left: 0; bottom: 0; right: 0;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  align-items: center;
+}
+
+@font-face {
+  font-family: 'blokk';
+  src: url('/fonts/blokk/blokkneue-regular-webfont.woff2') format('woff2'),
+  url('/fonts/blokk/blokkneue-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
 }

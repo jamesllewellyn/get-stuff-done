@@ -20,13 +20,27 @@
                 <div class="field">
                     <label class="label">Priority</label>
                     <p class="control">
-                        <span class="select">
-                          <select v-model="task.priority_id">
-                            <option value="1">High</option>
-                            <option value="2">Medium</option>
-                            <option  value="3">Low</option>
-                            </select>
-                        </span>
+                        <multi-select v-model="task.priority_id" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"></multi-select>
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label">Assign members</label>
+                    <p class="control">
+                        <multi-select v-model="task.users" placeholder="Assign to one or more members" label="handle" track-by="full_name" :options="users"  :show-labels="false" :multiple="true" :close-on-select="false">
+                            <template slot="option" scope="props">
+                                <div class="level">
+                                    <div class="level-item">
+                                        <img class="circle small-avatar" :src="props.option.avatar_url" >
+                                    </div>
+                                    <div class="level-item">
+                                        <span class="has-text-centered">{{ props.option.full_name }}</span>
+                                    </div>
+                                    <div class="level-item"></div>
+                                    <div class="level-item"></div>
+                                </div>
+
+                            </template>
+                    </multi-select>
                     </p>
                 </div>
                 <div class="field">
@@ -46,26 +60,30 @@
 <script>
     import Task from '../../core/Task';
     import store from '../../store';
-    import DatePicker from 'vue-bulma-datepicker'
+    import DatePicker from 'vue-bulma-datepicker';
+    import MultiSelect from 'vue-multiselect'
     export default {
         data() {
             return{
-                task: new Task({id:'', name:'', tasks: [], created_at: ''}),
-                modalName: 'addTask',
+                task: new Task({id:'', name:'', users: ''}),
+                modalName: 'addTask'
             }
         },
-        components:{DatePicker},
+        components:{DatePicker, MultiSelect},
         props: {
-            projectId : {
-                required: true
-            },
             sectionId : {
                 required: true
             }
         },
         computed:{
+            users:function() {
+                return store.getters.getTeamUser
+            },
             isLoading: function() {
                 return store.getters.getModalByName(this.modalName).isLoading;
+            },
+            fullname:function(user){
+                return user.first_name +' '+user.last_name;
             }
         },
         methods: {
@@ -73,7 +91,7 @@
                 /** set modal save button to loading status **/
                 store.commit('SET_BUTTON_TO_LOADING', {name : this.modalName});
                 /** dispatch add new project action **/
-                store.dispatch('ADD_NEW_TASK', {projectId: this.projectId, sectionId:this.sectionId, task: this.task });
+                store.dispatch('ADD_NEW_TASK', {sectionId:this.sectionId, task: this.task });
             },
             /** method to get form field errors **/
             getErrors(fieldName) {

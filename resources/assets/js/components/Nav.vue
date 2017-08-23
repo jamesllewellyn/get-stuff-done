@@ -6,27 +6,20 @@
                     <span></span>
                     <span></span>
                 </div>
-                <div class="has-text-centered">
-                    <img src="cowboy.png" alt="">
+                <div class="is-centered">
+                    <figure class="has-text-centered">
+                        <img class="logo is-centered" src="/images/logo.png" alt="">
+                    </figure>
                 </div>
                 <div class="has-text-centered">
                     <div class="has-dropdown is-hoverable">
                         <a href="#" class="has-text-centered " role="button" aria-expanded="false">
-                            <span v-text="user.name"><span class="caret"></span></span>
+                            <span v-text="getName()"><span class="caret"></span></span>
                         </a>
                         <div id="userDropdown" class="navbar-dropdown is-hidden-mobile" >
                             <a class="navbar-item" href="#">
                                 <div class="navbar-content">
-                                    <p class="has-text-centered">
-                                        Switch Account
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="navbar-item" href="#">
-                                <div class="navbar-content">
-                                    <p class="has-text-centered">
-                                        Logout
-                                    </p>
+                                    <slot></slot>
                                 </div>
                             </a>
                         </div>
@@ -39,17 +32,28 @@
                 </p>
                 <ul class="menu-list">
                     <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
-                        <router-link exact active-class="is-active" tag="a" to="/" >
-                            Dashboard
+                        <router-link exact active-class="is-active" tag="a" to="/inbox" >
+                            Inbox
                         </router-link>
                     </li>
-                    <li @click.prevent.stop="profileHandler">
-                        <a href="#" :class="{'is-active' : profileVisible}">
-                            My Profile
+                    <li>
+                        <a @click.prevent.stop="profileHandler">
+                            Profile
                         </a>
+                    </li>
+                    <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
+                        <router-link exact active-class="is-active" tag="a" to="/my-tasks" >
+                            My Tasks
+                        </router-link>
                     </li>
                 </ul>
                 <hr/>
+                <p class="menu-label">
+                    Team <a  @click.prevent.stop="triggerEvent('toggleModal', 'addTeam')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
+                </p>
+                <p class="control multi-select">
+                    <multi-select v-model="activeTeam" :options="teams" label="name" :searchable="false" :show-labels="false" placeholder="Switch Teams"  @select="switchTeam"></multi-select>
+                </p>
                 <p class="menu-label">
                     Projects <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>
@@ -65,16 +69,11 @@
 </template>
 
 <script>
+    import MultiSelect from 'vue-multiselect';
     import store from '../store';
     import { mapState, mapGetters } from 'vuex'
     export default {
         props:{
-            projects:{
-                required:true
-            },
-            user:{
-                required:true
-            },
             addClass:{
                 required:false
             },
@@ -87,22 +86,28 @@
                 default: false
             }
         },
-        computed:
-            mapState([
-                 'profileVisible'
-            ])
-        ,
+        components:{MultiSelect},
+        computed:{
+            profileVisible () { return this.$store.state.profileVisible },
+            user () { return  this.$store.state.user },
+            teams () { return  this.$store.state.teams },
+            activeTeam () { return  this.$store.getters.getActiveTeam },
+            projects () { return this.$store.getters.getProjects }
+        },
         methods:{
+            getName:function(){
+                return this.user.first_name+ ' ' + this.user.last_name;
+            },
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);
             },
             profileHandler: () =>{
                 Event.$emit('toggleProfile');
                 Event.$emit('toggleNav');
+            },
+            switchTeam:function(team){
+                this.$store.dispatch('SWITCH_TEAM', {teamId :team.id})
             }
-        },
-        mounted() {
-//            console.log('Nav mounted.')
         }
     }
 </script>

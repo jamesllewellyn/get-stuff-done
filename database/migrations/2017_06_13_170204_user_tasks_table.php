@@ -15,10 +15,13 @@ class UserTasksTable extends Migration
     {
         Schema::create('user_tasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('task_id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('task_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -29,6 +32,9 @@ class UserTasksTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('user_tasks');
+        Schema::enableForeignKeyConstraints();
+
     }
 }

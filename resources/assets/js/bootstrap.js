@@ -13,7 +13,8 @@ Vue.use(VueRouter);
 import moment from 'moment';
 window.moment = moment;
 import Notifications from 'vue-notification';
-Vue.use(Notifications);
+import velocity from 'velocity-animate'
+Vue.use(Notifications,  { velocity });
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -34,11 +35,13 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo'
+import Echo from 'laravel-echo'
 
-// window.Pusher = require('pusher-js');
+window.Pusher = require('pusher-js');
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: '73f8b9247fa0cfe5a1e7',
+    cluster: 'us2',
+    encrypted: true
+});

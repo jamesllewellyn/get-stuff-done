@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class SectionTable extends Migration
+class ProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class SectionTable extends Migration
      */
     public function up()
     {
-        Schema::create('sections', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('project_id');
-            $table->text('name');
+            $table->unsignedInteger('team_id');
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
         });
     }
 
@@ -29,6 +31,8 @@ class SectionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sections');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('projects');
+        Schema::enableForeignKeyConstraints();
     }
 }

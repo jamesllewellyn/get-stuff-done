@@ -9,16 +9,24 @@
             <div class="box">
                 <form role="form" method="POST" action="{{ route('register') }}">
                     {{ csrf_field() }}
-                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                        <label for="name" class="label">Name</label>
+                    <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
+                        <label for="name" class="label">First Name</label>
                         <p class="control">
-                            <input id="name" type="text" class="input" name="name" value="{{ old('name') }}" required autofocus>
-                            @if ($errors->has('name'))
-                                <p class="help is-danger">{{ $errors->first('name') }}</p>
+                            <input id="name" type="text" class="input" name="first_name" value="{{ old('first_name') }}" required autofocus>
+                            @if ($errors->has('first_name'))
+                                <p class="help is-danger">{{ $errors->first('first_name') }}</p>
                             @endif
                         </p>
                     </div>
-
+                    <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
+                        <label for="name" class="label">Last Name</label>
+                        <p class="control">
+                            <input id="name" type="text" class="input" name="last_name" value="{{ old('last_name') }}" required autofocus>
+                        @if ($errors->has('last_name'))
+                            <p class="help is-danger">{{ $errors->first('first_name') }}</p>
+                            @endif
+                            </p>
+                    </div>
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} field">
                         <label for="email" class="label">E-Mail Address</label>
                         <p class="control">

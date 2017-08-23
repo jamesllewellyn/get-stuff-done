@@ -1,13 +1,13 @@
 import Task from './Task';
 class Section{
-    constructor($data){
+    constructor(data){
         let self = this;
-        this.id = $data.id;
-        this.name = $data.name;
-        this.created_at = $data.created_at;
+        this.id = data.id;
+        this.name = data.name;
+        this.created_at = data.created_at;
         this.tasks = [];
-        if($data.tasks){
-            $data.tasks.forEach(function(task) {
+        if(data.tasks){
+            data.tasks.forEach(function(task) {
                 self.tasks.push(new Task(task));
             });
         }

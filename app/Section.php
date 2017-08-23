@@ -39,7 +39,7 @@ class Section extends Model
      * Get all section tasks.
      */
     public function tasks(){
-        return $this->hasManyThrough('App\Task', 'App\SectionTask', 'section_id' ,'id' )->orderBy('tasks.sort_order');
+        return $this->hasMany(Task::class, 'section_id', 'id' )->orderBy('tasks.sort_order');
     }
     /**
      * Get section project.

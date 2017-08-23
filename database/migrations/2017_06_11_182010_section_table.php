@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TasksTable extends Migration
+class SectionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class TasksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('sections', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('priority_id')->default(3);
-            $table->string('name');
-            $table->text('note')->nullable();
-            $table->integer('sort_order');
-            $table->boolean('status_id')->nullable();
-            $table->date('due_date');
-            $table->time('due_time')->nullable();
+            $table->unsignedInteger('project_id');
+            $table->text('name');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
 
@@ -34,6 +31,9 @@ class TasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('sections');
+        Schema::enableForeignKeyConstraints();
+
     }
 }

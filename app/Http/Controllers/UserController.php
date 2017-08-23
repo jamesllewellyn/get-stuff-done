@@ -2,24 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
+use App\PendingUser;
+use App\Team;
+use App\UserTeam;
 use Illuminate\Http\Request;
 use App\Project;
 use App\User;
+use Hash;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use Intervention\Image\Facades\Image;
+use App\Notifications\welcome;
 class UserController extends Controller
 {
     public function __construct() {
         /** define controller middleware */
-        $this->middleware('auth:api');
+        $this->middleware('auth:api', ['except' => ['store', 'invite']]);
     }
+
     /**
      * Store new user
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        $user =  new User();
+        /** validate the request data */
+        $this->validate(Request(),$user->validation, $user->messages);
+        /** create new user */
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->handle = $request->handle;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        /** login user */
+        Auth::login($user);
+        /** return new user */
+        return response()->json(['success' => true, 'user' => $user]);
+    }
+
+    /**
+     * Store user from email invite
+     * @param \Illuminate\Http\Request $request
+     * @return mixed
+     */
+    public function invite(Request $request){
+        $user = new User();
+        /** validate the request data */
+        $validator = Validator::make($request->all(),[
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'handle' => 'required',
+            'password' => 'required|min:7'
+        ],$user->messages);
+        /** if validation errors return customer to login page with error */
+        if($validator->fails()) {
+            return redirect()->back()->withErrors($validator)
+                ->withInput();
+        }
+        /** get pending user session data */
+        $pending = $request->session()->get('pending');
+        /** delete session */
+        $request->session()->forget('pending');
+
+        if(!$pending){
+            return redirect()->route('home')->with('inviteError','Sorry we couldn\'t find your invitation');
+        }
+        /** create new user */
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $pending['email'];
+        $user->handle = $request->handle;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        /** log user in */
+        Auth::login($user, true);
+        /** add user to team */
+        UserTeam::create(['user_id' => $user->id, 'team_id' => $pending['team_id']]);
+        /** remove pending user record */
+        PendingUser::where('id', $pending['id'])->delete();
+        /** send user welcome email**/
+        $user->notify(new welcome());
+        /** redirect to app home page */
+        return redirect()->route('home');
     }
     /**
      * Set users avatar
@@ -52,6 +119,7 @@ class UserController extends Controller
         Storage::put($path.'/avatar.png', $image);
         return response()->json(['success' => true, 'message' => 'The avatar has been uploaded']);
     }
+
     /**
      * get logged in user data
      * @param Request $request
@@ -65,21 +133,42 @@ class UserController extends Controller
     /**
      * Update project
      * @param \Illuminate\Http\Request $request
-     * @param Project $project
+     * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project) {
-        /** If project cant be found return error */
-        if(!$project){
-            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
-        }
-        /** validate the request data */
-        $this->validate(Request(),$project->validation, $project->messages);
+    public function update(Request $request, User $user) {
+//        /** If project cant be found return error */
+//        if(!$project){
+//            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
+//        }
+//        /** validate the request data */
+        $this->validate(Request(),$user->updateValidation, $user->messages);
         /** update record */
-        $project->name = $request->get('name');
-        $project->save();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->handle = $request->handle;
+        $user->save();
         /** return success and updated project */
-        return response()->json(['success' => true, 'message' => 'project has been updated', 'project' => $project]);
+        return response()->json(['success' => true, 'message' => 'project has been updated', 'user' => $user]);
+    }
+    /**
+     * Update current team
+     * @param \Illuminate\Http\Request $request
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function team(Request $request, User $user) {
+        /** validate the request data */
+        $this->validate(Request(),['teamId' => 'required']);
+        /** get team */
+        $team = Team::find($request->teamId);
+        /** get users teams */
+        $this->authorize('access-team',$team);
+        /** update record */
+        $user->current_team_id = $team->id;
+        $user->save();
+        /** return success and updated project */
+        return response()->json(['success' => true, 'message' => 'Team has been switched', 'user' => $user]);
     }
 
     /**
@@ -99,16 +188,59 @@ class UserController extends Controller
     }
 
     /**
-     * Get users projects
+     * Get users teams
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function projects(User $user) {
-        /** If user cant be found return error */
-        if(!$user){
-            return response()->json(['success' => false, 'message' => 'The requested user could not be found']);
-        }
+    public function teams(User $user) {
         /** return success message */
-        return response()->json($user->projects()->with('sections', 'sections.tasks')->get());
+        return response()->json($user->teams()->with(['projects','users'])->get());
     }
+
+    /**
+     * all users tasks
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function tasks(User $user) {
+        /** get tasks user is currently working on */
+        $tasks = $user->tasks()->with('section', 'section.project', 'section.project.team')->get();
+        /** return success message */
+        return response()->json($tasks);
+    }
+
+    /**
+     * Get tasks user is currently working on
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function workingOnIt(User $user) {
+        /** get tasks flagged as working on it */
+        $tasks = $user->workingOnIt()->with('section', 'section.project', 'section.project.team')->get();
+        /** return success message */
+        return response()->json($tasks);
+    }
+
+    /**
+     * Get tasks that are over due
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function overDue(User $user) {
+        /** get users over due tasks */
+        $tasks = $user->overDue()->with('section', 'section.project', 'section.project.team')->get();
+        /** return over due tasks */
+        return response()->json($tasks);
+    }
+
+    /**
+     * Get users unread notifications
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function notifications(User $user) {
+        /** return unread notifications */
+        return response()->json($user->unreadNotifications);
+    }
+
 }

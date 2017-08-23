@@ -17,7 +17,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name', 'team_id'
     ];
 
     /**
@@ -36,11 +36,14 @@ class Project extends Model
         'name.required' => 'Please provide a name for this project'
     ];
 
+    public function team(){
+        return $this->belongsTo(Team::class);
+    }
     /**
      * Get all project sections.
      */
     public function sections(){
-        return $this->hasMany('App\Section', 'project_id', 'id' );
+        return $this->hasMany(Section::class, 'project_id', 'id' );
     }
 
 }

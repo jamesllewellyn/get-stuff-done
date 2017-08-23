@@ -2,14 +2,13 @@
     <div class="home">
         <div class="level header is-mobile">
             <div class="level-left">
-                <h1 class="title">
-                    Dashboard
-                </h1>
+                <input class="title clear-background h1" type="text" name="name" @change="updateTeam" v-model="team.name" v-if="team">
+                <!--<h1 class="title" v-text="" ></h1>-->
             </div>
             <div class="level-right">
                 <div class="has-text-right">
             <span class="tag is-orange is-medium">
-                <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')" class="orange">Add Project</a>
+                <a  @click.prevent.stop="triggerEvent('toggleModal', 'addUser')" class="orange">Add Team Member</a>
             </span>
                 </div>
             </div>
@@ -53,6 +52,11 @@
                 </div>
             </div>
         </div>
+        <modal modal-name="addUser" title="Add Team Memeber">
+            <template slot="body">
+                <add-user></add-user>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -60,7 +64,9 @@
     import store from '../../store';
     import draggable from 'vuedraggable'
     import dashboardTask from '../../components/DashboardTask.vue';
+    import Modal from '../../components/Modal.vue';
     import Notification from '../../components/Notification.vue';
+    import addUser from '../../components/modals/AddUser.vue';
     export default {
         data() {
             return{
@@ -68,9 +74,12 @@
             }
         },
         components: {
-            dashboardTask, draggable, Notification
+            dashboardTask, draggable, Notification, Modal, addUser
         },
         computed: {
+            team : function () {
+                return store.getters.getActiveTeam;
+            },
             workingOnIt:{
                 get(){
                     return store.getters.getWorkingOnIt;
@@ -98,13 +107,16 @@
                 set(tasks){
                     console.log(tasks);
                 }
-            }
+            },
         },
         methods: {
             /** trigger toggle modal event */
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);
-            }
+            },
+            updateTeam:function(){
+                this.$store.dispatch('UPDATE_TEAM', {team:this.team})
+            },
         },
         mounted() {
         }

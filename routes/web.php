@@ -15,6 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/** create new account form */
+Route::get('/create', function () {
+    return view('auth.create-account');
+});
+
+/** user invite */
+Route::get('/invite', 'HomeController@invite')->name('user.invite');
+Route::post('/invite', 'UserController@invite')->name('user.invite');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+

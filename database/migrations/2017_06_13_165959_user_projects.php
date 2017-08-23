@@ -13,13 +13,15 @@ class UserProjects extends Migration
      */
     public function up()
     {
-        Schema::create('user_projects', function (Blueprint $table) {
+        Schema::create('user_teams', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('project_id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('team_id');
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -30,7 +32,9 @@ class UserProjects extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_projects');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('user_teams');
+        Schema::enableForeignKeyConstraints();
 
     }
 }

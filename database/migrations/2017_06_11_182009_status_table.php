@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class PriorityTable extends Migration
+class StatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,26 @@ class PriorityTable extends Migration
      */
     public function up()
     {
-        Schema::create('priorities', function (Blueprint $table) {
+        Schema::create('status', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
 
-        $this->addPriorities();
+        $this->addStatus();
     }
     /**
-     * add Priorities to table.
+     * add Status to table.
      *
      * @return void
      */
-    public function addPriorities(){
-        $priorities = ['high', 'medium', 'low'];
+    public function addStatus(){
+        $status = ['Done', 'Working On It'];
 
-        foreach ($priorities as $key => $priority) {
-            $new = new \App\Priority();
-            $new->name = $priority;
+        foreach ($status as $key => $s) {
+            $new = new \App\Status();
+            $new->name = $s;
             $new->save();
         }
     }
@@ -43,6 +43,8 @@ class PriorityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('priorities');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('status');
+        Schema::enableForeignKeyConstraints();
     }
 }
