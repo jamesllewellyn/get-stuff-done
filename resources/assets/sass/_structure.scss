@@ -156,6 +156,9 @@ h3{
 .bold{
   font-weight: bold !important;
 }
+.has-no-boarder{
+  border:none !important;
+}
 /** icons */
 .fa-plus-circle{
   color:$orange;
@@ -185,20 +188,11 @@ h3{
       }
   }
 }
-
-.dropdown {
-  box-shadow: 0 0 8px #777;
-  display: none;
-  left: 0;
-  position: absolute;
-  top: 100%;
-  z-index: 1000;
+.dropdown{
+  button{
+    background: transparent;
+  }
 }
-
-.dropdown.is-open {
-  display: block;
-}
-
 /** Task **/
 .task{
   z-index: 5;

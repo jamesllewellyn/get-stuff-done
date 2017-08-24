@@ -3,6 +3,13 @@
      <div class="box" :class="placeHolder ? 'place-holder' : ''">
          <div class="level">
              <div class="level-left">
+                 <drop-down-button :boarder="false" v-if="!placeHolder">
+                     <span slot="dropdowns">
+                         <a href="#" class="dropdown-item">
+                            Delete Section
+                         </a>
+                     </span>
+                 </drop-down-button>
                  <input class="clear-background title h3" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="section.name" v-if="section">
                  <h3 v-else class="title blokk"> Section Name</h3>
              </div>
@@ -30,6 +37,7 @@
     import draggable from 'vuedraggable'
     import TaskList from './TaskList.vue';
     import Notification from './Notification.vue';
+    import dropDownButton from './DropDownButton.vue';
     import store from '../store';
     export default {
         props: {
@@ -47,7 +55,7 @@
             }
         },
         components: {
-            TaskList , draggable , Notification
+            TaskList , draggable , Notification, dropDownButton
         },
         computed:{
             section: function() {

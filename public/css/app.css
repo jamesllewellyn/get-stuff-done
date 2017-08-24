@@ -10800,6 +10800,10 @@ h3 .caret {
   font-weight: bold !important;
 }
 
+.has-no-boarder {
+  border: none !important;
+}
+
 /** icons */
 
 .fa-plus-circle {
@@ -10836,18 +10840,8 @@ h3 .caret {
   color: #E55934;
 }
 
-.dropdown {
-  -webkit-box-shadow: 0 0 8px #777;
-          box-shadow: 0 0 8px #777;
-  display: none;
-  left: 0;
-  position: absolute;
-  top: 100%;
-  z-index: 1000;
-}
-
-.dropdown.is-open {
-  display: block;
+.dropdown button {
+  background: transparent;
 }
 
 /** Task **/

@@ -2,6 +2,13 @@
     <div class="project">
         <div class="level header is-mobile">
             <div class="level-left">
+                <drop-down-button :boarder="false">
+                     <span slot="dropdowns">
+                         <a href="#" class="dropdown-item">
+                            Delete Project
+                         </a>
+                     </span>
+                </drop-down-button>
                 <input class="title clear-background h1" type="text" name="name" @change="updateProject" v-model="project.name" v-if="project.name != ''" v-cloak>
                 <h1 v-else class="blokk title" >Project Title</h1>
             </div>
@@ -25,33 +32,34 @@
         *  Modals
         *************
         -->
-        <Modal modalName="addSection" title="Add New Section">
+        <modal modalName="addSection" title="Add New Section">
             <template slot="body">
                 <add-section :projectId="id"></add-section>
             </template>
-        </Modal>
+        </modal>
 
-        <Modal modalName="addTask" title="Add New Task">
+        <modal modalName="addTask" title="Add New Task">
             <template slot="body">
                 <add-task :projectId="id" :sectionId="sectionId"></add-task>
             </template>
-        </Modal>
+        </modal>
 
-        <Modal modalName="updateTask" title="Task">
+        <modal modalName="updateTask" title="Task">
             <template slot="body">
                 <!--<update-task :projectId="id" :sectionId="sectionId" :id="taskId"></update-task>-->
             </template>
-        </Modal>
+        </modal>
     </div>
 </template>
 
 <script>
     import store from '../../store';
-    import AddSection from '../../components/modals/AddSection.vue';
-    import AddTask from '../../components/modals/AddTask.vue';
-    import UpdateTask from '../../components/modals/UpdateTask.vue';
-    import ProjectSection from '../../components/Section';
-    import Modal from '../../components/Modal.vue';
+    import addSection from '../../components/modals/AddSection.vue';
+    import addTask from '../../components/modals/AddTask.vue';
+    import updateTask from '../../components/modals/UpdateTask.vue';
+    import projectSection from '../../components/Section';
+    import dropDownButton from '../../components/DropDownButton.vue';
+    import modal from '../../components/Modal.vue';
     export default {
         data() {
             return{
@@ -59,7 +67,7 @@
                 taskId:''
             }
         },
-        components:{ProjectSection, Modal, AddSection , AddTask, UpdateTask},
+        components:{projectSection, modal, addSection , addTask, updateTask, dropDownButton},
         computed: {
             id: function(){
                 if(!this.$route.params.id){
