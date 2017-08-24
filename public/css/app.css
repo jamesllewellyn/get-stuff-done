@@ -10772,7 +10772,7 @@ h3 .caret {
 .box.place-holder {
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
-  background-color: #f1f2f3;
+  background-color: transparent;
   border: rgba(10, 10, 10, 0.1) solid 1px;
 }
 
