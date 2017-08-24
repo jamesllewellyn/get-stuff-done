@@ -4,10 +4,29 @@
             <div class="level-left">
                 <h1 class="title">Inbox</h1>
             </div>
+            <div class="level-right">
+                <div class="has-text-right">
+                    <span class="tag is-orange is-medium">
+                        <a  @click.prevent.stop="clearInbox" class="orange">Clear Inbox</a>
+                    </span>
+                </div>
+            </div>
         </div>
         <hr />
-        <transition-group name="fade" mode="out-in" v-if="notifications.length == 0">
-            <div class="columns" v-for="(day, key ) in notifications" :key="key">
+        <transition-group name="fade" mode="out-in" >
+            <div class="columns is-mobile is-centered" key="1" v-if="Object.keys(notifications).length === 0" v-cloak>
+                <div class="column is-half">
+                    <div class="box is-empty-inbox">
+                        <div class="content has-text-centered">
+                            <h3 class="bold">
+                                You're all up to date
+                            </h3>
+                            <p>Your Inbox is currently empty</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns" v-for="(day, key ) in notifications" :key="key" v-else v-cloak>
                 <h3 class="h3 column is-one-quarter" v-text="convertDate(key)" ></h3>
                 <div class="column is-half">
                     <transition-group name="fade">
@@ -16,19 +35,6 @@
                 </div>
             </div>
         </transition-group>
-        <div class="columns is-mobile is-centered" v-else>
-            <div class="column is-half">
-                <div class="box is-empty-inbox">
-                    <div class="content has-text-centered">
-                        <h3 class="bold">
-                            You're all up to date
-                        </h3>
-                        <p>Your Inbox is currently empty</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </template>
 
@@ -61,6 +67,10 @@
             }
         },
         methods: {
+            /** clear mark all notifications as read */
+            clearInbox: function(){
+                this.$store.dispatch('USER_CLEAR_INBOX');
+            },
             /** trigger toggle modal event */
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);

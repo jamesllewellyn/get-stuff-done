@@ -168,6 +168,16 @@ const store = new Vuex.Store({
                     commit('SERVER_ERROR');
                 });
         },
+        USER_CLEAR_INBOX:function({commit, state}){
+            axios.put('/api/user/'+state.user.id+'/clear-notifications')
+                .then(function (response) {
+                    /** call success mutator to clear all notifications  */
+                    commit('USER_CLEAR_INBOX_SUCCESS');
+                })
+                .catch(function (error) {
+                    commit('SERVER_ERROR');
+                });
+        },
         USER_CAN_ACCESS_TEAM:function({commit}, {teamId}){
             axios.get('/api/team/'+teamId+'/can-access')
                 .then(function (response) {
@@ -453,9 +463,8 @@ const store = new Vuex.Store({
             let groupedDays = _.groupBy(notifications, (notification) => moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD')));
             state.notifications = groupedDays;
         },
-        NOTIFICATION_MARK_AS_READ_SUCCESS:(state, {notificationId}) => {
-            /** group notifactions into days */
-
+        USER_CLEAR_INBOX_SUCCESS:(state) => {
+            state.notifications = {};
         },
         TAKE_USER_TO_PROJECT:(state, {teamId, projectId}) => {
             /** parse id to int */

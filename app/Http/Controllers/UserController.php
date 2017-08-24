@@ -243,4 +243,16 @@ class UserController extends Controller
         return response()->json($user->unreadNotifications);
     }
 
+    /**
+     * Mark all user notifications as read
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function clearNotifications(User $user) {
+        /** mark all user notifications as read **/
+        $user->unreadNotifications->markAsRead();
+        /** return success */
+        return response()->json(['success' => 'true', 'message' => 'All notifications marked as read']);
+    }
+
 }

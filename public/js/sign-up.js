@@ -4827,9 +4827,20 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        USER_CAN_ACCESS_TEAM: function USER_CAN_ACCESS_TEAM(_ref14, _ref15) {
-            var commit = _ref14.commit;
-            var teamId = _ref15.teamId;
+        USER_CLEAR_INBOX: function USER_CLEAR_INBOX(_ref14) {
+            var commit = _ref14.commit,
+                state = _ref14.state;
+
+            axios.put('/api/user/' + state.user.id + '/clear-notifications').then(function (response) {
+                /** call success mutator to clear all notifications  */
+                commit('USER_CLEAR_INBOX_SUCCESS');
+            }).catch(function (error) {
+                commit('SERVER_ERROR');
+            });
+        },
+        USER_CAN_ACCESS_TEAM: function USER_CAN_ACCESS_TEAM(_ref15, _ref16) {
+            var commit = _ref15.commit;
+            var teamId = _ref16.teamId;
 
             axios.get('/api/team/' + teamId + '/can-access').then(function (response) {
                 /** call success */
@@ -4838,10 +4849,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        USER_CAN_ACCESS_PROJECT: function USER_CAN_ACCESS_PROJECT(_ref16, _ref17) {
-            var commit = _ref16.commit;
-            var teamId = _ref17.teamId,
-                projectId = _ref17.projectId;
+        USER_CAN_ACCESS_PROJECT: function USER_CAN_ACCESS_PROJECT(_ref17, _ref18) {
+            var commit = _ref17.commit;
+            var teamId = _ref18.teamId,
+                projectId = _ref18.projectId;
 
             axios.get('/api/team/' + teamId + '/project/' + projectId + '/can-access').then(function (response) {
                 if (!response.data.success) {
@@ -4853,12 +4864,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        USER_CAN_ACCESS_TASK: function USER_CAN_ACCESS_TASK(_ref18, _ref19) {
-            var commit = _ref18.commit;
-            var teamId = _ref19.teamId,
-                projectId = _ref19.projectId,
-                sectionId = _ref19.sectionId,
-                taskId = _ref19.taskId;
+        USER_CAN_ACCESS_TASK: function USER_CAN_ACCESS_TASK(_ref19, _ref20) {
+            var commit = _ref19.commit;
+            var teamId = _ref20.teamId,
+                projectId = _ref20.projectId,
+                sectionId = _ref20.sectionId,
+                taskId = _ref20.taskId;
 
             axios.get('/api/team/' + teamId + '/project/' + projectId + '/section/' + sectionId + '/task/' + taskId + '/can-access').then(function (response) {
                 if (!response.data.success) {
@@ -4873,9 +4884,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Team Actions
          **********************/
-        LOAD_TEAMS: function LOAD_TEAMS(_ref20) {
-            var commit = _ref20.commit,
-                state = _ref20.state;
+        LOAD_TEAMS: function LOAD_TEAMS(_ref21) {
+            var commit = _ref21.commit,
+                state = _ref21.state;
 
             axios.get('/api/user/' + state.user.id + '/teams').then(function (response) {
                 commit('SET_TEAM_LIST', { teams: response.data });
@@ -4885,10 +4896,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        ADD_NEW_TEAM: function ADD_NEW_TEAM(_ref21, _ref22) {
-            var commit = _ref21.commit,
-                state = _ref21.state;
-            var team = _ref22.team;
+        ADD_NEW_TEAM: function ADD_NEW_TEAM(_ref22, _ref23) {
+            var commit = _ref22.commit,
+                state = _ref22.state;
+            var team = _ref23.team;
 
             axios.post('/api/user/' + state.user.id + '/team/', team).then(function (response) {
                 commit('ADD_NEW_TEAM_SUCCESS', { team: response.data.team });
@@ -4904,10 +4915,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        UPDATE_TEAM: function UPDATE_TEAM(_ref23, _ref24) {
-            var commit = _ref23.commit,
-                getters = _ref23.getters;
-            var team = _ref24.team;
+        UPDATE_TEAM: function UPDATE_TEAM(_ref24, _ref25) {
+            var commit = _ref24.commit,
+                getters = _ref24.getters;
+            var team = _ref25.team;
 
             axios.put('/api/team/' + getters.getActiveTeam.id, team).then(function (response) {
                 commit('UPDATE_TEAM_SUCCESS', { team: response.data.team });
@@ -4919,11 +4930,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        SWITCH_TEAM: function SWITCH_TEAM(_ref25, _ref26) {
-            var commit = _ref25.commit,
-                getters = _ref25.getters,
-                state = _ref25.state;
-            var teamId = _ref26.teamId;
+        SWITCH_TEAM: function SWITCH_TEAM(_ref26, _ref27) {
+            var commit = _ref26.commit,
+                getters = _ref26.getters,
+                state = _ref26.state;
+            var teamId = _ref27.teamId;
 
             axios.put('/api/user/' + state.user.id + '/team', { teamId: teamId }).then(function (response) {
                 commit('SWITCH_TEAM_SUCCESS', { teamId: teamId });
@@ -4938,10 +4949,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Project Actions
          **********************/
-        GET_PROJECT: function GET_PROJECT(_ref27, _ref28) {
-            var commit = _ref27.commit,
-                getters = _ref27.getters;
-            var id = _ref28.id;
+        GET_PROJECT: function GET_PROJECT(_ref28, _ref29) {
+            var commit = _ref28.commit,
+                getters = _ref28.getters;
+            var id = _ref29.id;
 
             axios.get('/api/team/' + getters.getActiveTeam.id + '/project/' + id).then(function (response) {
                 commit('SET_PROJECT', { project: response.data.project });
@@ -4949,9 +4960,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        ADD_NEW_PROJECT: function ADD_NEW_PROJECT(_ref29, project) {
-            var commit = _ref29.commit,
-                getters = _ref29.getters;
+        ADD_NEW_PROJECT: function ADD_NEW_PROJECT(_ref30, project) {
+            var commit = _ref30.commit,
+                getters = _ref30.getters;
 
             axios.post('/api/team/' + getters.getActiveTeam.id + '/project/', project).then(function (response) {
                 commit('ADD_PROJECT_SUCCESS', { project: response.data.project });
@@ -4967,11 +4978,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addProject' });
             });
         },
-        UPDATE_PROJECT: function UPDATE_PROJECT(_ref30, _ref31) {
-            var commit = _ref30.commit,
-                getters = _ref30.getters;
-            var id = _ref31.id,
-                project = _ref31.project;
+        UPDATE_PROJECT: function UPDATE_PROJECT(_ref31, _ref32) {
+            var commit = _ref31.commit,
+                getters = _ref31.getters;
+            var id = _ref32.id,
+                project = _ref32.project;
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + id, project).then(function (response) {
                 /**  **/
@@ -4983,11 +4994,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Section Actions
          **********************/
-        ADD_NEW_SECTION: function ADD_NEW_SECTION(_ref32, _ref33) {
-            var commit = _ref32.commit,
-                getters = _ref32.getters;
-            var projectId = _ref33.projectId,
-                section = _ref33.section;
+        ADD_NEW_SECTION: function ADD_NEW_SECTION(_ref33, _ref34) {
+            var commit = _ref33.commit,
+                getters = _ref33.getters;
+            var projectId = _ref34.projectId,
+                section = _ref34.section;
 
             axios.post('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/', section).then(function (response) {
                 /**  **/
@@ -5004,12 +5015,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addSection' });
             });
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER: function UPDATE_SECTION_TASKS_SORT_ORDER(_ref34, _ref35) {
-            var commit = _ref34.commit,
-                state = _ref34.state,
-                getters = _ref34.getters;
-            var section = _ref35.section,
-                tasks = _ref35.tasks;
+        UPDATE_SECTION_TASKS_SORT_ORDER: function UPDATE_SECTION_TASKS_SORT_ORDER(_ref35, _ref36) {
+            var commit = _ref35.commit,
+                state = _ref35.state,
+                getters = _ref35.getters;
+            var section = _ref36.section,
+                tasks = _ref36.tasks;
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + state.project.id + '/section/' + section.id + '/tasks/reorder', { tasks: tasks }).then(function (response) {
                 commit('UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS', { section: section, tasks: tasks });
@@ -5017,12 +5028,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        UPDATE_SECTION: function UPDATE_SECTION(_ref36, _ref37) {
-            var commit = _ref36.commit,
-                state = _ref36.state,
-                getters = _ref36.getters;
-            var id = _ref37.id,
-                section = _ref37.section;
+        UPDATE_SECTION: function UPDATE_SECTION(_ref37, _ref38) {
+            var commit = _ref37.commit,
+                state = _ref37.state,
+                getters = _ref37.getters;
+            var id = _ref38.id,
+                section = _ref38.section;
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + state.project.id + '/section/' + id, section).then(function (response) {
                 /**  **/
@@ -5034,13 +5045,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Task Actions
          **********************/
-        GET_TASK: function GET_TASK(_ref38, _ref39) {
-            var commit = _ref38.commit,
-                state = _ref38.state,
-                getters = _ref38.getters;
-            var projectId = _ref39.projectId,
-                sectionId = _ref39.sectionId,
-                id = _ref39.id;
+        GET_TASK: function GET_TASK(_ref39, _ref40) {
+            var commit = _ref39.commit,
+                state = _ref39.state,
+                getters = _ref39.getters;
+            var projectId = _ref40.projectId,
+                sectionId = _ref40.sectionId,
+                id = _ref40.id;
 
             axios.get('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id).then(function (response) {
                 console.log(response);
@@ -5050,12 +5061,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        ADD_NEW_TASK: function ADD_NEW_TASK(_ref40, _ref41) {
-            var commit = _ref40.commit,
-                state = _ref40.state,
-                getters = _ref40.getters;
-            var sectionId = _ref41.sectionId,
-                task = _ref41.task;
+        ADD_NEW_TASK: function ADD_NEW_TASK(_ref41, _ref42) {
+            var commit = _ref41.commit,
+                state = _ref41.state,
+                getters = _ref41.getters;
+            var sectionId = _ref42.sectionId,
+                task = _ref42.task;
 
             axios.post('/api/team/' + getters.getActiveTeam.id + '/project/' + state.project.id + '/section/' + sectionId + '/task', task).then(function (response) {
                 /**  **/
@@ -5072,14 +5083,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addTask' });
             });
         },
-        UPDATE_TASK: function UPDATE_TASK(_ref42, _ref43) {
-            var state = _ref42.state,
-                commit = _ref42.commit,
-                getters = _ref42.getters;
-            var projectId = _ref43.projectId,
-                sectionId = _ref43.sectionId,
-                id = _ref43.id,
-                task = _ref43.task;
+        UPDATE_TASK: function UPDATE_TASK(_ref43, _ref44) {
+            var state = _ref43.state,
+                commit = _ref43.commit,
+                getters = _ref43.getters;
+            var projectId = _ref44.projectId,
+                sectionId = _ref44.sectionId,
+                id = _ref44.id,
+                task = _ref44.task;
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id, task).then(function (response) {
                 /**  **/
@@ -5099,15 +5110,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Sign up Mutations
          **********************/
-        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref44) {
-            var user = _ref44.user;
+        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref45) {
+            var user = _ref45.user;
 
             /** add user */
             state.user = user;
             Event.$emit('create-team-page', 'set-up-team');
         },
-        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref45) {
-            var errors = _ref45.errors;
+        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref46) {
+            var errors = _ref46.errors;
 
             /** add form errors */
             state.formErrors = errors;
@@ -5123,27 +5134,27 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * User Mutations
          **********************/
-        SET_USER: function SET_USER(state, _ref46) {
-            var user = _ref46.user;
+        SET_USER: function SET_USER(state, _ref47) {
+            var user = _ref47.user;
 
             state.user = user;
         },
         ADD_USER_AVATAR_SUCCESS: function ADD_USER_AVATAR_SUCCESS(state) {
             Event.$emit('notify', 'success', 'Success', 'Your avatar has been updated');
         },
-        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref47) {
-            var user = _ref47.user;
+        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref48) {
+            var user = _ref48.user;
 
             state.user = user;
         },
-        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref48) {
-            var errors = _ref48.errors;
+        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref49) {
+            var errors = _ref49.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref49) {
-            var tasks = _ref49.tasks;
+        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref50) {
+            var tasks = _ref50.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5153,8 +5164,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             });
             state.myTasks = groupedProjects;
         },
-        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref50) {
-            var tasks = _ref50.tasks;
+        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref51) {
+            var tasks = _ref51.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5164,8 +5175,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             });
             state.myOverDue = groupedProjects;
         },
-        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref51) {
-            var tasks = _ref51.tasks;
+        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref52) {
+            var tasks = _ref52.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5175,8 +5186,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             });
             state.myWorkingOnIt = groupedProjects;
         },
-        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref52) {
-            var notifications = _ref52.notifications;
+        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref53) {
+            var notifications = _ref53.notifications;
 
             /** group notifactions into days */
             var groupedDays = _.groupBy(notifications, function (notification) {
@@ -5184,10 +5195,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             });
             state.notifications = groupedDays;
         },
-        NOTIFICATION_MARK_AS_READ_SUCCESS: function NOTIFICATION_MARK_AS_READ_SUCCESS(state, _ref53) {
-            /** group notifactions into days */
-
-            var notificationId = _ref53.notificationId;
+        USER_CLEAR_INBOX_SUCCESS: function USER_CLEAR_INBOX_SUCCESS(state) {
+            state.notifications = {};
         },
         TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref54) {
             var teamId = _ref54.teamId,

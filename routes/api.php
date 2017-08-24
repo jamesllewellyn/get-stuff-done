@@ -43,6 +43,8 @@ use Illuminate\Http\Request;
     Route::get('/user/{user}/working-on-it', ['uses'=>'UserController@workingOnIt', 'as'=>'user.workingOnIt'] );
     /** get users unread notifications */
     Route::get('/user/{user}/notifications', ['uses'=>'UserController@notifications', 'as'=>'user.notifications'] );
+    /** mark all users notifications as read */
+    Route::put('/user/{user}/clear-notifications', ['uses'=>'UserController@clearNotifications', 'as'=>'user.notifications.clear'] );
 
 /***********************
  * Project API
