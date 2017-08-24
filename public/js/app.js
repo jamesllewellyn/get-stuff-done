@@ -70408,15 +70408,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "tag": "a",
       "to": "/inbox"
     }
-  }, [_vm._v("\n                        Inbox\n                    ")])], 1), _vm._v(" "), _c('li', [_c('a', {
-    on: {
-      "click": function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        _vm.profileHandler($event)
-      }
-    }
-  }, [_vm._v("\n                        Profile\n                    ")])]), _vm._v(" "), _c('li', {
+  }, [_vm._v("\n                        Inbox\n                    ")])], 1), _vm._v(" "), _c('li', {
     on: {
       "click": function($event) {
         $event.preventDefault();
@@ -70431,7 +70423,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "tag": "a",
       "to": "/my-tasks"
     }
-  }, [_vm._v("\n                        My Tasks\n                    ")])], 1)]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
+  }, [_vm._v("\n                        My Tasks\n                    ")])], 1), _vm._v(" "), _c('li', [_c('a', {
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        _vm.profileHandler($event)
+      }
+    }
+  }, [_vm._v("\n                        Profile\n                    ")])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
     staticClass: "menu-label"
   }, [_vm._v("\n                Team "), _c('a', {
     on: {

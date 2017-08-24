@@ -36,15 +36,15 @@
                             Inbox
                         </router-link>
                     </li>
-                    <li>
-                        <a @click.prevent.stop="profileHandler">
-                            Profile
-                        </a>
-                    </li>
                     <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
                         <router-link exact active-class="is-active" tag="a" to="/my-tasks" >
                             My Tasks
                         </router-link>
+                    </li>
+                    <li>
+                        <a @click.prevent.stop="profileHandler">
+                            Profile
+                        </a>
                     </li>
                 </ul>
                 <hr/>
