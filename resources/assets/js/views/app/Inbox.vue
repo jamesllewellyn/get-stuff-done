@@ -6,7 +6,7 @@
             </div>
         </div>
         <hr />
-        <transition-group name="fade" mode="out-in">
+        <transition-group name="fade" mode="out-in" v-if="notifications.length == 0">
             <div class="columns" v-for="(day, key ) in notifications" :key="key">
                 <h3 class="h3 column is-one-quarter" v-text="convertDate(key)" ></h3>
                 <div class="column is-half">
@@ -16,6 +16,19 @@
                 </div>
             </div>
         </transition-group>
+        <div class="columns is-mobile is-centered" v-else>
+            <div class="column is-half">
+                <div class="box is-empty-inbox">
+                    <div class="content has-text-centered">
+                        <h3 class="bold">
+                            You're all up to date
+                        </h3>
+                        <p>Your Inbox is currently empty</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 

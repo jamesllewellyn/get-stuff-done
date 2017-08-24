@@ -10780,6 +10780,13 @@ h3 .caret {
   color: #dbdbdb;
 }
 
+.box.is-empty-inbox {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  background-color: transparent;
+  border: rgba(10, 10, 10, 0.1) solid 1px;
+}
+
 .is-orange {
   background-color: #ff7739;
   color: #ffffff;
@@ -10790,7 +10797,7 @@ h3 .caret {
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 /** icons */

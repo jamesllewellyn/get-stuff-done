@@ -139,6 +139,11 @@ h3{
         color:#dbdbdb;
       }
     }
+    &.is-empty-inbox{
+      box-shadow: none !important;
+      background-color: transparent;
+      border: rgba(10, 10, 10, 0.1) solid 1px;
+    }
   }
 
 .is-orange{
@@ -149,7 +154,7 @@ h3{
   }
 }
 .bold{
-  font-weight: bold;
+  font-weight: bold !important;
 }
 /** icons */
 .fa-plus-circle{

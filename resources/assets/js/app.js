@@ -25,19 +25,15 @@ const app = new Vue({
     methods: {
         /** listens to Echo channels */
         listen(){
-            console.log('listening');
-            console.log('teams.'+ this.user.current_team_id + '.projects');
             /** listens to users current teams projects channel */
             Echo.channel('teams.'+ this.user.current_team_id + '.projects' )
                  /** listen for new project being added*/
                 .listen('ProjectAdded', (e) => {
-                    console.log('ProjectAdded');
-                    console.log(e);
-                    /** called ADD_PROJECT_SUCCESS to add project to list of projects*/
+                    /** called ADD_PROJECT_SUCCESS to add project to list of projects */
                     this.$store.commit('ADD_PROJECT_SUCCESS', { project : e.project});
                 });
         },
-        /** trigger event */
+        /** trigger event method */
         triggerEvent: function(eventName, payload){
             Event.$emit(eventName, payload);
         }
@@ -46,8 +42,9 @@ const app = new Vue({
         user () {
             /** wait for user data before fetching users teams **/
             if(this.user){
+                /** get users teams */
                 this.$store.dispatch('LOAD_TEAMS');
-                /** listen to Echo channels */
+                /** listen to users Echo channels */
                 this.listen();
             }
         }
@@ -61,6 +58,7 @@ const app = new Vue({
         Event.$on('toggleModal', function(modalName) {
             store.commit('TOGGLE_MODAL_IS_VISIBLE', {name : modalName});
         });
+        /** listen for notifications */
         Event.$on('notify', function(type, title, text) {
             this.$notify({
                 type:type,
@@ -68,12 +66,15 @@ const app = new Vue({
                 text: text
             });
         });
+        /** listen for toggle navigation events */
         Event.$on('toggleNav', function() {
             store.commit('TOGGLE_NAV_IS_VISIBLE');
         });
+        /** listen for toggle profile events */
         Event.$on('toggleProfile', function() {
             store.commit('TOGGLE_PROFILE_IS_VISIBLE');
         });
+        /** listen for force change page events */
         Event.$on('changePage', function($route) {
             router.push($route);
         });

@@ -61531,20 +61531,16 @@ var app = new Vue({
         listen: function listen() {
             var _this = this;
 
-            console.log('listening');
-            console.log('teams.' + this.user.current_team_id + '.projects');
             /** listens to users current teams projects channel */
             Echo.channel('teams.' + this.user.current_team_id + '.projects')
             /** listen for new project being added*/
             .listen('ProjectAdded', function (e) {
-                console.log('ProjectAdded');
-                console.log(e);
-                /** called ADD_PROJECT_SUCCESS to add project to list of projects*/
+                /** called ADD_PROJECT_SUCCESS to add project to list of projects */
                 _this.$store.commit('ADD_PROJECT_SUCCESS', { project: e.project });
             });
         },
 
-        /** trigger event */
+        /** trigger event method */
         triggerEvent: function triggerEvent(eventName, payload) {
             Event.$emit(eventName, payload);
         }
@@ -61553,8 +61549,9 @@ var app = new Vue({
         user: function user() {
             /** wait for user data before fetching users teams **/
             if (this.user) {
+                /** get users teams */
                 this.$store.dispatch('LOAD_TEAMS');
-                /** listen to Echo channels */
+                /** listen to users Echo channels */
                 this.listen();
             }
         }
@@ -61568,6 +61565,7 @@ var app = new Vue({
         Event.$on('toggleModal', function (modalName) {
             __WEBPACK_IMPORTED_MODULE_2__store_index__["a" /* default */].commit('TOGGLE_MODAL_IS_VISIBLE', { name: modalName });
         });
+        /** listen for notifications */
         Event.$on('notify', function (type, title, text) {
             this.$notify({
                 type: type,
@@ -61575,12 +61573,15 @@ var app = new Vue({
                 text: text
             });
         });
+        /** listen for toggle navigation events */
         Event.$on('toggleNav', function () {
             __WEBPACK_IMPORTED_MODULE_2__store_index__["a" /* default */].commit('TOGGLE_NAV_IS_VISIBLE');
         });
+        /** listen for toggle profile events */
         Event.$on('toggleProfile', function () {
             __WEBPACK_IMPORTED_MODULE_2__store_index__["a" /* default */].commit('TOGGLE_PROFILE_IS_VISIBLE');
         });
+        /** listen for force change page events */
         Event.$on('changePage', function ($route) {
             __WEBPACK_IMPORTED_MODULE_1__app_routes__["a" /* default */].push($route);
         });
@@ -61823,6 +61824,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_InboxItem_vue__ = __webpack_require__(187);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_InboxItem_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_InboxItem_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -62104,7 +62118,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "my-tasks"
     }
-  }, [_vm._m(0), _vm._v(" "), _c('hr'), _vm._v(" "), _c('transition-group', {
+  }, [_vm._m(0), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.notifications.length == 0) ? _c('transition-group', {
     attrs: {
       "name": "fade",
       "mode": "out-in"
@@ -62132,7 +62146,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       })
     }))], 1)])
-  }))], 1)
+  })) : _c('div', {
+    staticClass: "columns is-mobile is-centered"
+  }, [_c('div', {
+    staticClass: "column is-half"
+  }, [_c('div', {
+    staticClass: "box is-empty-inbox"
+  }, [_c('div', {
+    staticClass: "content has-text-centered"
+  }, [_c('h3', {
+    staticClass: "bold"
+  }, [_vm._v("\n                        You're all up to date\n                    ")]), _vm._v(" "), _c('p', [_vm._v("Your Inbox is currently empty")])])])])])], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "level header is-mobile"
