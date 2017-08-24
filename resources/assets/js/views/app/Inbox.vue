@@ -63,7 +63,7 @@
                 return store.state.user;
             },
             notifications: function(){
-                return store.state.notifications;
+                return store.getters.getNofificationsByDays;
             }
         },
         methods: {

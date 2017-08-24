@@ -10,8 +10,9 @@ const store = new Vuex.Store({
         projects: [],/** all current teams projects */
         project: null,/** all current projects sections and tasks */
         task: null,/** Current task being displayed */
-        notifications: {},/** Users notifications */
+        notifications: {}, /** Users notifications */
         myTasks: {},/** all tasks assigned to user */
+        myTasksLoading: true, /** loading state for MyTask page, used when changing task filter to fade content in/out */
         myOverDue: {},/** all users tasks currently overDue */
         myWorkingOnIt: {},/** all users tasks flagged as working on it */
         user: new User({first_name: '', last_name : '', handle : '', email : '', password : ''}),/** user */
@@ -438,7 +439,10 @@ const store = new Vuex.Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values( _.groupBy(project, 'section_id') );
             });
+            /** add tasks to myTasks */
             state.myTasks = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
         },
         GET_OVER_DUE_SUCCESS:(state, {tasks}) => {
             /** group tasks into projects */
@@ -447,7 +451,10 @@ const store = new Vuex.Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values( _.groupBy(project, 'section_id') );
             });
+            /** add tasks to myTasks */
             state.myOverDue = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
         },
         GET_WORKING_ON_IT_SUCCESS:(state, {tasks}) => {
             /** group tasks into projects */
@@ -456,12 +463,19 @@ const store = new Vuex.Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values( _.groupBy(project, 'section_id') );
             });
+            /** add tasks to myTasks */
             state.myWorkingOnIt = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
+        },
+        MY_TASKS_LOADING: (state) =>{
+            state.myTasksLoading = true;
+        },
+        MY_TASKS_LOADING_CLEAR: (state) =>{
+            state.myTasksLoading = false;
         },
         GET_NOTIFICATIONS_SUCCESS:(state, {notifications}) => {
-            /** group notifactions into days */
-            let groupedDays = _.groupBy(notifications, (notification) => moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD')));
-            state.notifications = groupedDays;
+            state.notifications = notifications;
         },
         USER_CLEAR_INBOX_SUCCESS:(state) => {
             state.notifications = {};
@@ -717,6 +731,14 @@ const store = new Vuex.Store({
         },
     },
     getters: {
+        /***********************
+         * Nofification Getters
+         **********************/
+        getNofificationsByDays:(state) => {
+            /** group notifications by days **/
+            let groupedDays = _.groupBy(state.notifications, (notification) => moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD')));
+            return groupedDays;
+        },
         /***********************
          * Team Getters
          **********************/

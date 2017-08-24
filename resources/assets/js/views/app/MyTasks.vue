@@ -11,35 +11,32 @@
             </div>
         </div>
         <hr />
-        <div class="columns is-multiline" v-if="tasks">
-            <div class="column is-half" v-for="project in tasks" >
-                    <div class="box">
-                        <div class="level">
-                            <div class="level-left">
-                                <h3 v-text="project[0][0].section.project.team.name"></h3>
+        <transition  name="fade" mode="out-in" >
+            <div class="my-tasks-projects" v-if="!areTasksLoading">
+                <div class="columns is-multiline" v-if="tasks">
+                    <div class="column is-half" v-for="project in tasks" >
+                        <div class="box">
+                            <div class="level">
+                                <div class="level-left">
+                                    <h3 v-text="project[0][0].section.project.team.name"></h3>
+                                </div>
+                                <div class="level-right">
+                                    <span class="tag is-light is-pulled-right" v-text="project[0][0].section.project.name"></span>
+                                </div>
                             </div>
-                            <div class="level-right">
-                                <span class="tag is-light is-pulled-right" v-text="project[0][0].section.project.name"></span>
-                            </div>
+                            <section v-for="section in project">
+                                <span class="tag is-light" v-text="section[0].section.name"></span>
+                                <table class="table task-table">
+                                    <tbody>
+                                        <task-list v-for="task in section" class="reorder-item" :projectId="task.section.project.id" :sectionId="task.section.id" :task="task"  :key="task.id"></task-list>
+                                    </tbody>
+                                </table>
+                            </section>
                         </div>
-                        <section v-for="section in project">
-                            <span class="tag is-light" v-text="section[0].section.name"></span>
-                            <table class="table task-table">
-                                <tbody>
-                                    <task-list v-for="task in section" class="reorder-item" :projectId="task.section.project.id" :sectionId="task.section.id" :task="task"  :key="task.id"></task-list>
-                                </tbody>
-                            </table>
-                            <!--<draggable v-if="section.length != 0" v-model="workingOnIt" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >-->
-                            <!--<transition-group :tag="'tbody'" name="reorder">-->
-                            <!--<task-list v-for="task in section" class="reorder-item"  :sectionId="task.section.id" :task="task"  :key="task.id"></task-list>-->
-                            <!--</transition-group>-->
-                            <!--</draggable>-->
-                        </section>
-
                     </div>
-
                 </div>
-        </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -65,6 +62,9 @@
             MultiSelect
         },
         computed: {
+            areTasksLoading(){
+                return store.state.myTasksLoading;
+            },
             user: function(){
                 /**
                  * user state is blank class if user is not set
@@ -109,6 +109,9 @@
             },
             /** filter tasks */
             filter(){
+                /** set my tasks page to loading state */
+                this.$store.commit('MY_TASKS_LOADING');
+                /** show ajax loader */
                 switch (this.filter){
                     case 'All' :
                         store.dispatch('GET_MY_TASKS');

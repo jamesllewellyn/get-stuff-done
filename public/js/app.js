@@ -4655,6 +4655,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         task: null, /** Current task being displayed */
         notifications: {}, /** Users notifications */
         myTasks: {}, /** all tasks assigned to user */
+        myTasksLoading: true, /** loading state for MyTask page, used when changing task filter to fade content in/out */
         myOverDue: {}, /** all users tasks currently overDue */
         myWorkingOnIt: {}, /** all users tasks flagged as working on it */
         user: new __WEBPACK_IMPORTED_MODULE_5__core_User__["a" /* default */]({ first_name: '', last_name: '', handle: '', email: '', password: '' }), /** user */
@@ -5162,7 +5163,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values(_.groupBy(project, 'section_id'));
             });
+            /** add tasks to myTasks */
             state.myTasks = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
         },
         GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref51) {
             var tasks = _ref51.tasks;
@@ -5173,7 +5177,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values(_.groupBy(project, 'section_id'));
             });
+            /** add tasks to myTasks */
             state.myOverDue = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
         },
         GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref52) {
             var tasks = _ref52.tasks;
@@ -5184,16 +5191,21 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values(_.groupBy(project, 'section_id'));
             });
+            /** add tasks to myTasks */
             state.myWorkingOnIt = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
+        },
+        MY_TASKS_LOADING: function MY_TASKS_LOADING(state) {
+            state.myTasksLoading = true;
+        },
+        MY_TASKS_LOADING_CLEAR: function MY_TASKS_LOADING_CLEAR(state) {
+            state.myTasksLoading = false;
         },
         GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref53) {
             var notifications = _ref53.notifications;
 
-            /** group notifactions into days */
-            var groupedDays = _.groupBy(notifications, function (notification) {
-                return moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD'));
-            });
-            state.notifications = groupedDays;
+            state.notifications = notifications;
         },
         USER_CLEAR_INBOX_SUCCESS: function USER_CLEAR_INBOX_SUCCESS(state) {
             state.notifications = {};
@@ -5543,6 +5555,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         }
     },
     getters: {
+        /***********************
+         * Nofification Getters
+         **********************/
+        getNofificationsByDays: function getNofificationsByDays(state) {
+            /** group notifications by days **/
+            var groupedDays = _.groupBy(state.notifications, function (notification) {
+                return moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD'));
+            });
+            return groupedDays;
+        },
         /***********************
          * Team Getters
          **********************/
@@ -61897,7 +61919,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].state.user;
         },
         notifications: function notifications() {
-            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].state.notifications;
+            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].getters.getNofificationsByDays;
         }
     },
     methods: {
@@ -62310,9 +62332,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 
@@ -62336,6 +62355,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         MultiSelect: __WEBPACK_IMPORTED_MODULE_6_vue_multiselect___default.a
     },
     computed: {
+        areTasksLoading: function areTasksLoading() {
+            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].state.myTasksLoading;
+        },
+
         user: function user() {
             /**
              * user state is blank class if user is not set
@@ -62381,6 +62404,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         /** filter tasks */
         filter: function filter() {
+            /** set my tasks page to loading state */
+            this.$store.commit('MY_TASKS_LOADING');
+            /** show ajax loader */
             switch (this.filter) {
                 case 'All':
                     __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_TASKS');
@@ -67623,7 +67649,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "filter"
     }
-  })], 1)])]), _vm._v(" "), _c('hr'), _vm._v(" "), (_vm.tasks) ? _c('div', {
+  })], 1)])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('transition', {
+    attrs: {
+      "name": "fade",
+      "mode": "out-in"
+    }
+  }, [(!_vm.areTasksLoading) ? _c('div', {
+    staticClass: "my-tasks-projects"
+  }, [(_vm.tasks) ? _c('div', {
     staticClass: "columns is-multiline"
   }, _vm._l((_vm.tasks), function(project) {
     return _c('div', {
@@ -67665,7 +67698,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         })
       }))])])
     })], 2)])
-  })) : _vm._e()])
+  })) : _vm._e()]) : _vm._e()])], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "level-item"
@@ -70322,6 +70355,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         projects: function projects() {
             return this.$store.getters.getProjects;
+        },
+        inboxCount: function inboxCount() {
+            return this.$store.state.notifications.length;
         }
     },
     methods: {
@@ -70408,7 +70444,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "tag": "a",
       "to": "/inbox"
     }
-  }, [_vm._v("\n                        Inbox\n                    ")])], 1), _vm._v(" "), _c('li', {
+  }, [_vm._v("\n                        Inbox "), (_vm.inboxCount) ? _c('span', {
+    staticClass: "tag is-danger is-pulled-right",
+    domProps: {
+      "textContent": _vm._s(_vm.inboxCount)
+    }
+  }) : _vm._e()])], 1), _vm._v(" "), _c('li', {
     on: {
       "click": function($event) {
         $event.preventDefault();

@@ -33,7 +33,7 @@
                 <ul class="menu-list">
                     <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
                         <router-link exact active-class="is-active" tag="a" to="/inbox" >
-                            Inbox
+                            Inbox <span class="tag is-danger is-pulled-right" v-text="inboxCount" v-if="inboxCount"></span>
                         </router-link>
                     </li>
                     <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
@@ -92,7 +92,8 @@
             user () { return  this.$store.state.user },
             teams () { return  this.$store.state.teams },
             activeTeam () { return  this.$store.getters.getActiveTeam },
-            projects () { return this.$store.getters.getProjects }
+            projects () { return this.$store.getters.getProjects },
+            inboxCount () { return this.$store.state.notifications.length }
         },
         methods:{
             getName:function(){

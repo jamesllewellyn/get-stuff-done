@@ -4655,6 +4655,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         task: null, /** Current task being displayed */
         notifications: {}, /** Users notifications */
         myTasks: {}, /** all tasks assigned to user */
+        myTasksLoading: true, /** loading state for MyTask page, used when changing task filter to fade content in/out */
         myOverDue: {}, /** all users tasks currently overDue */
         myWorkingOnIt: {}, /** all users tasks flagged as working on it */
         user: new __WEBPACK_IMPORTED_MODULE_5__core_User__["a" /* default */]({ first_name: '', last_name: '', handle: '', email: '', password: '' }), /** user */
@@ -5162,7 +5163,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values(_.groupBy(project, 'section_id'));
             });
+            /** add tasks to myTasks */
             state.myTasks = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
         },
         GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref51) {
             var tasks = _ref51.tasks;
@@ -5173,7 +5177,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values(_.groupBy(project, 'section_id'));
             });
+            /** add tasks to myTasks */
             state.myOverDue = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
         },
         GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref52) {
             var tasks = _ref52.tasks;
@@ -5184,16 +5191,21 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** group tasks in projects into sections */
                 groupedProjects[key] = _.values(_.groupBy(project, 'section_id'));
             });
+            /** add tasks to myTasks */
             state.myWorkingOnIt = groupedProjects;
+            /** clear loading state on myTasks page */
+            state.myTasksLoading = false;
+        },
+        MY_TASKS_LOADING: function MY_TASKS_LOADING(state) {
+            state.myTasksLoading = true;
+        },
+        MY_TASKS_LOADING_CLEAR: function MY_TASKS_LOADING_CLEAR(state) {
+            state.myTasksLoading = false;
         },
         GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref53) {
             var notifications = _ref53.notifications;
 
-            /** group notifactions into days */
-            var groupedDays = _.groupBy(notifications, function (notification) {
-                return moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD'));
-            });
-            state.notifications = groupedDays;
+            state.notifications = notifications;
         },
         USER_CLEAR_INBOX_SUCCESS: function USER_CLEAR_INBOX_SUCCESS(state) {
             state.notifications = {};
@@ -5543,6 +5555,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         }
     },
     getters: {
+        /***********************
+         * Nofification Getters
+         **********************/
+        getNofificationsByDays: function getNofificationsByDays(state) {
+            /** group notifications by days **/
+            var groupedDays = _.groupBy(state.notifications, function (notification) {
+                return moment(notification['created_at'], 'YYYY-MM-DD').calendar(moment('YYYY-MM-DD'));
+            });
+            return groupedDays;
+        },
         /***********************
          * Team Getters
          **********************/
