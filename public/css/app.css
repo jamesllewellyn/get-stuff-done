@@ -10945,7 +10945,7 @@ select {
 }
 
 .multiselect {
-  width: 145px;
+  min-width: 145px;
 }
 
 textarea {
