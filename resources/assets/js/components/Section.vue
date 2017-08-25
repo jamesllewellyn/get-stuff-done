@@ -13,7 +13,7 @@
                  <i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>
              </div>
          </div>
-         <draggable v-if="tasks" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >
+         <draggable v-if="tasks.length > 0" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >
              <transition-group :tag="'tbody'" name="reorder">
                 <task-list v-for="task in tasks" class="reorder-item" :projectId="projectId" :sectionId="section.id" :task="task"  :key="task.id"></task-list>
              </transition-group>
@@ -61,9 +61,14 @@
             },
             tasks: {
                 get() {
-                    if(this.id) {
-                        return store.getters.getSectionById({sectionId: this.id}).tasks;
+                    if(!this.id) {
+                        return [];
                     }
+                    if(!store.getters.getSectionById({sectionId: this.id}).tasks){
+                        return [];
+                    }
+                    return store.getters.getSectionById({sectionId: this.id}).tasks;
+
                 },
                 set(tasks) {
                     let sort_order = 1;
@@ -92,7 +97,7 @@
         },
         mounted() {
             let self = this;
-            /** listen for toggle navigation events */
+            /** listen section delete event */
             Event.$on('section.'+this.id+'.delete', function() {
                 self.deleteSection();
             });

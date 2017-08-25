@@ -306,6 +306,16 @@ const store = new Vuex.Store({
                    commit('UPDATE_PROJECT_FAILURE');
                 });
         },
+        DELETE_PROJECT: function ({ commit, getters } ,{id}) {
+            axios.delete('/api/team/'+getters.getActiveTeam.id+'/project/' + id)
+                .then(function (response) {
+                    /**  **/
+                    commit('DELETE_PROJECT_SUCCESS', {teamId: getters.getActiveTeam.id,id: id, message: response.data.message });
+                })
+                .catch(function (error) {
+                    commit('SERVER_ERROR');
+                });
+        },
         /***********************
          * Section Actions
          **********************/
@@ -616,6 +626,20 @@ const store = new Vuex.Store({
         },
         UPDATE_PROJECT_FAILURE: (state) => {
             Event.$emit('notify','error', 'Whoops', 'Project name couldn\'t be updated');
+        },
+        DELETE_PROJECT_SUCCESS:(state, {teamId, id, message}) => {
+            /** cast id to int **/
+            let pId = parseInt(id);
+            /** get team index **/
+            let tIdx = state.teams.map(team => team.id).indexOf(teamId);
+            /** remove deleted project from state.projects object**/
+            state.teams[tIdx].projects = _.reject(state.teams[tIdx].projects , function(project) { return project.id === pId; });
+            /** project no longer exists so move user from project page **/
+            Event.$emit('changePage', '/inbox/');
+            /** close are you sure modal **/
+            Event.$emit('hideAreYouSure');
+            /** notify user of section delete **/
+            Event.$emit('notify','success', 'Success', message);
         },
         /***********************
          * Section Mutations

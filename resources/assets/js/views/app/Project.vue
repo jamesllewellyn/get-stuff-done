@@ -2,13 +2,7 @@
     <div class="project">
         <div class="level header is-mobile">
             <div class="level-left">
-                <!--<drop-down-button :boarder="false">-->
-                     <!--<span slot="dropdowns">-->
-                         <!--<a href="#" class="dropdown-item">-->
-                            <!--Delete Project-->
-                         <!--</a>-->
-                     <!--</span>-->
-                <!--</drop-down-button>-->
+                <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Project', event: 'project.'+id+'.delete', action: 'delete this project', areYouSure : true}]"></drop-down-button>
                 <input class="title clear-background h1" type="text" name="name" @change="updateProject" v-model="project.name" v-if="project.name != ''" v-cloak>
                 <h1 v-else class="blokk title" >Project Title</h1>
             </div>
@@ -93,6 +87,9 @@
             updateProject:function(){
                 this.$store.dispatch('UPDATE_PROJECT', {id: this.id, project :this.project})
             },
+            deleteProject(){
+                this.$store.dispatch('DELETE_PROJECT', {id: this.id})
+            }
         },
         watch: {
             /** whenever id changes, get project data */
@@ -121,6 +118,10 @@
             Event.$on('clickedTask', function(sectionId, taskId) {
                 self.taskId = taskId;
                 self.sectionId = sectionId;
+            });
+            /** listen for project delete event **/
+            Event.$on('project.'+this.id+'.delete', function() {
+                self.deleteProject();
             });
         },
         beforeRouteUpdate (to, from, next) {

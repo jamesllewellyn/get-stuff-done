@@ -29,7 +29,7 @@
             task:{
                 type: Object,
                 required: false,
-                default: {name: 'example task name', priority: 'high', due_date: moment(), status_id : null}
+                default: function () { return {name: 'example task name', priority: 'high', due_date: moment(), status_id : null} }
             },
             placeHolder:{
                 type: Boolean,

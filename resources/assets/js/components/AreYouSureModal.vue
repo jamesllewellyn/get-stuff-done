@@ -38,6 +38,7 @@
               this.isVisible = false;
             },
             yes(){
+                this.isLoading = true;
                 Event.$emit(this.yesAction);
             }
         },
