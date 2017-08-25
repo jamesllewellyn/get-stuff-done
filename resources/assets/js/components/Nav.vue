@@ -52,7 +52,7 @@
                     Team <a  @click.prevent.stop="triggerEvent('toggleModal', 'addTeam')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>
                 <p class="control multi-select">
-                    <multi-select v-model="activeTeam" :options="teams" label="name" :searchable="false" :show-labels="false" placeholder="Switch Teams"  @select="switchTeam"></multi-select>
+                    <multi-select :value.sync="activeTeam" :options="teams" label="name" :searchable="false" :show-labels="false" placeholder="Switch Teams"  @select="switchTeam"></multi-select>
                 </p>
                 <p class="menu-label">
                     Projects <a  @click.prevent.stop="triggerEvent('toggleModal', 'addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>

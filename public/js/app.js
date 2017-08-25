@@ -70768,6 +70768,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "control multi-select"
   }, [_c('multi-select', {
     attrs: {
+      "value": _vm.activeTeam,
       "options": _vm.teams,
       "label": "name",
       "searchable": false,
@@ -70775,14 +70776,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Switch Teams"
     },
     on: {
-      "select": _vm.switchTeam
-    },
-    model: {
-      value: (_vm.activeTeam),
-      callback: function($$v) {
-        _vm.activeTeam = $$v
+      "update:value": function($event) {
+        _vm.activeTeam = $event
       },
-      expression: "activeTeam"
+      "select": _vm.switchTeam
     }
   })], 1), _vm._v(" "), _c('p', {
     staticClass: "menu-label"
