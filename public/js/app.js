@@ -62269,7 +62269,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "level-right"
   }, [_c('div', {
     staticClass: "has-text-right"
-  }, [_c('span', {
+  }, [(Object.keys(_vm.notifications).length > 0) ? _c('span', {
     staticClass: "tag is-orange is-medium"
   }, [_c('a', {
     staticClass: "orange",
@@ -62280,7 +62280,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.clearInbox($event)
       }
     }
-  }, [_vm._v("Clear Inbox")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('transition-group', {
+  }, [_vm._v("Clear Inbox")])]) : _vm._e()])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('transition-group', {
     attrs: {
       "name": "fade",
       "mode": "out-in"
