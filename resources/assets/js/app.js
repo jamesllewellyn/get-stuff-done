@@ -4,6 +4,7 @@ import store from './store/index';
 import AddProject from './components/modals/AddProject.vue';
 import AddTeam from './components/modals/AddTeam.vue';
 import Modal from './components/Modal.vue';
+import areYouSure from './components/AreYouSureModal.vue';
 import Task from './components/Task.vue';
 import Profile from './components/Profile.vue';
 import Navigation from './components/Nav.vue';
@@ -20,7 +21,7 @@ const app = new Vue({
          ])
     ,
     components : {
-        Task, Modal, AddProject, Navigation , Profile, Spinner, AddTeam
+        Task, Modal, AddProject, Navigation , Profile, Spinner, AddTeam, areYouSure
     },
     methods: {
         /** listens to Echo channels */

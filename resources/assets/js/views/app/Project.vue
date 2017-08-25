@@ -2,13 +2,13 @@
     <div class="project">
         <div class="level header is-mobile">
             <div class="level-left">
-                <drop-down-button :boarder="false">
-                     <span slot="dropdowns">
-                         <a href="#" class="dropdown-item">
-                            Delete Project
-                         </a>
-                     </span>
-                </drop-down-button>
+                <!--<drop-down-button :boarder="false">-->
+                     <!--<span slot="dropdowns">-->
+                         <!--<a href="#" class="dropdown-item">-->
+                            <!--Delete Project-->
+                         <!--</a>-->
+                     <!--</span>-->
+                <!--</drop-down-button>-->
                 <input class="title clear-background h1" type="text" name="name" @change="updateProject" v-model="project.name" v-if="project.name != ''" v-cloak>
                 <h1 v-else class="blokk title" >Project Title</h1>
             </div>
@@ -23,8 +23,10 @@
         <hr>
         <div>
             <div class="columns is-multiline" v-if="project">
-                <project-section v-for="section in project.sections" :id="section.id" :key="section.id" :projectId="id"></project-section>
-                <project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>
+                <!--<transition-group tag="template" name="fade" mode="out-in">-->
+                    <project-section v-for="(section, key) in project.sections" :id="section.id" :key="key" :projectId="id"></project-section>
+                    <project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>
+                <!--</transition-group>-->
             </div>
         </div>
         <!--

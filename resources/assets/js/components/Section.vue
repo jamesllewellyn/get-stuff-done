@@ -3,12 +3,7 @@
      <div class="box" :class="placeHolder ? 'place-holder' : ''">
          <div class="level">
              <div class="level-left">
-                 <drop-down-button :boarder="false" v-if="!placeHolder">
-                     <span slot="dropdowns">
-                         <a href="#" class="dropdown-item">
-                            Delete Section
-                         </a>
-                     </span>
+                 <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Section', event: 'section.'+id+'.delete', action: 'delete this section', areYouSure : true}]" v-if="!placeHolder">
                  </drop-down-button>
                  <input class="clear-background title h3" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="section.name" v-if="section">
                  <h3 v-else class="title blokk"> Section Name</h3>
@@ -26,7 +21,7 @@
          <notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>
          <table class="table place-holder" v-else>
              <tbody>
-                <task-list   v-for="n in 3" :key="n" :placeHolder="true" ></task-list>
+                <task-list v-for="n in 3" :key="n" :placeHolder="true" ></task-list>
              </tbody>
          </table>
      </div>
@@ -89,8 +84,18 @@
             updateSection:function(){
                 this.$store.dispatch('UPDATE_SECTION', {id: this.id, section :this.section})
             },
+            deleteSection(){
+                this.$store.dispatch('DELETE_SECTION', {id: this.id})
+            },
+            triggerEvent(event){
+            }
         },
         mounted() {
+            let self = this;
+            /** listen for toggle navigation events */
+            Event.$on('section.'+this.id+'.delete', function() {
+                self.deleteSection();
+            });
         }
     }
 </script>

@@ -60,6 +60,7 @@
         </transition>
         <task></task>
         <profile></profile>
+        <are-you-sure></are-you-sure>
         <modal modal-name="addProject" title="Add New Project">
             <template slot="body">
                 <add-project></add-project>

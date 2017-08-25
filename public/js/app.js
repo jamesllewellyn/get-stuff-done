@@ -4933,11 +4933,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         SWITCH_TEAM: function SWITCH_TEAM(_ref26, _ref27) {
             var commit = _ref26.commit,
-                getters = _ref26.getters,
                 state = _ref26.state;
             var teamId = _ref27.teamId;
 
-            axios.put('/api/user/' + state.user.id + '/team', { teamId: teamId }).then(function (response) {
+            axios.put('/api/user/' + state.user.id + '/team', { teamId: teamId }).then(function () {
                 commit('SWITCH_TEAM_SUCCESS', { teamId: teamId });
             }, function (error) {
                 if (error.response.data) {
@@ -4957,7 +4956,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
 
             axios.get('/api/team/' + getters.getActiveTeam.id + '/project/' + id).then(function (response) {
                 commit('SET_PROJECT', { project: response.data.project });
-            }, function (err) {
+            }, function () {
                 commit('SERVER_ERROR');
             });
         },
@@ -5043,16 +5042,29 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('UPDATE_SECTION_FAILURE');
             });
         },
-        /***********************
-         * Task Actions
-         **********************/
-        GET_TASK: function GET_TASK(_ref39, _ref40) {
+        DELETE_SECTION: function DELETE_SECTION(_ref39, _ref40) {
             var commit = _ref39.commit,
                 state = _ref39.state,
                 getters = _ref39.getters;
-            var projectId = _ref40.projectId,
-                sectionId = _ref40.sectionId,
-                id = _ref40.id;
+            var id = _ref40.id;
+
+            axios.delete('/api/team/' + getters.getActiveTeam.id + '/project/' + state.project.id + '/section/' + id).then(function (response) {
+                /**  **/
+                commit('DELETE_SECTION_SUCCESS', { id: id, message: response.data.message });
+            }).catch(function () {
+                commit('UPDATE_SECTION_FAILURE');
+            });
+        },
+        /***********************
+         * Task Actions
+         **********************/
+        GET_TASK: function GET_TASK(_ref41, _ref42) {
+            var commit = _ref41.commit,
+                state = _ref41.state,
+                getters = _ref41.getters;
+            var projectId = _ref42.projectId,
+                sectionId = _ref42.sectionId,
+                id = _ref42.id;
 
             axios.get('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id).then(function (response) {
                 console.log(response);
@@ -5062,12 +5074,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        ADD_NEW_TASK: function ADD_NEW_TASK(_ref41, _ref42) {
-            var commit = _ref41.commit,
-                state = _ref41.state,
-                getters = _ref41.getters;
-            var sectionId = _ref42.sectionId,
-                task = _ref42.task;
+        ADD_NEW_TASK: function ADD_NEW_TASK(_ref43, _ref44) {
+            var commit = _ref43.commit,
+                state = _ref43.state,
+                getters = _ref43.getters;
+            var sectionId = _ref44.sectionId,
+                task = _ref44.task;
 
             axios.post('/api/team/' + getters.getActiveTeam.id + '/project/' + state.project.id + '/section/' + sectionId + '/task', task).then(function (response) {
                 /**  **/
@@ -5084,14 +5096,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addTask' });
             });
         },
-        UPDATE_TASK: function UPDATE_TASK(_ref43, _ref44) {
-            var state = _ref43.state,
-                commit = _ref43.commit,
-                getters = _ref43.getters;
-            var projectId = _ref44.projectId,
-                sectionId = _ref44.sectionId,
-                id = _ref44.id,
-                task = _ref44.task;
+        UPDATE_TASK: function UPDATE_TASK(_ref45, _ref46) {
+            var state = _ref45.state,
+                commit = _ref45.commit,
+                getters = _ref45.getters;
+            var projectId = _ref46.projectId,
+                sectionId = _ref46.sectionId,
+                id = _ref46.id,
+                task = _ref46.task;
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id, task).then(function (response) {
                 /**  **/
@@ -5111,15 +5123,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Sign up Mutations
          **********************/
-        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref45) {
-            var user = _ref45.user;
+        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref47) {
+            var user = _ref47.user;
 
             /** add user */
             state.user = user;
             Event.$emit('create-team-page', 'set-up-team');
         },
-        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref46) {
-            var errors = _ref46.errors;
+        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref48) {
+            var errors = _ref48.errors;
 
             /** add form errors */
             state.formErrors = errors;
@@ -5135,27 +5147,27 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * User Mutations
          **********************/
-        SET_USER: function SET_USER(state, _ref47) {
-            var user = _ref47.user;
+        SET_USER: function SET_USER(state, _ref49) {
+            var user = _ref49.user;
 
             state.user = user;
         },
         ADD_USER_AVATAR_SUCCESS: function ADD_USER_AVATAR_SUCCESS(state) {
             Event.$emit('notify', 'success', 'Success', 'Your avatar has been updated');
         },
-        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref48) {
-            var user = _ref48.user;
+        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref50) {
+            var user = _ref50.user;
 
             state.user = user;
         },
-        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref49) {
-            var errors = _ref49.errors;
+        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref51) {
+            var errors = _ref51.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref50) {
-            var tasks = _ref50.tasks;
+        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref52) {
+            var tasks = _ref52.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5168,8 +5180,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear loading state on myTasks page */
             state.myTasksLoading = false;
         },
-        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref51) {
-            var tasks = _ref51.tasks;
+        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref53) {
+            var tasks = _ref53.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5182,8 +5194,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear loading state on myTasks page */
             state.myTasksLoading = false;
         },
-        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref52) {
-            var tasks = _ref52.tasks;
+        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref54) {
+            var tasks = _ref54.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5202,17 +5214,17 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         MY_TASKS_LOADING_CLEAR: function MY_TASKS_LOADING_CLEAR(state) {
             state.myTasksLoading = false;
         },
-        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref53) {
-            var notifications = _ref53.notifications;
+        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref55) {
+            var notifications = _ref55.notifications;
 
             state.notifications = notifications;
         },
         USER_CLEAR_INBOX_SUCCESS: function USER_CLEAR_INBOX_SUCCESS(state) {
             state.notifications = {};
         },
-        TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref54) {
-            var teamId = _ref54.teamId,
-                projectId = _ref54.projectId;
+        TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref56) {
+            var teamId = _ref56.teamId,
+                projectId = _ref56.projectId;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5221,11 +5233,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** take user to project page */
             Event.$emit('changePage', '/project/' + projectId);
         },
-        TAKE_USER_TO_TASK: function TAKE_USER_TO_TASK(state, _ref55) {
-            var teamId = _ref55.teamId,
-                projectId = _ref55.projectId,
-                sectionId = _ref55.sectionId,
-                task = _ref55.task;
+        TAKE_USER_TO_TASK: function TAKE_USER_TO_TASK(state, _ref57) {
+            var teamId = _ref57.teamId,
+                projectId = _ref57.projectId,
+                sectionId = _ref57.sectionId,
+                task = _ref57.task;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5241,8 +5253,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Team Mutations
          **********************/
-        SET_TEAM_LIST: function SET_TEAM_LIST(state, _ref56) {
-            var teams = _ref56.teams;
+        SET_TEAM_LIST: function SET_TEAM_LIST(state, _ref58) {
+            var teams = _ref58.teams;
 
             /** clear current teams **/
             state.teams = [];
@@ -5251,13 +5263,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
             });
         },
-        SET_ACTIVE_TEAM: function SET_ACTIVE_TEAM(state, _ref57) {
-            var team = _ref57.team;
+        SET_ACTIVE_TEAM: function SET_ACTIVE_TEAM(state, _ref59) {
+            var team = _ref59.team;
 
             state.user.current_team_id = team.id;
         },
-        ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref58) {
-            var team = _ref58.team;
+        ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref60) {
+            var team = _ref60.team;
 
             /** add team */
             state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
@@ -5271,15 +5283,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 }
             });
         },
-        ADD_NEW_TEAM_FAILURE: function ADD_NEW_TEAM_FAILURE(state, _ref59) {
-            var errors = _ref59.errors;
+        ADD_NEW_TEAM_FAILURE: function ADD_NEW_TEAM_FAILURE(state, _ref61) {
+            var errors = _ref61.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        ADD_TEAM_MEMBER_SUCCESS: function ADD_TEAM_MEMBER_SUCCESS(state, _ref60) {
-            var message = _ref60.message,
-                user = _ref60.user;
+        ADD_TEAM_MEMBER_SUCCESS: function ADD_TEAM_MEMBER_SUCCESS(state, _ref62) {
+            var message = _ref62.message,
+                user = _ref62.user;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5290,20 +5302,20 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** send user success message */
             Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref61) {
-            var message = _ref61.message;
+        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref63) {
+            var message = _ref63.message;
 
             /** send user error message */
             Event.$emit('notify', 'error', 'Whoops', message);
         },
-        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref62) {
-            var message = _ref62.message;
+        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref64) {
+            var message = _ref64.message;
 
             /** send user error message */
             Event.$emit('notify', 'error', 'Whoops', message);
         },
-        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref63) {
-            var teamId = _ref63.teamId;
+        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref65) {
+            var teamId = _ref65.teamId;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5318,8 +5330,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** display notification to user */
             Event.$emit('notify', 'success', 'Success', 'Team has been switched');
         },
-        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref64) {
-            var team = _ref64.team;
+        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref66) {
+            var team = _ref66.team;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5334,8 +5346,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Project Mutations
          **********************/
-        SET_PROJECT: function SET_PROJECT(state, _ref65) {
-            var project = _ref65.project;
+        SET_PROJECT: function SET_PROJECT(state, _ref67) {
+            var project = _ref67.project;
 
             state.project = project;
             var idx = 0;
@@ -5347,8 +5359,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         CLEAR_PROJECT: function CLEAR_PROJECT(state) {
             state.project = null;
         },
-        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref66) {
-            var project = _ref66.project;
+        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref68) {
+            var project = _ref68.project;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5359,14 +5371,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New project has been created');
         },
-        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref67) {
-            var errors = _ref67.errors;
+        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref69) {
+            var errors = _ref69.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref68) {
-            var project = _ref68.project;
+        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref70) {
+            var project = _ref70.project;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5387,22 +5399,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Section Mutations
          **********************/
-        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref69) {
-            var section = _ref69.section;
+        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref71) {
+            var section = _ref71.section;
 
             /** add section to currently loaded project **/
             state.project.sections.push(new __WEBPACK_IMPORTED_MODULE_2__core_Section__["a" /* default */](section));
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New section has been created');
         },
-        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref70) {
-            var errors = _ref70.errors;
+        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref72) {
+            var errors = _ref72.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref71) {
-            var section = _ref71.section;
+        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref73) {
+            var section = _ref73.section;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5416,21 +5428,36 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_SECTION_FAILURE: function UPDATE_SECTION_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Section name couldn\'t be updated');
         },
+        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref74) {
+            var id = _ref74.id,
+                message = _ref74.message;
+
+            /** cast id to int **/
+            var sId = parseInt(id);
+            /** remove deleted section from state.project.sections **/
+            state.project.sections = _.reject(state.project.sections, function (section) {
+                return section.id === sId;
+            });
+            /** close are you sure modal **/
+            Event.$emit('hideAreYouSure');
+            /** notify user of section delete **/
+            Event.$emit('notify', 'success', 'Success', message);
+        },
         /***********************
          * Task Mutations
          **********************/
         CLEAR_TASK: function CLEAR_TASK(state) {
             state.task = null;
         },
-        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref72) {
-            var task = _ref72.task;
+        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref75) {
+            var task = _ref75.task;
 
             /** add task to active task state **/
             state.task = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
         },
-        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref73) {
-            var sectionId = _ref73.sectionId,
-                task = _ref73.task;
+        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref76) {
+            var sectionId = _ref76.sectionId,
+                task = _ref76.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId);
@@ -5443,15 +5470,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
-        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref74) {
-            var errors = _ref74.errors;
+        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref77) {
+            var errors = _ref77.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref75) {
-            var sectionId = _ref75.sectionId,
-                task = _ref75.task;
+        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref78) {
+            var sectionId = _ref78.sectionId,
+                task = _ref78.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId);
@@ -5467,15 +5494,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** update task to data array **/
             state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
         },
-        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref76) {
-            var errors = _ref76.errors;
+        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref79) {
+            var errors = _ref79.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref77) {
-            var section = _ref77.section,
-                tasks = _ref77.tasks;
+        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref80) {
+            var section = _ref80.section,
+                tasks = _ref80.tasks;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5489,13 +5516,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Modal Mutations
          **********************/
-        ADD_MODAL: function ADD_MODAL(state, _ref78) {
-            var name = _ref78.name;
+        ADD_MODAL: function ADD_MODAL(state, _ref81) {
+            var name = _ref81.name;
 
             state.modals.push({ name: name, isVisible: false, isLoading: false });
         },
-        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref79) {
-            var name = _ref79.name;
+        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref82) {
+            var name = _ref82.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -5504,16 +5531,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear all form errors **/
             state.formErrors = '';
         },
-        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref80) {
-            var name = _ref80.name;
+        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref83) {
+            var name = _ref83.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isLoading = true;
         },
-        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref81) {
-            var name = _ref81.name;
+        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref84) {
+            var name = _ref84.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -5620,8 +5647,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             return false;
         },
         getSectionById: function getSectionById(state, getters) {
-            return function (_ref82) {
-                var sectionId = _ref82.sectionId;
+            return function (_ref85) {
+                var sectionId = _ref85.sectionId;
 
                 /** cast id to int **/
                 var sId = parseInt(sectionId);
@@ -5643,9 +5670,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         /** returns a task **/
         getTaskById: function getTaskById(state, getters) {
-            return function (_ref83) {
-                var sectionId = _ref83.sectionId,
-                    id = _ref83.id;
+            return function (_ref86) {
+                var sectionId = _ref86.sectionId,
+                    id = _ref86.id;
 
                 /** cast ids to int **/
                 var pId = parseInt(projectId);
@@ -61567,15 +61594,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_modals_AddTeam_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_modals_AddTeam_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue__ = __webpack_require__(134);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Modal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Task_vue__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_Task_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Profile_vue__ = __webpack_require__(243);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_Profile_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Nav_vue__ = __webpack_require__(250);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Nav_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_Nav_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vue_simple_spinner__ = __webpack_require__(253);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vue_simple_spinner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_vue_simple_spinner__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Task_vue__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_Task_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Profile_vue__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_Profile_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_Nav_vue__ = __webpack_require__(250);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_Nav_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_Nav_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_vue_simple_spinner__ = __webpack_require__(253);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_vue_simple_spinner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_vue_simple_spinner__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_vuex__ = __webpack_require__(4);
+
 
 
 
@@ -61592,10 +61622,10 @@ var app = new Vue({
     el: '#app',
     router: __WEBPACK_IMPORTED_MODULE_1__app_routes__["a" /* default */],
     store: __WEBPACK_IMPORTED_MODULE_2__store_index__["a" /* default */],
-    computed: Object(__WEBPACK_IMPORTED_MODULE_10_vuex__["b" /* mapState */])(['user', 'navVisible', 'profileVisible', 'teams', 'isLoading']),
+    computed: Object(__WEBPACK_IMPORTED_MODULE_11_vuex__["b" /* mapState */])(['user', 'navVisible', 'profileVisible', 'teams', 'isLoading']),
 
     components: {
-        Task: __WEBPACK_IMPORTED_MODULE_6__components_Task_vue___default.a, Modal: __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue___default.a, AddProject: __WEBPACK_IMPORTED_MODULE_3__components_modals_AddProject_vue___default.a, Navigation: __WEBPACK_IMPORTED_MODULE_8__components_Nav_vue___default.a, Profile: __WEBPACK_IMPORTED_MODULE_7__components_Profile_vue___default.a, Spinner: __WEBPACK_IMPORTED_MODULE_9_vue_simple_spinner___default.a, AddTeam: __WEBPACK_IMPORTED_MODULE_4__components_modals_AddTeam_vue___default.a
+        Task: __WEBPACK_IMPORTED_MODULE_7__components_Task_vue___default.a, Modal: __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue___default.a, AddProject: __WEBPACK_IMPORTED_MODULE_3__components_modals_AddProject_vue___default.a, Navigation: __WEBPACK_IMPORTED_MODULE_9__components_Nav_vue___default.a, Profile: __WEBPACK_IMPORTED_MODULE_8__components_Profile_vue___default.a, Spinner: __WEBPACK_IMPORTED_MODULE_10_vue_simple_spinner___default.a, AddTeam: __WEBPACK_IMPORTED_MODULE_4__components_modals_AddTeam_vue___default.a, areYouSure: __WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue___default.a
     },
     methods: {
         /** listens to Echo channels */
@@ -68059,6 +68089,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -69071,11 +69103,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -69131,9 +69158,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         updateSection: function updateSection() {
             this.$store.dispatch('UPDATE_SECTION', { id: this.id, section: this.section });
-        }
+        },
+        deleteSection: function deleteSection() {
+            this.$store.dispatch('DELETE_SECTION', { id: this.id });
+        },
+        triggerEvent: function triggerEvent(event) {}
     },
-    mounted: function mounted() {}
+    mounted: function mounted() {
+        var self = this;
+        /** listen for toggle navigation events */
+        Event.$on('section.' + this.id + '.delete', function () {
+            self.deleteSection();
+        });
+    }
 });
 
 /***/ }),
@@ -69160,16 +69197,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            isActive: false
+        };
+    },
+
     props: {
         boarder: {
             type: Boolean,
             default: true
+        },
+        dropdowns: {
+            type: Array,
+            required: true
         }
     },
-    mounted: function mounted() {
-        console.log('Component mounted.');
+    methods: {
+        /** trigger event */
+        triggerEvent: function triggerEvent(object) {
+            if (object.areYouSure) {
+                Event.$emit('showAreYouSure', object.action, object.event);
+                return true;
+            }
+            Event.$emit(object.event);
+        },
+        showDropdown: function showDropdown() {
+            this.isActive = true;
+            this.$refs.dropdown.focus();
+        },
+        hideDropdown: function hideDropdown() {
+            this.isActive = false;
+        }
     }
 });
 
@@ -69189,15 +69252,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "aria-haspopup": "true",
       "aria-controls": "dropdown-menu"
     }
-  }, [_vm._t("button-text"), _vm._v(" "), _vm._m(0)], 2)]), _vm._v(" "), _c('div', {
+  }, [_vm._m(0)])]), _vm._v(" "), _c('div', {
+    ref: "dropdown",
     staticClass: "dropdown-menu",
     attrs: {
       "id": "dropdown-menu",
       "role": "menu"
+    },
+    on: {
+      "blur": _vm.hideDropdown
     }
   }, [_c('div', {
     staticClass: "dropdown-content"
-  }, [_vm._t("dropdowns")], 2)])])
+  }, _vm._l((_vm.dropdowns), function(dropdown) {
+    return _c('a', {
+      staticClass: "dropdown-item",
+      on: {
+        "click": function($event) {
+          _vm.triggerEvent(dropdown)
+        }
+      }
+    }, [_vm._v("\n                   " + _vm._s(dropdown.text) + "\n                ")])
+  }))])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
     staticClass: "icon is-small"
@@ -69232,16 +69308,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "level-left"
   }, [(!_vm.placeHolder) ? _c('drop-down-button', {
     attrs: {
-      "boarder": false
+      "boarder": false,
+      "dropdowns": [{
+        text: 'Delete Section',
+        event: 'section.' + _vm.id + '.delete',
+        action: 'delete this section',
+        areYouSure: true
+      }]
     }
-  }, [_c('span', {
-    slot: "dropdowns"
-  }, [_c('a', {
-    staticClass: "dropdown-item",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("\n                           Delete Section\n                        ")])])]) : _vm._e(), _vm._v(" "), (_vm.section) ? _c('input', {
+  }) : _vm._e(), _vm._v(" "), (_vm.section) ? _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -69358,18 +69433,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "level header is-mobile"
   }, [_c('div', {
     staticClass: "level-left"
-  }, [_c('drop-down-button', {
-    attrs: {
-      "boarder": false
-    }
-  }, [_c('span', {
-    slot: "dropdowns"
-  }, [_c('a', {
-    staticClass: "dropdown-item",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("\n                        Delete Project\n                     ")])])]), _vm._v(" "), (_vm.project.name != '') ? _c('input', {
+  }, [(_vm.project.name != '') ? _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -69393,7 +69457,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }) : _c('h1', {
     staticClass: "blokk title"
-  }, [_vm._v("Project Title")])], 1), _vm._v(" "), _c('div', {
+  }, [_vm._v("Project Title")])]), _vm._v(" "), _c('div', {
     staticClass: "level-right"
   }, [_c('div', {
     staticClass: "has-text-right"
@@ -69410,9 +69474,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Add Section")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [(_vm.project) ? _c('div', {
     staticClass: "columns is-multiline"
-  }, [_vm._l((_vm.project.sections), function(section) {
+  }, [_vm._l((_vm.project.sections), function(section, key) {
     return _c('project-section', {
-      key: section.id,
+      key: key,
       attrs: {
         "id": section.id,
         "projectId": _vm.id
@@ -71421,6 +71485,181 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(262),
+  /* template */
+  __webpack_require__(263),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/laravel-tasks/resources/assets/js/components/AreYouSureModal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] AreYouSureModal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-509bf57b", Component.options)
+  } else {
+    hotAPI.reload("data-v-509bf57b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 262 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(2);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            action: '',
+            yesAction: '',
+            isVisible: false,
+            isLoading: false
+        };
+    },
+
+    computed: {},
+    methods: {
+        hideModal: function hideModal() {
+            this.isVisible = false;
+        },
+        yes: function yes() {
+            Event.$emit(this.yesAction);
+        }
+    },
+    created: function created() {
+        var self = this;
+        Event.$on('showAreYouSure', function (action, yesAction) {
+            self.action = action;
+            self.yesAction = yesAction;
+            self.isVisible = true;
+        });
+        Event.$on('hideAreYouSure', function () {
+            self.action = '';
+            self.yesAction = '';
+            self.isVisible = false;
+            self.isLoading = false;
+        });
+    }
+});
+
+/***/ }),
+/* 263 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('transition', {
+    attrs: {
+      "name": "modal",
+      "mode": "out-in"
+    }
+  }, [(_vm.isVisible) ? _c('div', {
+    staticClass: "modal",
+    class: _vm.isVisible ? 'is-active' : ''
+  }, [_c('div', {
+    staticClass: "modal-background",
+    on: {
+      "click": function($event) {
+        _vm.hideModal()
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "modal-card modal-container"
+  }, [_c('header', {
+    staticClass: "modal-card-head"
+  }, [_c('p', {
+    staticClass: "modal-card-title"
+  }, [_vm._v("Are you sure about that?")]), _vm._v(" "), _c('button', {
+    staticClass: "delete",
+    on: {
+      "click": function($event) {
+        _vm.hideModal()
+      }
+    }
+  })]), _vm._v(" "), _c('section', {
+    staticClass: "modal-card-body"
+  }, [_c('p', [_vm._v("Do you really want to "), _c('span', {
+    domProps: {
+      "textContent": _vm._s(_vm.action)
+    }
+  }), _vm._v(" ?")])]), _vm._v(" "), _c('footer', {
+    staticClass: "modal-card-foot"
+  }, [_c('a', {
+    staticClass: "button is-success",
+    class: {
+      'is-loading': _vm.isLoading
+    },
+    on: {
+      "click": _vm.yes
+    }
+  }, [_vm._v("Yes")]), _vm._v(" "), _c('a', {
+    staticClass: "button",
+    on: {
+      "click": _vm.hideModal
+    }
+  }, [_vm._v("Cancel")])])])]) : _vm._e()])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-509bf57b", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

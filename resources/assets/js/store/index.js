@@ -256,9 +256,9 @@ const store = new Vuex.Store({
                     commit('SERVER_ERROR');
                 });
         },
-        SWITCH_TEAM: function({ commit, getters, state }, {teamId}){
+        SWITCH_TEAM: function({ commit, state }, {teamId}){
             axios.put('/api/user/'+ state.user.id+'/team', {teamId :teamId} )
-                .then((response) => {
+                .then(() => {
                     commit('SWITCH_TEAM_SUCCESS', { teamId: teamId})
                 }, (error) => {
                     if(error.response.data){
@@ -275,7 +275,7 @@ const store = new Vuex.Store({
             axios.get('/api/team/' + getters.getActiveTeam.id + '/project/' + id )
                 .then((response) => {
                     commit('SET_PROJECT', { project: response.data.project });
-                }, (err) => {
+                }, () => {
                     commit('SERVER_ERROR');
             })
         },
@@ -343,6 +343,16 @@ const store = new Vuex.Store({
                     commit('UPDATE_SECTION_SUCCESS', { section: response.data.section });
                 })
                 .catch(function (error) {
+                    commit('UPDATE_SECTION_FAILURE');
+                });
+        },
+        DELETE_SECTION: function ({ commit, state, getters } ,{id}) {
+            axios.delete('/api/team/'+getters.getActiveTeam.id+'/project/'+ state.project.id +'/section/' + id)
+                .then(function (response) {
+                    /**  **/
+                    commit('DELETE_SECTION_SUCCESS', {id : id, message : response.data.message});
+                })
+                .catch(function () {
                     commit('UPDATE_SECTION_FAILURE');
                 });
         },
@@ -630,6 +640,16 @@ const store = new Vuex.Store({
         },
         UPDATE_SECTION_FAILURE: (state) => {
             Event.$emit('notify','error', 'Whoops', 'Section name couldn\'t be updated');
+        },
+        DELETE_SECTION_SUCCESS:(state, {id, message}) => {
+            /** cast id to int **/
+            let sId = parseInt(id);
+            /** remove deleted section from state.project.sections **/
+            state.project.sections = _.reject(state.project.sections, function(section) { return section.id === sId; });
+            /** close are you sure modal **/
+            Event.$emit('hideAreYouSure');
+            /** notify user of section delete **/
+            Event.$emit('notify','success', 'Success', message);
         },
         /***********************
          * Task Mutations
