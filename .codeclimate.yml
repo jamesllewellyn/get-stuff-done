@@ -15,9 +15,9 @@ engines:
     enabled: true
   phpmd:
     enabled: true
-      checks:
-        CleanCode/StaticAccess:
-          enabled: false
+    checks:
+      CleanCode/StaticAccess:
+        enabled: false
 ratings:
   paths:
   - "**.css"
