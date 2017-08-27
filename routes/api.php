@@ -68,7 +68,7 @@ use Illuminate\Http\Request;
     /** Section store, show, destroy, update */
     Route::resource('team/{team}/project/{project}/section/{section}/task', 'TaskController', ['only' => [ 'store', 'show', 'destroy', 'update']]);
     /** flag task as done */
-    Route::put('/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );
+    Route::put('team/{team}/project/{project}/section/{section}/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );
     /** check user can access project */
     Route::get('/team/{team}/project/{project}/section/{section}/task/{task}/can-access', ['uses'=>'TaskController@canAccess', 'as'=>'project.canAccess'] );
 /***********************

@@ -383,7 +383,7 @@ const store = new Vuex.Store({
         ADD_NEW_TASK: function ({ commit, state, getters } ,{sectionId, task}) {
             axios.post('/api/team/'+getters.getActiveTeam.id+'/project/'+ state.project.id +'/section/' + sectionId + '/task', task)
                 .then(function (response) {
-                    /**  **/
+                    /** call success mutation **/
                     commit('ADD_TASK_SUCCESS', { sectionId: sectionId,  task: response.data.task });
                     /** clear button loading state*/
                     commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addTask'});
@@ -398,20 +398,28 @@ const store = new Vuex.Store({
                     commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addTask'});
                 });
         },
-        UPDATE_TASK: function ({ state, commit, getters} ,{projectId, sectionId, id, task}) {
+        UPDATE_TASK: function ({ commit, getters} ,{projectId, sectionId, id, task}) {
             axios.put('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section/' + sectionId + '/task/' + id, task)
                 .then(function (response) {
-                    /**  **/
-                    console.log( response.data.task );
+                    /** call success mutation **/
                     commit('UPDATE_TASK_SUCCESS', {sectionId: sectionId, task: response.data.task });
                 })
                 .catch(function (error) {
-                    console.log( error );
                     if(error.response.data){
                         commit('UPDATE_TASK_FAILURE', { errors:  error.response.data });
                     }
                     /** clear button loading state*/
                     commit('REMOVE_BUTTON_LOADING_STATE', {name : 'updateTask'});
+                });
+        },
+        TASK_SET_TO_DONE: function ({ commit, getters} ,{projectId, sectionId, id}) {
+            axios.put('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section/' + sectionId + '/task/' + id + '/done')
+                .then(function (response) {
+                    /** all success mutation **/
+                    commit('TASK_SET_TO_DONE_SUCCESS', {sectionId: sectionId, task: response.data.task });
+                })
+                .catch(function (error) {
+                    commit('SERVER_ERROR');
                 });
         },
     },
@@ -704,9 +712,7 @@ const store = new Vuex.Store({
             let sId = parseInt(sectionId);
             let tId = parseInt(task.id);
             let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
-            console.log('sIdx: '+sIdx);
             let tIdx = state.project.sections[sIdx].tasks.map(tasks => task.id).indexOf(tId);
-            console.log('tIdx: '+tIdx);
             /** update task to data array **/
             state.project.sections[sIdx].tasks[tIdx] = new Task(task);
         },
@@ -719,6 +725,16 @@ const store = new Vuex.Store({
             let sIdx = state.project.sections.map(section => section.id).indexOf(section.id);
             /** reorder tasks by sort_order and update project object **/
             state.project.sections[sIdx].tasks = _.sortBy(tasks, function(task) { return task.sort_order; });
+        },
+        TASK_SET_TO_DONE_SUCCESS: (state, { sectionId, task }) => {
+            /** cast id to int **/
+            let sId = parseInt(sectionId);
+            let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
+            let tIdx = state.project.sections[sIdx].tasks.map(tasks => task.id).indexOf(task.id);
+            /** update task to data array **/
+            state.project.sections[sIdx].tasks[tIdx] = new Task(task);
+            /** notify user of success **/
+            Event.$emit('notify','success', 'Success', 'Task Completed');
         },
         /***********************
          * Modal Mutations

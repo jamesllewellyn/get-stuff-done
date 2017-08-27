@@ -37,9 +37,6 @@
             }
         },
         computed:{
-//            task: function(){
-//                return store.getters.getTask(this.id);
-//            },
             priority : function () {
                 switch (this.task.priority_id){
                     case 1 :
@@ -60,11 +57,14 @@
             status: function(){
                 let now = moment();
                 /** todo: clean this up **/
-                if(this.task.status_id === 1){
+                if(!this.task.status_id){
+                    return  '';
+                }
+                if(this.task.status_id.id === 1){
                     return  'is-done';
                 }
 
-                if(this.task.status_id === 2){
+                if(this.task.status_id.id === 2){
                     return 'is-started';
                 }
 
@@ -80,13 +80,12 @@
                 }
             },
             done: function () {
-                /** todo: move this into store **/
+                /** flag task as done **/
+                this.$store.dispatch('TASK_SET_TO_DONE', {projectId: this.projectId, sectionId: this.sectionId, id: this.task.id});
             }
         },
         mounted() {
-//            console.log(this.id);
-//            console.log(this.sectionId);
-//            console.log(this.task);
+
         }
     }
 </script>

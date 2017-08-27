@@ -152,7 +152,7 @@ class TaskController extends Controller
         $task->status_id = 1;
         $task->save();
         /** return success message */
-        return response()->json(['success' => true, 'message' => 'Task '.$task->name.' has been flagged as done']);
+        return response()->json(['success' => true, 'message' => 'Task '.$task->name.' has been flagged as done', 'task' => $task]);
     }
 
     /**
