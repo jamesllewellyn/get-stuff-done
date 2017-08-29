@@ -29,7 +29,6 @@
                                         <div class="level-item"></div>
                                         <div class="level-item"></div>
                                     </div>
-
                                 </template>
                             </multi-select>
                         </p>

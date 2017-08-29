@@ -94,7 +94,6 @@
                 this.$store.dispatch('TASK_SET_TO_DONE', {projectId: this.project_id, sectionId: this.section_id, id: this.id});
             },
             forceUpdate(){
-                console.log('forceUpdate');
                 this.$forceUpdate();
             }
         },

@@ -10,10 +10,10 @@
              </div>
              <div class="level-right">
                  <a  @click.prevent.stop="addTask()" v-if="!placeHolder"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
-                 <!--<i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>-->
+                 <i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>
              </div>
          </div>
-         <table class="table place-holder">
+         <table class="table place-holder" v-if="tasks.length > 0">
              <tbody>
                 <task-list v-for="(task, key) in tasks"
                            :key="key"
@@ -23,7 +23,7 @@
                            :name="task.name"
                            :status_id="task.status_id"
                            :priority_id="task.priority_id"
-                           :due_date="task.priority_id"
+                           :due_date="task.due_date"
 
                 ></task-list>
              </tbody>
@@ -33,12 +33,12 @@
                 <!--<task-list v-for="task in tasks" class="reorder-item" :projectId="projectId" :sectionId="section.id" :id="task.id"  :key="task.id"></task-list>-->
              <!--</transition-group>-->
          <!--</draggable>-->
-         <!--<notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>-->
-         <!--<table class="table place-holder" v-else>-->
-             <!--<tbody>-->
-                <!--<task-list v-for="n in 3" :key="n" :placeHolder="true" ></task-list>-->
-             <!--</tbody>-->
-         <!--</table>-->
+         <notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>
+         <table class="table place-holder" v-else>
+             <tbody>
+                <task-list v-for="n in 3" :key="n" :placeHolder="true" ></task-list>
+             </tbody>
+         </table>
      </div>
  </div>
 </template>
@@ -108,8 +108,11 @@
             deleteSection(){
                 this.$store.dispatch('DELETE_SECTION', {id: this.id})
             },
+            /**
+             * use force update to re-render instance
+             * when section task object had been updated
+             * **/
             forceUpdate(){
-                console.log('forceUpdate');
                 this.$forceUpdate();
             }
         },
