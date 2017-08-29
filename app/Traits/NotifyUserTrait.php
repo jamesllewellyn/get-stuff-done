@@ -5,8 +5,12 @@ namespace App\Traits;
 use App\User;
 use App\Task;
 use App\Team;
+use App\Project;
+use Auth;
 use App\Notifications\UserRemovedFromTask;
 use App\Notifications\UserAssignedToTask;
+use App\Notifications\ProjectAdded;
+use App\Notifications\ProjectDeleted;
 use Illuminate\Support\Facades\Notification;
 
 trait NotifyUserTrait
@@ -16,12 +20,13 @@ trait NotifyUserTrait
      *
      * @param Team $team
      * @param Task $task
-     * @param User $actionBy
      * @param $userIds
      */
-    private function notifyUsersRemovedFromTask(Team $team, Task $task, User $actionBy, $userIds){
-        $users = User::whereIn('id',$userIds)->get();
-        Notification::send($users, new UserRemovedFromTask($team, $task, $actionBy));
+    private function notifyUsersRemovedFromTask(Team $team, Task $task, $userIds){
+        /** get users to be notified  */
+        $users = User::whereIn('id',$userIds)->where('id', '<>', Auth::User()->id )->get();
+        /** send notifications  */
+        Notification::send($users, new UserRemovedFromTask($team, $task, Auth::User()));
     }
 
     /**
@@ -29,11 +34,38 @@ trait NotifyUserTrait
      *
      * @param Team $team
      * @param Task $task
-     * @param User $actionBy
      * @param $userIds
      */
-    private function notifyUsersAddedToTask(Team $team, Task $task, User $actionBy, $userIds){
-        $users = User::whereIn('id',$userIds)->get();
-        Notification::send($users, new UserAssignedToTask($team, $task, $actionBy));
+    private function notifyUsersAddedToTask(Team $team, Task $task, $userIds){
+        /** get users to be notified  */
+        $users = User::whereIn('id',$userIds)->where('id', '<>', Auth::User()->id )->get();
+        /** send notifications  */
+        Notification::send($users, new UserAssignedToTask($team, $task, Auth::User()));
+    }
+
+    /**
+     * Notify team members that project has been added
+     *
+     * @param Team $team
+     * @param Project $project
+     */
+    private function notifyTeamMembersProjectAdded(Team $team, Project $project){
+        /** get team members  */
+        $users = $team->users()->where('users.id', '<>', Auth::User()->id)->get();
+        /** send notifications  */
+        Notification::send($users, new ProjectAdded($team, $project, Auth::User()));
+    }
+
+    /**
+     * Notify team members that project has been deleted
+     *
+     * @param Team $team
+     * @param Project $project
+     */
+    private function notifyTeamMembersProjectDeleted(Team $team, $projectName){
+        /** get team members  */
+        $users = $team->users()->where('users.id', '<>', Auth::User()->id)->get();
+        /** send notifications  */
+        Notification::send($users, new ProjectDeleted($team, $projectName, Auth::User()));
     }
 }

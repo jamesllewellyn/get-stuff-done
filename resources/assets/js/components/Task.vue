@@ -126,7 +126,6 @@
                 }
             },
             status(){
-                console.log(this.statusDropDownValue);
                 if(typeof this.statusDropDownValue === 'object'){
                     return this.statusDropDownValue.id;
                 }
@@ -155,7 +154,6 @@
                 }
             },
             priority(){
-                console.log(this.priorityDropDownValue);
                 if(typeof this.priorityDropDownValue === 'object'){
                     return this.priorityDropDownValue.id;
                 }

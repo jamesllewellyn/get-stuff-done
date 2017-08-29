@@ -26,12 +26,16 @@ const app = new Vue({
     methods: {
         /** listens to Echo channels */
         listen(){
-            /** listens to users current teams projects channel */
-            Echo.channel('teams.'+ this.user.current_team_id + '.projects' )
-                 /** listen for new project being added*/
-                .listen('ProjectAdded', (e) => {
-                    /** called ADD_PROJECT_SUCCESS to add project to list of projects */
-                    this.$store.commit('ADD_PROJECT_SUCCESS', { project : e.project});
+            // /** listens to users current teams projects channel */
+            // Echo.channel('teams.'+ this.user.current_team_id + '.projects' )
+            //      /** listen for new project being added*/
+            //     .listen('ProjectAdded', (e) => {
+            //         /** called ADD_PROJECT_SUCCESS to add project to list of projects */
+            //         this.$store.commit('ADD_PROJECT_SUCCESS', { project : e.project});
+            //     });
+            Echo.private('App.User.' + this.user.id)
+                .notification((notification) => {
+                    console.log(notification);
                 });
         },
         /** trigger event method */

@@ -9,9 +9,10 @@ use App\Section;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UserAssignedToTask extends Notification
+class UserAssignedToTask extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $team, $task, $user;
@@ -36,7 +37,7 @@ class UserAssignedToTask extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -59,7 +60,7 @@ class UserAssignedToTask extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
         $section =  Section::find($this->task->section_id);
         return [
@@ -70,5 +71,20 @@ class UserAssignedToTask extends Notification
             'section_id' => $this->task->section_id,
             'task_id' => $this->task->id
         ];
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'team' => $this->team,
+            'task' => $this->task,
+            'user' => $this->user
+        ]);
     }
 }

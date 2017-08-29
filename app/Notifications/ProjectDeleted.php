@@ -3,29 +3,28 @@
 namespace App\Notifications;
 
 use App\Team;
-use App\Project;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class ProjectAdded extends Notification implements ShouldQueue
+class ProjectDeleted extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $team, $project, $user;
+    protected $team, $projectName, $user;
 
     /**
      * Create a new notification instance.
      * @param Team $team
-     * @param Project $project
+     * @param $projectName
      * @param User $user
      */
-    public function __construct(Team $team, Project $project, User $user)
+    public function __construct(Team $team, $projectName, User $user)
     {
         $this->team = $team;
-        $this->project = $project;
+        $this->projectName = $projectName;
         $this->user = $user;
     }
 
@@ -49,8 +48,8 @@ class ProjectAdded extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject($this->user->getFullName().' has added a new project to '.$this->team->name)
-            ->line($this->user->getFullName().' ('.$this->user->email.') has added project '.$this->project->name.' to team '.$this->team->name)
+            ->subject($this->user->getFullName().' has deleted a new project from '.$this->team->name)
+            ->line($this->user->getFullName().' ('.$this->user->email.') has deleted project '.$this->projectName.' from team '.$this->team->name)
             ->action('Log in', url('/login'));
     }
 
@@ -64,9 +63,8 @@ class ProjectAdded extends Notification implements ShouldQueue
     {
         return [
             'user' => $this->user,
-            'action' => 'Added project '.$this->project->name.' to team '.$this->team->name,
-            'team_id' => $this->team->id,
-            'project_id' => $this->project->id
+            'action' => 'Deleted project '.$this->projectName.' from team '.$this->team->name,
+            'team_id' => $this->team->id
         ];
     }
 
@@ -80,7 +78,7 @@ class ProjectAdded extends Notification implements ShouldQueue
     {
         return new BroadcastMessage([
             'team' => $this->team,
-            'project' => $this->project,
+            'projectName' => $this->projectName,
             'user' => $this->user
         ]);
     }

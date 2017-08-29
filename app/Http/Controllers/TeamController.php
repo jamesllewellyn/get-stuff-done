@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Team;
 use Auth;
 use App\PendingUser;
-use App\Notifications\AddedToTeam;
+use App\Notifications\UserAddedToTeam;
 use App\Notifications\InviteUser;
 
 class TeamController extends Controller
@@ -147,7 +147,7 @@ class TeamController extends Controller
         $userTeam->team_id = $team->id;
         $userTeam->save();
         /** notify user that they have been added to a new team **/
-        $user->notify(new AddedToTeam($team, $addedBy));
+        $user->notify(new UserAddedToTeam($team, $addedBy));
         /** return successful response **/
         return response()->json(['success' => true, 'message' => $user->full_name.' has been added to team '.$team->name, 'user' => $user]);
     }

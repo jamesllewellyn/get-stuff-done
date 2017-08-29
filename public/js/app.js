@@ -61697,14 +61697,15 @@ var app = new Vue({
     methods: {
         /** listens to Echo channels */
         listen: function listen() {
-            var _this = this;
-
-            /** listens to users current teams projects channel */
-            Echo.channel('teams.' + this.user.current_team_id + '.projects')
-            /** listen for new project being added*/
-            .listen('ProjectAdded', function (e) {
-                /** called ADD_PROJECT_SUCCESS to add project to list of projects */
-                _this.$store.commit('ADD_PROJECT_SUCCESS', { project: e.project });
+            // /** listens to users current teams projects channel */
+            // Echo.channel('teams.'+ this.user.current_team_id + '.projects' )
+            //      /** listen for new project being added*/
+            //     .listen('ProjectAdded', (e) => {
+            //         /** called ADD_PROJECT_SUCCESS to add project to list of projects */
+            //         this.$store.commit('ADD_PROJECT_SUCCESS', { project : e.project});
+            //     });
+            Echo.private('App.User.' + this.user.id).notification(function (notification) {
+                console.log(notification);
             });
         },
 
@@ -62197,7 +62198,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         view: function view() {
             var type = this.inboxItem.type.split("\\");
             switch (type['2']) {
-                case 'UserAssignedToTask':
+                case 'AssignedTask':
                     return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('USER_CAN_ACCESS_TASK', {
                         teamId: this.inboxItem.data.team_id,
                         projectId: this.inboxItem.data.project_id,
@@ -62207,7 +62208,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 case 'ProjectAdded':
                     return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('USER_CAN_ACCESS_PROJECT', { teamId: this.inboxItem.data.team_id, projectId: this.inboxItem.data.project_id });
                     break;
-                case 'AddedToTeam':
+                case 'UserAddedToTeam':
                     return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('USER_CAN_ACCESS_TEAM', { teamId: this.inboxItem.data.team_id });
                     break;
             }
@@ -64212,7 +64213,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
         },
         status: function status() {
-            console.log(this.statusDropDownValue);
             if (_typeof(this.statusDropDownValue) === 'object') {
                 return this.statusDropDownValue.id;
             }
@@ -64242,7 +64242,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
         },
         priority: function priority() {
-            console.log(this.priorityDropDownValue);
             if (_typeof(this.priorityDropDownValue) === 'object') {
                 return this.priorityDropDownValue.id;
             }

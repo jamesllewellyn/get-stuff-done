@@ -6,10 +6,12 @@ use App\Project;
 use App\Team;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
+use App\Traits\NotifyUserTrait;
 
 class ProjectController extends Controller
 {
+    use NotifyUserTrait;
+
     public function __construct() {
         /** define controller middleware */
         $this->middleware('auth:api');
@@ -45,14 +47,8 @@ class ProjectController extends Controller
         $this->validate(Request(),$project->validation, $project->messages);
         /** create new project */
         $project = Project::create(['name' => $request->get('name'), 'team_id' => $team->id]);
-        /** get user  */
-        $loggedBy =  Auth::user();
-        /** get team members where are not currently logged in user*/
-        $users = $team->users()->where('users.id', '<>', $loggedBy->id )->get();
-        /** send notifications  */
-        Notification::send($users, new \App\Notifications\ProjectAdded($team, $project, $loggedBy) );
-        /** broadcast added project event */
-        broadcast(new \App\Events\ProjectAdded($team->id, $project))->toOthers();
+        /** notify team members that new project has been added  */
+        $this->notifyTeamMembersProjectAdded($team, $project);
         /** return success and stored project */
         return response()->json(['success' => true, 'message' => 'project has been created', 'project' => $project]);
     }
@@ -129,6 +125,8 @@ class ProjectController extends Controller
         $this->authorize('access-project', [$team, $project]);
         /** delete project */
         $project->delete();
+        /** notify team members project has been deleted **/
+        $this->notifyTeamMembersProjectDeleted($team, $project->name);
         /** return success message */
         return response()->json(['success' => true, 'message' => 'Project '.$project->name.' has been successfully deleted']);
     }

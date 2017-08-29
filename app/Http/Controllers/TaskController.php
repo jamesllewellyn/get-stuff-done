@@ -135,11 +135,11 @@ class TaskController extends Controller
         $syncData = $task->assignedUsers()->sync($userIds);
         /** notify removed users */
         if($syncData['detached']){
-            $this->notifyUsersRemovedFromTask($team, $task, Auth::User(), $syncData['detached']);
+            $this->notifyUsersRemovedFromTask($team, $task, $syncData['detached']);
         }
         /** notify added users */
         if($syncData['attached']){
-            $this->notifyUsersAddedToTask($team, $task, Auth::User(), $syncData['attached']);
+            $this->notifyUsersAddedToTask($team, $task, $syncData['attached']);
         }
         /** return success and updated task */
         return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task]);
