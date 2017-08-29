@@ -45,7 +45,7 @@
                             <div class="field">
                                 <label class="label">Priority</label>
                                 <p class="control">
-                                    <multi-select v-model="priority" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"  @select="updateTask"></multi-select>
+                                    <multi-select v-model="priorityDropDownValue" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"  @select="updateTask"></multi-select>
                                 </p>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                             <div class="field">
                                 <label class="label">Status</label>
                                 <p class="control">
-                                    <multi-select v-model="status" :options="[{id:1, name:'Done'}, {id:2, name:'Working On It'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set current status"  @select="updateTask"></multi-select>
+                                    <multi-select v-model="statusDropDownValue" :options="[{id:1, name:'Done'}, {id:2, name:'Working On It'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set current status"  @select="updateTask"></multi-select>
                                 </p>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                     return 'is-started';
                 }
             },
-            status(){
+            statusDropDownValue(){
                 switch (this.task.status_id) {
                     case 1 :
                     case "1" :
@@ -114,7 +114,13 @@
                         return {id:2, name:'Working On It'};
                 }
             },
-            priority(){
+            status(){
+                if(typeof this.statusDropDownValue === 'object'){
+                    return this.statusDropDownValue.id;
+                }
+                return null;
+            },
+            priorityDropDownValue(){
                 switch (this.task.priority_id){
                     case 1 :
                     case "1" :
@@ -127,6 +133,12 @@
                         return {id:3, name:'Low'};
                 }
             },
+            priority(){
+                if(typeof this.priorityDropDownValue === 'object'){
+                    return this.priorityDropDownValue.id;
+                }
+                return null;
+            },
             users() {
                 return store.getters.getTeamUser
             }
@@ -136,7 +148,21 @@
                 return moment(date).format("MMM Do YY");
             },
             updateTask:function(){
-                this.$store.dispatch('UPDATE_TASK', {projectId: this.projectId, sectionId:this.sectionId, id: this.id, task :this.task})
+                this.$store.dispatch('UPDATE_TASK', {
+                    projectId: this.projectId,
+                    sectionId:this.sectionId,
+                    id: this.task.id,
+                    task : {
+                        id :this.task.id,
+                        name: this.task.name,
+                        due_date: this.task.due_date,
+                        note: this.task.note,
+                        priority_id : this.priority,
+                        sort_order : this.task.sort_order,
+                        status_id : this.status,
+                        users : this.task.users
+                    }
+                })
             },
             hideTask:function(){
                 this.isVisible = false;

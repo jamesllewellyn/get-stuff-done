@@ -714,7 +714,7 @@ const store = new Vuex.Store({
             let sId = parseInt(sectionId);
             let tId = parseInt(task.id);
             let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
-            let tIdx = state.project.sections[sIdx].tasks.map(tasks => task.id).indexOf(tId);
+            let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(tId);
             /** update task to data array **/
             state.project.sections[sIdx].tasks[tIdx] = new Task(task);
             /** notify section component of update **/

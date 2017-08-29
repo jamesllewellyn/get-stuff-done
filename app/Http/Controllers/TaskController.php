@@ -122,11 +122,9 @@ class TaskController extends Controller
         $task->due_date =  $request->due_date;
         $task->note = $request->note;
         $task->sort_order = $request->sort_order;
-        if($request->has('priority_id')) {
-            $task->priority_id = $request->priority_id['id'];  /** vue-select component returns an object */
-        }
+        $task->priority_id = $request->priority_id;
         if($request->has('status_id')){
-            $task->status_id = $request->status_id['id'];  /** vue-select component returns an object */
+            $task->status_id = $request->status_id;
         }
         $task->save();
         /** get assigned userIds from request */

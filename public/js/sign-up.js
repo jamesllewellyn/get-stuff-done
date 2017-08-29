@@ -5533,7 +5533,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var sIdx = state.project.sections.map(function (section) {
                 return section.id;
             }).indexOf(sId);
-            var tIdx = state.project.sections[sIdx].tasks.map(function (tasks) {
+            var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
                 return task.id;
             }).indexOf(tId);
             /** update task to data array **/

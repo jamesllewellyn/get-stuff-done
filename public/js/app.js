@@ -5533,7 +5533,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var sIdx = state.project.sections.map(function (section) {
                 return section.id;
             }).indexOf(sId);
-            var tIdx = state.project.sections[sIdx].tasks.map(function (tasks) {
+            var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
                 return task.id;
             }).indexOf(tId);
             /** update task to data array **/
@@ -64074,6 +64074,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_multiselect__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 //
 //
 //
@@ -64180,7 +64182,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return 'is-started';
             }
         },
-        status: function status() {
+        statusDropDownValue: function statusDropDownValue() {
             switch (this.task.status_id) {
                 case 1:
                 case "1":
@@ -64191,7 +64193,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return { id: 2, name: 'Working On It' };
             }
         },
-        priority: function priority() {
+        status: function status() {
+            if (_typeof(this.statusDropDownValue) === 'object') {
+                return this.statusDropDownValue.id;
+            }
+            return null;
+        },
+        priorityDropDownValue: function priorityDropDownValue() {
             switch (this.task.priority_id) {
                 case 1:
                 case "1":
@@ -64204,6 +64212,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return { id: 3, name: 'Low' };
             }
         },
+        priority: function priority() {
+            if (_typeof(this.priorityDropDownValue) === 'object') {
+                return this.priorityDropDownValue.id;
+            }
+            return null;
+        },
         users: function users() {
             return __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */].getters.getTeamUser;
         }
@@ -64213,7 +64227,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return moment(date).format("MMM Do YY");
         },
         updateTask: function updateTask() {
-            this.$store.dispatch('UPDATE_TASK', { projectId: this.projectId, sectionId: this.sectionId, id: this.id, task: this.task });
+            this.$store.dispatch('UPDATE_TASK', {
+                projectId: this.projectId,
+                sectionId: this.sectionId,
+                id: this.task.id,
+                task: {
+                    id: this.task.id,
+                    name: this.task.name,
+                    due_date: this.task.due_date,
+                    note: this.task.note,
+                    priority_id: this.priority,
+                    sort_order: this.task.sort_order,
+                    status_id: this.status,
+                    users: this.task.users
+                }
+            });
         },
         hideTask: function hideTask() {
             this.isVisible = false;
@@ -67403,11 +67431,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "select": _vm.updateTask
     },
     model: {
-      value: (_vm.priority),
+      value: (_vm.priorityDropDownValue),
       callback: function($$v) {
-        _vm.priority = $$v
+        _vm.priorityDropDownValue = $$v
       },
-      expression: "priority"
+      expression: "priorityDropDownValue"
     }
   })], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "column"
@@ -67435,11 +67463,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "select": _vm.updateTask
     },
     model: {
-      value: (_vm.status),
+      value: (_vm.statusDropDownValue),
       callback: function($$v) {
-        _vm.status = $$v
+        _vm.statusDropDownValue = $$v
       },
-      expression: "status"
+      expression: "statusDropDownValue"
     }
   })], 1)])])]), _vm._v(" "), _c('div', {
     staticClass: "field"
