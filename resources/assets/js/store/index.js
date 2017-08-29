@@ -369,14 +369,13 @@ const store = new Vuex.Store({
         /***********************
          * Task Actions
          **********************/
-        GET_TASK: function ({ commit, state, getters } ,{projectId , sectionId, id}) {
+        GET_TASK: function ({ commit, getters } ,{projectId , sectionId, id}) {
             axios.get('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section/' + sectionId + '/task/' + id)
                 .then(function (response) {
-                    console.log(response);
-                    /**  **/
+                    /** call success mutation **/
                     commit('GET_TASK_SUCCESS', {task: response.data.task });
                 })
-                .catch(function (error) {
+                .catch(function () {
                     commit('SERVER_ERROR');
                 });
         },
@@ -408,8 +407,6 @@ const store = new Vuex.Store({
                     if(error.response.data){
                         commit('UPDATE_TASK_FAILURE', { errors:  error.response.data });
                     }
-                    /** clear button loading state*/
-                    commit('REMOVE_BUTTON_LOADING_STATE', {name : 'updateTask'});
                 });
         },
         TASK_SET_TO_DONE: function ({ commit, getters} ,{projectId, sectionId, id}) {
@@ -544,7 +541,7 @@ const store = new Vuex.Store({
         },
         ADD_NEW_TEAM_SUCCESS: (state, {team}) => {
             /** clear form errors */
-            state.formErrors = null;
+            state.formErrors = {};
             /** add team */
             state.teams.push( new Team(team));
             /** set team as current team */
@@ -591,7 +588,7 @@ const store = new Vuex.Store({
         },
         UPDATE_TEAM_SUCCESS: (state, {team}) => {
             /** clear form errors */
-            state.formErrors = null;
+            state.formErrors = {};
             /** get current team index **/
             let tIdx = state.teams.map(team => team.id).indexOf(state.user.current_team_id);
             /** update team name **/
@@ -616,7 +613,7 @@ const store = new Vuex.Store({
         },
         ADD_PROJECT_SUCCESS: (state, { project }) => {
             /** clear form errors */
-            state.formErrors = null;
+            state.formErrors = {};
             /** get current team index **/
             let tIdx = state.teams.map(team => team.id).indexOf(state.user.current_team_id);
             /** add new project to data array*/
@@ -695,7 +692,7 @@ const store = new Vuex.Store({
         CLEAR_TASK:(state) =>{
             state.task = null;
             /** clear any form errors **/
-            state.formErrors = null;
+            state.formErrors = {};
         },
         GET_TASK_SUCCESS: (state, { task }) => {
             /** add task to active task state **/
@@ -719,7 +716,7 @@ const store = new Vuex.Store({
         },
         UPDATE_TASK_SUCCESS: (state, { sectionId, task }) => {
             /** clear any form errors **/
-            state.formErrors = '';
+            state.formErrors = {};
             /** cast id to int **/
             let sId = parseInt(sectionId);
             let tId = parseInt(task.id);
@@ -762,7 +759,7 @@ const store = new Vuex.Store({
             let idx = state.modals.map(modal => modal.name).indexOf(name);
             state.modals[idx].isVisible = !state.modals[idx].isVisible;
             /** clear all form errors **/
-            state.formErrors = '';
+            state.formErrors = {};
         },
         SET_BUTTON_TO_LOADING: (state,{name}) =>{
             let idx = state.modals.map(modal => modal.name).indexOf(name);

@@ -5072,17 +5072,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
          **********************/
         GET_TASK: function GET_TASK(_ref43, _ref44) {
             var commit = _ref43.commit,
-                state = _ref43.state,
                 getters = _ref43.getters;
             var projectId = _ref44.projectId,
                 sectionId = _ref44.sectionId,
                 id = _ref44.id;
 
             axios.get('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id).then(function (response) {
-                console.log(response);
-                /**  **/
+                /** call success mutation **/
                 commit('GET_TASK_SUCCESS', { task: response.data.task });
-            }).catch(function (error) {
+            }).catch(function () {
                 commit('SERVER_ERROR');
             });
         },
@@ -5123,8 +5121,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 if (error.response.data) {
                     commit('UPDATE_TASK_FAILURE', { errors: error.response.data });
                 }
-                /** clear button loading state*/
-                commit('REMOVE_BUTTON_LOADING_STATE', { name: 'updateTask' });
             });
         },
         TASK_SET_TO_DONE: function TASK_SET_TO_DONE(_ref49, _ref50) {
@@ -5295,7 +5291,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var team = _ref64.team;
 
             /** clear form errors */
-            state.formErrors = null;
+            state.formErrors = {};
             /** add team */
             state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
             /** set team as current team */
@@ -5359,7 +5355,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var team = _ref70.team;
 
             /** clear form errors */
-            state.formErrors = null;
+            state.formErrors = {};
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5390,7 +5386,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var project = _ref72.project;
 
             /** clear form errors */
-            state.formErrors = null;
+            state.formErrors = {};
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5500,7 +5496,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         CLEAR_TASK: function CLEAR_TASK(state) {
             state.task = null;
             /** clear any form errors **/
-            state.formErrors = null;
+            state.formErrors = {};
         },
         GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref80) {
             var task = _ref80.task;
@@ -5536,7 +5532,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 task = _ref83.task;
 
             /** clear any form errors **/
-            state.formErrors = '';
+            state.formErrors = {};
             /** cast id to int **/
             var sId = parseInt(sectionId);
             var tId = parseInt(task.id);
@@ -5605,7 +5601,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             }).indexOf(name);
             state.modals[idx].isVisible = !state.modals[idx].isVisible;
             /** clear all form errors **/
-            state.formErrors = '';
+            state.formErrors = {};
         },
         SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref89) {
             var name = _ref89.name;
