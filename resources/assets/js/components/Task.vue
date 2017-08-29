@@ -9,7 +9,7 @@
                 <div class="header">
                     <span class="status has-text-left"><i class="fa fa-circle" :class="statusClass" aria-hidden="true"></i></span>
                     <input class="clear-background title h2" type="text" name="name" placeholder="Task Name" @change="updateTask" v-model="task.name">
-                    <h3> </h3>
+                    <p class="help is-danger" v-text="getErrors('name')"></p>
                     <p class="is-pulled-left"> created by <strong>You </strong> </p>
                     <p class="has-text-right"> created on <strong v-text="convertDate(task.created_at)"></strong> </p>
                 </div>
@@ -38,6 +38,7 @@
                         <p class="control">
                             <date-picker :config="{ class: 'input-date', onChange:updateTask }" v-model="task.due_date" @change="updateTask"></date-picker>
                         </p>
+                        <p class="help is-danger" v-text="getErrors('due_date')"></p>
                     </div>
 
                     <div class="columns">
@@ -48,6 +49,7 @@
                                     <multi-select v-model="priorityDropDownValue" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"  @select="updateTask"></multi-select>
                                 </p>
                             </div>
+                            <p class="help is-danger" v-text="getErrors('priority_id')"></p>
                         </div>
                         <div class="column">
                             <div class="field">
@@ -103,37 +105,57 @@
                     return 'is-started';
                 }
             },
-            statusDropDownValue(){
-                switch (this.task.status_id) {
-                    case 1 :
-                    case "1" :
-                        return {id:1, name:'Done'};
-                        break;
-                    case 2 :
-                    case "2" :
-                        return {id:2, name:'Working On It'};
+            statusDropDownValue:{
+                get(){
+                    switch (this.task.status_id) {
+                        case 1 :
+                        case "1" :
+                            return {id:1, name:'Done'};
+                            break;
+                        case 2 :
+                        case "2" :
+                            return {id:2, name:'Working On It'};
+                    }
+                },
+                set(value){
+                    if(typeof value === 'object'){
+                        this.task.status_id = value.id;
+                        return false;
+                    }
+                    this.task.status_id = null;
                 }
             },
             status(){
+                console.log(this.statusDropDownValue);
                 if(typeof this.statusDropDownValue === 'object'){
                     return this.statusDropDownValue.id;
                 }
                 return null;
             },
-            priorityDropDownValue(){
-                switch (this.task.priority_id){
-                    case 1 :
-                    case "1" :
-                        return {id:1, name:'High'};
-                    case 2 :
-                    case "2" :
-                        return {id:2, name:'Medium'};
-                    case 3:
-                    case "3" :
-                        return {id:3, name:'Low'};
+            priorityDropDownValue:{
+                get(){
+                    switch (this.task.priority_id){
+                        case 1 :
+                        case "1" :
+                            return {id:1, name:'High'};
+                        case 2 :
+                        case "2" :
+                            return {id:2, name:'Medium'};
+                        case 3:
+                        case "3" :
+                            return {id:3, name:'Low'};
+                    }
+                },
+                set(value){
+                    if(typeof value === 'object'){
+                        this.task.priority_id = value.id;
+                        return false;
+                    }
+                    this.task.priority_id = null;
                 }
             },
             priority(){
+                console.log(this.priorityDropDownValue);
                 if(typeof this.priorityDropDownValue === 'object'){
                     return this.priorityDropDownValue.id;
                 }
@@ -167,6 +189,10 @@
             hideTask:function(){
                 this.isVisible = false;
                 this.$store.commit('CLEAR_TASK');
+            },
+            /** method to get form field errors **/
+            getErrors(fieldName) {
+                return store.getters.getFormErrors(fieldName);
             }
         },
         watch: {

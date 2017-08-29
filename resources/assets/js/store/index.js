@@ -543,6 +543,8 @@ const store = new Vuex.Store({
             state.user.current_team_id = team.id;
         },
         ADD_NEW_TEAM_SUCCESS: (state, {team}) => {
+            /** clear form errors */
+            state.formErrors = null;
             /** add team */
             state.teams.push( new Team(team));
             /** set team as current team */
@@ -588,6 +590,8 @@ const store = new Vuex.Store({
             Event.$emit('notify','success', 'Success', 'Team has been switched');
         },
         UPDATE_TEAM_SUCCESS: (state, {team}) => {
+            /** clear form errors */
+            state.formErrors = null;
             /** get current team index **/
             let tIdx = state.teams.map(team => team.id).indexOf(state.user.current_team_id);
             /** update team name **/
@@ -611,6 +615,8 @@ const store = new Vuex.Store({
             state.project = null;
         },
         ADD_PROJECT_SUCCESS: (state, { project }) => {
+            /** clear form errors */
+            state.formErrors = null;
             /** get current team index **/
             let tIdx = state.teams.map(team => team.id).indexOf(state.user.current_team_id);
             /** add new project to data array*/
@@ -688,6 +694,8 @@ const store = new Vuex.Store({
          **********************/
         CLEAR_TASK:(state) =>{
             state.task = null;
+            /** clear any form errors **/
+            state.formErrors = null;
         },
         GET_TASK_SUCCESS: (state, { task }) => {
             /** add task to active task state **/
@@ -710,6 +718,8 @@ const store = new Vuex.Store({
             state.formErrors = errors;
         },
         UPDATE_TASK_SUCCESS: (state, { sectionId, task }) => {
+            /** clear any form errors **/
+            state.formErrors = '';
             /** cast id to int **/
             let sId = parseInt(sectionId);
             let tId = parseInt(task.id);

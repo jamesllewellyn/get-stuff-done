@@ -5294,6 +5294,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref64) {
             var team = _ref64.team;
 
+            /** clear form errors */
+            state.formErrors = null;
             /** add team */
             state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
             /** set team as current team */
@@ -5356,6 +5358,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref70) {
             var team = _ref70.team;
 
+            /** clear form errors */
+            state.formErrors = null;
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5385,6 +5389,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref72) {
             var project = _ref72.project;
 
+            /** clear form errors */
+            state.formErrors = null;
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5493,6 +5499,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
          **********************/
         CLEAR_TASK: function CLEAR_TASK(state) {
             state.task = null;
+            /** clear any form errors **/
+            state.formErrors = null;
         },
         GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref80) {
             var task = _ref80.task;
@@ -5527,6 +5535,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var sectionId = _ref83.sectionId,
                 task = _ref83.task;
 
+            /** clear any form errors **/
+            state.formErrors = '';
             /** cast id to int **/
             var sId = parseInt(sectionId);
             var tId = parseInt(task.id);

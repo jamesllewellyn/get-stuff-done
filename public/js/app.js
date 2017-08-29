@@ -5294,6 +5294,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref64) {
             var team = _ref64.team;
 
+            /** clear form errors */
+            state.formErrors = null;
             /** add team */
             state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
             /** set team as current team */
@@ -5356,6 +5358,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref70) {
             var team = _ref70.team;
 
+            /** clear form errors */
+            state.formErrors = null;
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5385,6 +5389,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref72) {
             var project = _ref72.project;
 
+            /** clear form errors */
+            state.formErrors = null;
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5493,6 +5499,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
          **********************/
         CLEAR_TASK: function CLEAR_TASK(state) {
             state.task = null;
+            /** clear any form errors **/
+            state.formErrors = null;
         },
         GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref80) {
             var task = _ref80.task;
@@ -5527,6 +5535,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var sectionId = _ref83.sectionId,
                 task = _ref83.task;
 
+            /** clear any form errors **/
+            state.formErrors = '';
             /** cast id to int **/
             var sId = parseInt(sectionId);
             var tId = parseInt(task.id);
@@ -64148,6 +64158,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
 
 
 
@@ -64182,37 +64194,59 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 return 'is-started';
             }
         },
-        statusDropDownValue: function statusDropDownValue() {
-            switch (this.task.status_id) {
-                case 1:
-                case "1":
-                    return { id: 1, name: 'Done' };
-                    break;
-                case 2:
-                case "2":
-                    return { id: 2, name: 'Working On It' };
+
+        statusDropDownValue: {
+            get: function get() {
+                switch (this.task.status_id) {
+                    case 1:
+                    case "1":
+                        return { id: 1, name: 'Done' };
+                        break;
+                    case 2:
+                    case "2":
+                        return { id: 2, name: 'Working On It' };
+                }
+            },
+            set: function set(value) {
+                if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+                    this.task.status_id = value.id;
+                    return false;
+                }
+                this.task.status_id = null;
             }
         },
         status: function status() {
+            console.log(this.statusDropDownValue);
             if (_typeof(this.statusDropDownValue) === 'object') {
                 return this.statusDropDownValue.id;
             }
             return null;
         },
-        priorityDropDownValue: function priorityDropDownValue() {
-            switch (this.task.priority_id) {
-                case 1:
-                case "1":
-                    return { id: 1, name: 'High' };
-                case 2:
-                case "2":
-                    return { id: 2, name: 'Medium' };
-                case 3:
-                case "3":
-                    return { id: 3, name: 'Low' };
+
+        priorityDropDownValue: {
+            get: function get() {
+                switch (this.task.priority_id) {
+                    case 1:
+                    case "1":
+                        return { id: 1, name: 'High' };
+                    case 2:
+                    case "2":
+                        return { id: 2, name: 'Medium' };
+                    case 3:
+                    case "3":
+                        return { id: 3, name: 'Low' };
+                }
+            },
+            set: function set(value) {
+                if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+                    this.task.priority_id = value.id;
+                    return false;
+                }
+                this.task.priority_id = null;
             }
         },
         priority: function priority() {
+            console.log(this.priorityDropDownValue);
             if (_typeof(this.priorityDropDownValue) === 'object') {
                 return this.priorityDropDownValue.id;
             }
@@ -64246,6 +64280,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         hideTask: function hideTask() {
             this.isVisible = false;
             this.$store.commit('CLEAR_TASK');
+        },
+        /** method to get form field errors **/
+        getErrors: function getErrors(fieldName) {
+            return __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */].getters.getFormErrors(fieldName);
         }
     },
     watch: {
@@ -67318,7 +67356,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.task.name = $event.target.value
       }
     }
-  }), _vm._v(" "), _c('h3'), _vm._v(" "), _c('p', {
+  }), _vm._v(" "), _c('p', {
+    staticClass: "help is-danger",
+    domProps: {
+      "textContent": _vm._s(_vm.getErrors('name'))
+    }
+  }), _vm._v(" "), _c('p', {
     staticClass: "is-pulled-left"
   }, [_vm._v(" created by "), _c('strong', [_vm._v("You ")])]), _vm._v(" "), _c('p', {
     staticClass: "has-text-right"
@@ -67400,7 +67443,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "task.due_date"
     }
-  })], 1)]), _vm._v(" "), _c('div', {
+  })], 1), _vm._v(" "), _c('p', {
+    staticClass: "help is-danger",
+    domProps: {
+      "textContent": _vm._s(_vm.getErrors('due_date'))
+    }
+  })]), _vm._v(" "), _c('div', {
     staticClass: "columns"
   }, [_c('div', {
     staticClass: " column"
@@ -67437,7 +67485,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "priorityDropDownValue"
     }
-  })], 1)])]), _vm._v(" "), _c('div', {
+  })], 1)]), _vm._v(" "), _c('p', {
+    staticClass: "help is-danger",
+    domProps: {
+      "textContent": _vm._s(_vm.getErrors('priority_id'))
+    }
+  })]), _vm._v(" "), _c('div', {
     staticClass: "column"
   }, [_c('div', {
     staticClass: "field"
