@@ -5512,6 +5512,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             }).indexOf(sId);
             /** add new task to data array **/
             state.project.sections[sIdx].tasks.push(new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task));
+            /** notify section component of update **/
+            Event.$emit('section.' + sId + '.updated');
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
@@ -5536,6 +5538,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             }).indexOf(tId);
             /** update task to data array **/
             state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
+            /** notify section component of update **/
+            Event.$emit('section.' + sId + '.updated');
         },
         UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref84) {
             var errors = _ref84.errors;
@@ -5565,11 +5569,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var sIdx = state.project.sections.map(function (section) {
                 return section.id;
             }).indexOf(sId);
-            var tIdx = state.project.sections[sIdx].tasks.map(function (tasks) {
+            var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
                 return task.id;
             }).indexOf(task.id);
             /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
+            state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+            /** notify section component of update **/
+            Event.$emit('section.' + sId + '.updated');
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'Task Completed');
         },
@@ -5735,19 +5741,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                     id = _ref92.id;
 
                 /** cast ids to int **/
-                var pId = parseInt(projectId);
                 var sId = parseInt(sectionId);
                 var tId = parseInt(id);
-                /** find object index of project **/
-                var pIdx = state.projects.map(function (project) {
-                    return project.id;
-                }).indexOf(pId);
                 /** find object index of section **/
-                var sIdx = state.projects[pIdx].sections.map(function (section) {
+                var sIdx = state.project.sections.map(function (section) {
                     return section.id;
                 }).indexOf(sId);
                 /** find and return task **/
-                return state.projects[pIdx].sections[sIdx].tasks.find(function (task) {
+                return state.project.sections[sIdx].tasks.find(function (task) {
                     return task.id === tId;
                 });
             };
@@ -7029,8 +7030,8 @@ var Task = function () {
 
         this.id = data.id;
         this.name = data.name;
-        this.status_id = this.status(data.status_id);
-        this.priority_id = this.priority(data.priority_id);
+        this.status_id = data.status_id;
+        this.priority_id = data.priority_id;
         this.due_date = data.due_date;
         this.sort_order = data.sort_order;
         this.due_time = data.due_time;

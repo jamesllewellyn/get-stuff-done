@@ -5512,6 +5512,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             }).indexOf(sId);
             /** add new task to data array **/
             state.project.sections[sIdx].tasks.push(new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task));
+            /** notify section component of update **/
+            Event.$emit('section.' + sId + '.updated');
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
@@ -5536,6 +5538,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             }).indexOf(tId);
             /** update task to data array **/
             state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
+            /** notify section component of update **/
+            Event.$emit('section.' + sId + '.updated');
         },
         UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref84) {
             var errors = _ref84.errors;
@@ -5565,11 +5569,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var sIdx = state.project.sections.map(function (section) {
                 return section.id;
             }).indexOf(sId);
-            var tIdx = state.project.sections[sIdx].tasks.map(function (tasks) {
+            var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
                 return task.id;
             }).indexOf(task.id);
             /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
+            state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+            /** notify section component of update **/
+            Event.$emit('section.' + sId + '.updated');
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'Task Completed');
         },
@@ -5735,19 +5741,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                     id = _ref92.id;
 
                 /** cast ids to int **/
-                var pId = parseInt(projectId);
                 var sId = parseInt(sectionId);
                 var tId = parseInt(id);
-                /** find object index of project **/
-                var pIdx = state.projects.map(function (project) {
-                    return project.id;
-                }).indexOf(pId);
                 /** find object index of section **/
-                var sIdx = state.projects[pIdx].sections.map(function (section) {
+                var sIdx = state.project.sections.map(function (section) {
                     return section.id;
                 }).indexOf(sId);
                 /** find and return task **/
-                return state.projects[pIdx].sections[sIdx].tasks.find(function (task) {
+                return state.project.sections[sIdx].tasks.find(function (task) {
                     return task.id === tId;
                 });
             };
@@ -7029,8 +7030,8 @@ var Task = function () {
 
         this.id = data.id;
         this.name = data.name;
-        this.status_id = this.status(data.status_id);
-        this.priority_id = this.priority(data.priority_id);
+        this.status_id = data.status_id;
+        this.priority_id = data.priority_id;
         this.due_date = data.due_date;
         this.sort_order = data.sort_order;
         this.due_time = data.due_time;
@@ -67479,20 +67480,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
-        projectId: {
+        project_id: {
             type: Number,
-            required: false
+            required: true
         },
-        sectionId: {
+        section_id: {
             type: Number,
-            required: false
+            required: true
         },
-        task: {
-            type: Object,
-            required: false,
-            default: function _default() {
-                return { name: 'example task name', priority: 'high', due_date: moment(), status_id: null };
-            }
+        id: {
+            type: Number,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        priority_id: {
+            required: true
+        },
+        due_date: {
+            required: true
+        },
+        status_id: {
+            required: true
         },
         placeHolder: {
             type: Boolean,
@@ -67501,7 +67512,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     computed: {
         priority: function priority() {
-            switch (this.task.priority_id) {
+            switch (this.priority_id) {
                 case 1:
                 case "1":
                     return 'High';
@@ -67514,24 +67525,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return 'Low';
             }
         },
-        due_date: function due_date() {
-            return moment(this.task.due_date).format("MMM Do YY");
+        dueDateFormatted: function dueDateFormatted() {
+            return moment(this.due_date).format("MMM Do YY");
         },
         status: function status() {
             var now = moment();
             /** todo: clean this up **/
-            if (!this.task.status_id) {
+            if (!this.status_id) {
                 return '';
             }
-            if (this.task.status_id.id === 1) {
+            if (this.status_id === 1) {
                 return 'is-done';
             }
-
-            if (this.task.status_id.id === 2) {
+            if (this.status_id === 2) {
                 return 'is-started';
             }
-
-            if (moment(this.task.due_date).isBefore(now)) {
+            if (moment(this.due_date).isBefore(now)) {
                 return 'is-over-due';
             }
         }
@@ -67539,15 +67548,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         showTask: function showTask() {
             if (!this.placeHolder) {
-                Event.$emit('showTask', this.projectId, this.sectionId, this.task.id);
+                Event.$emit('showTask', this.project_id, this.section_id, this.id);
             }
         },
         done: function done() {
             /** flag task as done **/
-            this.$store.dispatch('TASK_SET_TO_DONE', { projectId: this.projectId, sectionId: this.sectionId, id: this.task.id });
+            this.$store.dispatch('TASK_SET_TO_DONE', { projectId: this.project_id, sectionId: this.section_id, id: this.id });
+        },
+        forceUpdate: function forceUpdate() {
+            console.log('forceUpdate');
+            this.$forceUpdate();
         }
     },
-    mounted: function mounted() {}
+    mounted: function mounted() {
+        var self = this;
+        /** listen task updated */
+        Event.$on('task.' + this.id + '.updated', function () {
+            self.forceUpdate();
+        });
+    }
 });
 
 /***/ }),
@@ -67555,9 +67574,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('tr', {
-    class: _vm.task.done ? 'strikeout' : ''
-  }, [_c('td', [_c('span', {
+  return _c('tr', [_c('td', [_c('span', {
     staticClass: "handle is-hidden-mobile",
     attrs: {
       "aria-hidden": "true"
@@ -67594,13 +67611,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.showTask()
       }
     }
-  }, [_vm._v(_vm._s(_vm.task.name))]) : _c('span', [_vm._v(_vm._s(_vm.task.name))])]), _vm._v(" "), _c('td', {
+  }, [_vm._v(_vm._s(_vm.name))]) : _c('span', [_vm._v(_vm._s(_vm.name))])]), _vm._v(" "), _c('td', {
     staticClass: "is-centered-text",
     class: _vm.placeHolder ? 'blokk' : ''
   }, [_vm._v(_vm._s(_vm.priority) + " ")]), _vm._v(" "), _c('td', {
     staticClass: "is-centered-text",
     class: _vm.placeHolder ? 'blokk' : ''
-  }, [_vm._v(_vm._s(_vm.due_date))])])
+  }, [_vm._v(_vm._s(_vm.dueDateFormatted))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -68139,11 +68156,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -68169,11 +68181,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return parseInt(this.$route.params.id);
         },
         project: function project() {
-            /** get project */
-            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].getters.getProject;
+            return this.$store.getters.getProject;
         },
+
         TeamId: function TeamId() {
-            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].getters.getActiveTeam;
+            return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].getters.getActiveTeam.id;
         }
     },
     methods: {
@@ -69124,15 +69136,28 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuedraggable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TaskList_vue__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TaskList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__TaskList_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Notification_vue__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Notification_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Notification_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DropDownButton_vue__ = __webpack_require__(179);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DropDownButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__DropDownButton_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TaskList_vue__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TaskList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__TaskList_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Notification_vue__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Notification_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Notification_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(2);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -69164,12 +69189,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-
+//    import draggable from 'vuedraggable'
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return { name: this.sectionName };
+    },
     props: {
         projectId: {
             type: Number,
@@ -69179,30 +69207,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Number,
             required: false
         },
+        sectionName: {
+            type: String,
+            required: false
+        },
         placeHolder: {
             type: Boolean,
             default: false
         }
     },
     components: {
-        TaskList: __WEBPACK_IMPORTED_MODULE_1__TaskList_vue___default.a, draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a, Notification: __WEBPACK_IMPORTED_MODULE_2__Notification_vue___default.a, dropDownButton: __WEBPACK_IMPORTED_MODULE_3__DropDownButton_vue___default.a
+        TaskList: __WEBPACK_IMPORTED_MODULE_0__TaskList_vue___default.a, Notification: __WEBPACK_IMPORTED_MODULE_1__Notification_vue___default.a, dropDownButton: __WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue___default.a
     },
     computed: {
-        section: function section() {
-            /** get  project via route param */
-            if (this.projectId) {
-                return __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].getters.getSectionById({ projectId: this.projectId, sectionId: this.id });
-            }
-        },
         tasks: {
             get: function get() {
                 if (!this.id) {
                     return [];
                 }
-                if (!__WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].getters.getSectionById({ sectionId: this.id }).tasks) {
+                if (!__WEBPACK_IMPORTED_MODULE_3__store__["a" /* default */].getters.getSectionById({ sectionId: this.id }).tasks) {
                     return [];
                 }
-                return __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].getters.getSectionById({ sectionId: this.id }).tasks;
+                return __WEBPACK_IMPORTED_MODULE_3__store__["a" /* default */].getters.getSectionById({ sectionId: this.id }).tasks;
             },
             set: function set(tasks) {
                 var sort_order = 1;
@@ -69221,18 +69247,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Event.$emit('clickedSection', this.id);
         },
         updateSection: function updateSection() {
-            this.$store.dispatch('UPDATE_SECTION', { id: this.id, section: this.section });
+            this.$store.dispatch('UPDATE_SECTION', { id: this.id, section: { id: this.id, name: this.name } });
         },
         deleteSection: function deleteSection() {
             this.$store.dispatch('DELETE_SECTION', { id: this.id });
         },
-        triggerEvent: function triggerEvent(event) {}
+        forceUpdate: function forceUpdate() {
+            console.log('forceUpdate');
+            this.$forceUpdate();
+        }
     },
     mounted: function mounted() {
         var self = this;
         /** listen section delete event */
         Event.$on('section.' + this.id + '.delete', function () {
             self.deleteSection();
+        });
+        /** listen section updated */
+        Event.$on('section.' + this.id + '.updated', function () {
+            self.forceUpdate();
         });
     }
 });
@@ -69380,12 +69413,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         areYouSure: true
       }]
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.section) ? _c('input', {
+  }) : _vm._e(), _vm._v(" "), (_vm.name) ? _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.section.name),
-      expression: "section.name"
+      value: (_vm.name),
+      expression: "name"
     }],
     staticClass: "clear-background title h3",
     attrs: {
@@ -69394,13 +69427,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Section Name"
     },
     domProps: {
-      "value": (_vm.section.name)
+      "value": (_vm.name)
     },
     on: {
       "change": _vm.updateSection,
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.section.name = $event.target.value
+        _vm.name = $event.target.value
       }
     }
   }) : _c('h3', {
@@ -69420,63 +69453,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "aria-hidden": "true"
     }
-  })]) : _c('i', {
-    staticClass: "fa fa-circle is-pulled-right align-vertical",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })])]), _vm._v(" "), (_vm.tasks.length > 0) ? _c('draggable', {
-    staticClass: "table task-table",
-    attrs: {
-      "options": {
-        handle: '.handle'
-      },
-      "element": 'table'
-    },
-    on: {
-      "start": function($event) {
-        _vm.drag = true
-      },
-      "end": function($event) {
-        _vm.drag = false
-      }
-    },
-    model: {
-      value: (_vm.tasks),
-      callback: function($$v) {
-        _vm.tasks = $$v
-      },
-      expression: "tasks"
-    }
-  }, [_c('transition-group', {
-    attrs: {
-      "tag": 'tbody',
-      "name": "reorder"
-    }
-  }, _vm._l((_vm.tasks), function(task) {
-    return _c('task-list', {
-      key: task.id,
-      staticClass: "reorder-item",
-      attrs: {
-        "projectId": _vm.projectId,
-        "sectionId": _vm.section.id,
-        "task": task
-      }
-    })
-  }))], 1) : (!_vm.placeHolder) ? _c('notification', {
-    attrs: {
-      "status": 'info'
-    }
-  }, [_vm._v("This section currently has no tasks")]) : _c('table', {
+  })]) : _vm._e()])]), _vm._v(" "), _c('table', {
     staticClass: "table place-holder"
-  }, [_c('tbody', _vm._l((3), function(n) {
+  }, [_c('tbody', _vm._l((_vm.tasks), function(task, key) {
     return _c('task-list', {
-      key: n,
+      key: key,
       attrs: {
-        "placeHolder": true
+        "project_id": _vm.projectId,
+        "section_id": _vm.id,
+        "id": task.id,
+        "name": task.name,
+        "status_id": task.status_id,
+        "priority_id": task.priority_id,
+        "due_date": task.priority_id
       }
     })
-  }))])], 1)])
+  }))])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -69548,19 +69540,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Add Section")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [(_vm.project) ? _c('div', {
     staticClass: "columns is-multiline"
-  }, [_vm._l((_vm.project.sections), function(section, key) {
+  }, _vm._l((_vm.project.sections), function(section, key) {
     return _c('project-section', {
       key: key,
       attrs: {
+        "projectId": _vm.id,
         "id": section.id,
-        "projectId": _vm.id
+        "sectionName": section.name
       }
     })
-  }), _vm._v(" "), (_vm.project.sections.length == 0) ? _c('project-section', {
-    attrs: {
-      "placeHolder": true
-    }
-  }) : _vm._e()], 2) : _vm._e()]), _vm._v(" "), _c('modal', {
+  })) : _vm._e()]), _vm._v(" "), _c('modal', {
     attrs: {
       "modalName": "addSection",
       "title": "Add New Section"
@@ -69583,14 +69572,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "projectId": _vm.id,
       "sectionId": _vm.sectionId
     }
-  })], 1)], 2), _vm._v(" "), _c('modal', {
-    attrs: {
-      "modalName": "updateTask",
-      "title": "Task"
-    }
-  }, [_c('template', {
-    slot: "body"
-  })], 2)], 1)
+  })], 1)], 2)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

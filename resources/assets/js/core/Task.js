@@ -2,8 +2,8 @@ class Task{
     constructor(data){
         this.id = data.id;
         this.name = data.name;
-        this.status_id = this.status(data.status_id);
-        this.priority_id = this.priority(data.priority_id);
+        this.status_id = data.status_id;
+        this.priority_id = data.priority_id;
         this.due_date = data.due_date;
         this.sort_order = data.sort_order;
         this.due_time = data.due_time;

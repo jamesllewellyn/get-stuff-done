@@ -5,36 +5,54 @@
              <div class="level-left">
                  <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Section', event: 'section.'+id+'.delete', action: 'delete this section', areYouSure : true}]" v-if="!placeHolder">
                  </drop-down-button>
-                 <input class="clear-background title h3" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="section.name" v-if="section">
+                 <input class="clear-background title h3" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="name" v-if="name">
                  <h3 v-else class="title blokk"> Section Name</h3>
              </div>
              <div class="level-right">
                  <a  @click.prevent.stop="addTask()" v-if="!placeHolder"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
-                 <i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>
+                 <!--<i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>-->
              </div>
          </div>
-         <draggable v-if="tasks.length > 0" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >
-             <transition-group :tag="'tbody'" name="reorder">
-                <task-list v-for="task in tasks" class="reorder-item" :projectId="projectId" :sectionId="section.id" :task="task"  :key="task.id"></task-list>
-             </transition-group>
-         </draggable>
-         <notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>
-         <table class="table place-holder" v-else>
+         <table class="table place-holder">
              <tbody>
-                <task-list v-for="n in 3" :key="n" :placeHolder="true" ></task-list>
+                <task-list v-for="(task, key) in tasks"
+                           :key="key"
+                           :project_id="projectId"
+                           :section_id="id"
+                           :id="task.id"
+                           :name="task.name"
+                           :status_id="task.status_id"
+                           :priority_id="task.priority_id"
+                           :due_date="task.priority_id"
+
+                ></task-list>
              </tbody>
          </table>
+         <!--<draggable v-if="tasks.length > 0" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >-->
+             <!--<transition-group :tag="'tbody'" name="reorder">-->
+                <!--<task-list v-for="task in tasks" class="reorder-item" :projectId="projectId" :sectionId="section.id" :id="task.id"  :key="task.id"></task-list>-->
+             <!--</transition-group>-->
+         <!--</draggable>-->
+         <!--<notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>-->
+         <!--<table class="table place-holder" v-else>-->
+             <!--<tbody>-->
+                <!--<task-list v-for="n in 3" :key="n" :placeHolder="true" ></task-list>-->
+             <!--</tbody>-->
+         <!--</table>-->
      </div>
  </div>
 </template>
 
 <script>
-    import draggable from 'vuedraggable'
+//    import draggable from 'vuedraggable'
     import TaskList from './TaskList.vue';
     import Notification from './Notification.vue';
     import dropDownButton from './DropDownButton.vue';
     import store from '../store';
     export default {
+        data: function () {
+            return { name: this.sectionName }
+        },
         props: {
             projectId:{
                 type: Number,
@@ -44,21 +62,19 @@
                 type: Number,
                 required: false
             },
+            sectionName:{
+                type: String,
+                required: false
+            },
             placeHolder:{
                 type: Boolean,
                 default: false
             }
         },
         components: {
-            TaskList , draggable , Notification, dropDownButton
+            TaskList , Notification, dropDownButton
         },
         computed:{
-            section: function() {
-                /** get  project via route param */
-                if(this.projectId) {
-                    return store.getters.getSectionById({projectId: this.projectId, sectionId: this.id});
-                }
-            },
             tasks: {
                 get() {
                     if(!this.id) {
@@ -87,12 +103,14 @@
                 Event.$emit('clickedSection',this.id);
             },
             updateSection:function(){
-                this.$store.dispatch('UPDATE_SECTION', {id: this.id, section :this.section})
+                this.$store.dispatch('UPDATE_SECTION', {id: this.id, section :{id: this.id, name: this.name }})
             },
             deleteSection(){
                 this.$store.dispatch('DELETE_SECTION', {id: this.id})
             },
-            triggerEvent(event){
+            forceUpdate(){
+                console.log('forceUpdate');
+                this.$forceUpdate();
             }
         },
         mounted() {
@@ -100,6 +118,10 @@
             /** listen section delete event */
             Event.$on('section.'+this.id+'.delete', function() {
                 self.deleteSection();
+            });
+            /** listen section updated */
+            Event.$on('section.'+this.id+'.updated', function() {
+                self.forceUpdate();
             });
         }
     }

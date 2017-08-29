@@ -700,6 +700,8 @@ const store = new Vuex.Store({
             let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
             /** add new task to data array **/
             state.project.sections[sIdx].tasks.push( new Task(task) );
+            /** notify section component of update **/
+            Event.$emit('section.'+sId+'.updated');
             /** notify user of success **/
             Event.$emit('notify','success', 'Success', 'New task has been added');
         },
@@ -715,6 +717,8 @@ const store = new Vuex.Store({
             let tIdx = state.project.sections[sIdx].tasks.map(tasks => task.id).indexOf(tId);
             /** update task to data array **/
             state.project.sections[sIdx].tasks[tIdx] = new Task(task);
+            /** notify section component of update **/
+            Event.$emit('section.'+sId+'.updated');
         },
         UPDATE_TASK_FAILURE: (state, { errors }) => {
             /** add form errors */
@@ -730,9 +734,11 @@ const store = new Vuex.Store({
             /** cast id to int **/
             let sId = parseInt(sectionId);
             let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
-            let tIdx = state.project.sections[sIdx].tasks.map(tasks => task.id).indexOf(task.id);
+            let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(task.id);
             /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx] = new Task(task);
+            state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+            /** notify section component of update **/
+            Event.$emit('section.'+sId+'.updated');
             /** notify user of success **/
             Event.$emit('notify','success', 'Success', 'Task Completed');
         },
@@ -866,15 +872,12 @@ const store = new Vuex.Store({
         /** returns a task **/
         getTaskById: (state, getters) => ({ sectionId, id}) => {
             /** cast ids to int **/
-            let pId = parseInt(projectId);
             let sId = parseInt(sectionId);
             let tId = parseInt(id);
-            /** find object index of project **/
-            let pIdx = state.projects.map(project => project.id).indexOf(pId);
             /** find object index of section **/
-            let sIdx = state.projects[pIdx].sections.map(section => section.id).indexOf(sId);
+            let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
             /** find and return task **/
-            return state.projects[pIdx].sections[sIdx].tasks.find(task => task.id === tId);
+            return state.project.sections[sIdx].tasks.find(task => task.id === tId);
         },
         /** all users tasks  **/
         getMyTasks: (state) => {

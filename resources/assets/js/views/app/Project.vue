@@ -18,8 +18,8 @@
         <div>
             <div class="columns is-multiline" v-if="project">
                 <!--<transition-group tag="template" name="fade" mode="out-in">-->
-                    <project-section v-for="(section, key) in project.sections" :id="section.id" :key="key" :projectId="id"></project-section>
-                    <project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>
+                    <project-section v-for="(section, key) in project.sections" :projectId="id" :id="section.id" :sectionName="section.name" :key="key" ></project-section>
+                    <!--<project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>-->
                 <!--</transition-group>-->
             </div>
         </div>
@@ -40,11 +40,6 @@
             </template>
         </modal>
 
-        <modal modalName="updateTask" title="Task">
-            <template slot="body">
-                <!--<update-task :projectId="id" :sectionId="sectionId" :id="taskId"></update-task>-->
-            </template>
-        </modal>
     </div>
 </template>
 
@@ -71,12 +66,9 @@
                 }
                 return parseInt(this.$route.params.id);
             },
-            project: function() {
-                /** get project */
-                return store.getters.getProject;
-            },
+            project () { return this.$store.getters.getProject },
             TeamId: function(){
-                return store.getters.getActiveTeam;
+                return store.getters.getActiveTeam.id;
             }
         },
         methods: {
