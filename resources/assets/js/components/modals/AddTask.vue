@@ -22,6 +22,7 @@
                     <p class="control">
                         <multi-select v-model="task.priority_id" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"></multi-select>
                     </p>
+                    <p class="help is-danger" v-text="getErrors('priority_id')"></p>
                 </div>
                 <div class="field">
                     <label class="label">Assign members</label>

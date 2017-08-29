@@ -37,7 +37,7 @@ class Task extends Model
     public $messages = [
         'name.required' => 'Please provide a name for this task',
         'due_date.required' => 'Please provide a due date for this task',
-        'priority_id.required' => 'Please give a priority to the task',
+        'priority_id.required' => 'Please give a priority to this task',
     ];
 
 
