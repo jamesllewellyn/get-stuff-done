@@ -64167,8 +64167,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         task: function task() {
             return __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */].getters.getTask;
         },
-
-        status: function status() {
+        statusClass: function statusClass() {
             var now = moment();
             /** todo: clean this up **/
             if (this.task.status_id === 1) {
@@ -64179,6 +64178,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             if (this.task.status_id === 2) {
                 return 'is-started';
+            }
+        },
+        status: function status() {
+            switch (this.task.status_id) {
+                case 1:
+                case "1":
+                    return { id: 1, name: 'Done' };
+                    break;
+                case 2:
+                case "2":
+                    return { id: 2, name: 'Working On It' };
+            }
+        },
+        priority: function priority() {
+            switch (this.task.priority_id) {
+                case 1:
+                case "1":
+                    return { id: 1, name: 'High' };
+                case 2:
+                case "2":
+                    return { id: 2, name: 'Medium' };
+                case 3:
+                case "3":
+                    return { id: 3, name: 'Low' };
             }
         },
         users: function users() {
@@ -67240,7 +67263,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "status has-text-left"
   }, [_c('i', {
     staticClass: "fa fa-circle",
-    class: _vm.status,
+    class: _vm.statusClass,
     attrs: {
       "aria-hidden": "true"
     }
@@ -67380,11 +67403,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "select": _vm.updateTask
     },
     model: {
-      value: (_vm.task.priority_id),
+      value: (_vm.priority),
       callback: function($$v) {
-        _vm.task.priority_id = $$v
+        _vm.priority = $$v
       },
-      expression: "task.priority_id"
+      expression: "priority"
     }
   })], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "column"
@@ -67412,11 +67435,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "select": _vm.updateTask
     },
     model: {
-      value: (_vm.task.status_id),
+      value: (_vm.status),
       callback: function($$v) {
-        _vm.task.status_id = $$v
+        _vm.status = $$v
       },
-      expression: "task.status_id"
+      expression: "status"
     }
   })], 1)])])]), _vm._v(" "), _c('div', {
     staticClass: "field"

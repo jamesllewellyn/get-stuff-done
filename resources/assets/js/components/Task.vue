@@ -7,7 +7,7 @@
         <transition name="slide">
             <aside class="task hero is-fullheight has-shadow" v-if="isVisible">
                 <div class="header">
-                    <span class="status has-text-left"><i class="fa fa-circle" :class="status" aria-hidden="true"></i></span>
+                    <span class="status has-text-left"><i class="fa fa-circle" :class="statusClass" aria-hidden="true"></i></span>
                     <input class="clear-background title h2" type="text" name="name" placeholder="Task Name" @change="updateTask" v-model="task.name">
                     <h3> </h3>
                     <p class="is-pulled-left"> created by <strong>You </strong> </p>
@@ -45,7 +45,7 @@
                             <div class="field">
                                 <label class="label">Priority</label>
                                 <p class="control">
-                                    <multi-select v-model="task.priority_id" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"  @select="updateTask"></multi-select>
+                                    <multi-select v-model="priority" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"  @select="updateTask"></multi-select>
                                 </p>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                             <div class="field">
                                 <label class="label">Status</label>
                                 <p class="control">
-                                    <multi-select v-model="task.status_id" :options="[{id:1, name:'Done'}, {id:2, name:'Working On It'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set current status"  @select="updateTask"></multi-select>
+                                    <multi-select v-model="status" :options="[{id:1, name:'Done'}, {id:2, name:'Working On It'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set current status"  @select="updateTask"></multi-select>
                                 </p>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
             task(){
                 return store.getters.getTask;
             },
-            status: function(){
+            statusClass(){
                 let now = moment();
                 /** todo: clean this up **/
                 if(this.task.status_id === 1){
@@ -103,7 +103,31 @@
                     return 'is-started';
                 }
             },
-            users:function() {
+            status(){
+                switch (this.task.status_id) {
+                    case 1 :
+                    case "1" :
+                        return {id:1, name:'Done'};
+                        break;
+                    case 2 :
+                    case "2" :
+                        return {id:2, name:'Working On It'};
+                }
+            },
+            priority(){
+                switch (this.task.priority_id){
+                    case 1 :
+                    case "1" :
+                        return {id:1, name:'High'};
+                    case 2 :
+                    case "2" :
+                        return {id:2, name:'Medium'};
+                    case 3:
+                    case "3" :
+                        return {id:3, name:'Low'};
+                }
+            },
+            users() {
                 return store.getters.getTeamUser
             }
         },
