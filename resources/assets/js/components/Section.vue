@@ -28,12 +28,13 @@
                 ></task-list>
              </tbody>
          </table>
+         <notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>
          <!--<draggable v-if="tasks.length > 0" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >-->
              <!--<transition-group :tag="'tbody'" name="reorder">-->
                 <!--<task-list v-for="task in tasks" class="reorder-item" :projectId="projectId" :sectionId="section.id" :id="task.id"  :key="task.id"></task-list>-->
              <!--</transition-group>-->
          <!--</draggable>-->
-         <notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>
+
          <table class="table place-holder" v-else>
              <tbody>
                 <task-list v-for="n in 3" :key="n" :placeHolder="true" ></task-list>

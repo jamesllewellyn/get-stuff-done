@@ -20,28 +20,32 @@
         props:{
             project_id:{
                 type: Number,
-                required: true
+                required: false
             },
             section_id:{
                 type: Number,
-                required: true
+                required: false
             },
             id:{
                 type: Number,
-                required: true,
+                required: false,
             },
             name:{
                 type: String,
-                required: true,
+                required: false,
+                default : 'Task Name'
             },
             priority_id:{
-                required: true,
+                required: false,
+                default : 1
             },
             due_date:{
-                required: true,
+                required: false,
+                default : moment().format("MMM Do YY")
             },
             status_id:{
-                required: true,
+                required: false,
+                default: 1
             },
             placeHolder:{
                 type: Boolean,

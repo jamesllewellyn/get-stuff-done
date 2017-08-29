@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\AssignedTask;
+use App\Notifications\UserAssignedToTask;
 use App\Section;
 use App\Task;
 use App\Project;
@@ -11,9 +11,11 @@ use App\UserTask;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use App\Traits\NotifyUserTrait;
 
 class TaskController extends Controller
 {
+    use NotifyUserTrait;
 
     public function __construct() {
         /** define controller middleware */
@@ -78,7 +80,7 @@ class TaskController extends Controller
             /** get all assigned users that are not user creating task */
             $users = $task->assignedUsers()->where('users.id', '<>', $loggedBy->id )->get();
             /** notify users they have been added to task */
-            Notification::send($users, new AssignedTask($team, $task, $loggedBy));
+            Notification::send($users, new UserAssignedToTask($team, $task, $loggedBy));
         }
         /** return success and stored task */
         return response()->json(['success' => true, 'message' => 'New task has been added to '.$section->name , 'task' => $task]);
@@ -130,7 +132,15 @@ class TaskController extends Controller
         /** get assigned userIds from request */
         $userIds = array_pluck($request->users, 'id');
         /** sync users assigned to task */
-        $task->assignedUsers()->sync($userIds);
+        $syncData = $task->assignedUsers()->sync($userIds);
+        /** notify removed users */
+        if($syncData['detached']){
+            $this->notifyUsersRemovedFromTask($team, $task, Auth::User(), $syncData['detached']);
+        }
+        /** notify added users */
+        if($syncData['attached']){
+            $this->notifyUsersAddedToTask($team, $task, Auth::User(), $syncData['attached']);
+        }
         /** return success and updated task */
         return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task]);
     }

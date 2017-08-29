@@ -62197,7 +62197,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         view: function view() {
             var type = this.inboxItem.type.split("\\");
             switch (type['2']) {
-                case 'AssignedTask':
+                case 'UserAssignedToTask':
                     return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('USER_CAN_ACCESS_TASK', {
                         teamId: this.inboxItem.data.team_id,
                         projectId: this.inboxItem.data.project_id,
@@ -67581,28 +67581,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: {
         project_id: {
             type: Number,
-            required: true
+            required: false
         },
         section_id: {
             type: Number,
-            required: true
+            required: false
         },
         id: {
             type: Number,
-            required: true
+            required: false
         },
         name: {
             type: String,
-            required: true
+            required: false,
+            default: 'Task Name'
         },
         priority_id: {
-            required: true
+            required: false,
+            default: 1
         },
         due_date: {
-            required: true
+            required: false,
+            default: moment().format("MMM Do YY")
         },
         status_id: {
-            required: true
+            required: false,
+            default: 1
         },
         placeHolder: {
             type: Boolean,
@@ -69292,6 +69296,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 //    import draggable from 'vuedraggable'
 
@@ -69666,7 +69671,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Add Section")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [(_vm.project) ? _c('div', {
     staticClass: "columns is-multiline"
-  }, _vm._l((_vm.project.sections), function(section, key) {
+  }, [_vm._l((_vm.project.sections), function(section, key) {
     return _c('project-section', {
       key: key,
       attrs: {
@@ -69675,7 +69680,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "sectionName": section.name
       }
     })
-  })) : _vm._e()]), _vm._v(" "), _c('modal', {
+  }), _vm._v(" "), (_vm.project.sections.length == 0) ? _c('project-section', {
+    attrs: {
+      "placeHolder": true
+    }
+  }) : _vm._e()], 2) : _vm._e()]), _vm._v(" "), _c('modal', {
     attrs: {
       "modalName": "addSection",
       "title": "Add New Section"

@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AssignedTask extends Notification
+class UserAssignedToTask extends Notification
 {
     use Queueable;
     protected $team, $task, $user;
@@ -20,7 +20,6 @@ class AssignedTask extends Notification
      * @param Team $team
      * @param Task $task
      * @param User $user
-     * @return void
      */
     public function __construct(Team $team, Task $task, User $user)
     {
