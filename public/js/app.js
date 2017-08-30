@@ -62208,7 +62208,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 case 'ProjectAdded':
                     return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('USER_CAN_ACCESS_PROJECT', { teamId: this.inboxItem.data.team_id, projectId: this.inboxItem.data.project_id });
                     break;
-                case 'UserAddedToTeam':
+                case 'AddedToTeam':
                     return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('USER_CAN_ACCESS_TEAM', { teamId: this.inboxItem.data.team_id });
                     break;
             }
@@ -64156,7 +64156,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
-//
 
 
 
@@ -64198,7 +64197,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     case 1:
                     case "1":
                         return { id: 1, name: 'Done' };
-                        break;
                     case 2:
                     case "2":
                         return { id: 2, name: 'Working On It' };
@@ -64206,19 +64204,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             set: function set(value) {
                 if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+                    /** update task status id */
                     this.task.status_id = value.id;
+                    /** called update method */
+                    this.updateTask();
                     return false;
                 }
                 this.task.status_id = null;
             }
         },
-        status: function status() {
-            if (_typeof(this.statusDropDownValue) === 'object') {
-                return this.statusDropDownValue.id;
-            }
-            return null;
-        },
-
         priorityDropDownValue: {
             get: function get() {
                 switch (this.task.priority_id) {
@@ -64235,17 +64229,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             },
             set: function set(value) {
                 if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+                    /** update task priority_id */
                     this.task.priority_id = value.id;
+                    /** called update method */
+                    this.updateTask();
                     return false;
                 }
                 this.task.priority_id = null;
             }
-        },
-        priority: function priority() {
-            if (_typeof(this.priorityDropDownValue) === 'object') {
-                return this.priorityDropDownValue.id;
-            }
-            return null;
         },
         users: function users() {
             return __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */].getters.getTeamUser;
@@ -64265,9 +64256,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     name: this.task.name,
                     due_date: this.task.due_date,
                     note: this.task.note,
-                    priority_id: this.priority,
+                    priority_id: this.task.priority_id,
                     sort_order: this.task.sort_order,
-                    status_id: this.status,
+                    status_id: this.task.status_id,
                     users: this.task.users
                 }
             });
@@ -67470,9 +67461,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "show-labels": false,
       "placeholder": "Set priority"
     },
-    on: {
-      "select": _vm.updateTask
-    },
     model: {
       value: (_vm.priorityDropDownValue),
       callback: function($$v) {
@@ -67506,9 +67494,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "searchable": false,
       "show-labels": false,
       "placeholder": "Set current status"
-    },
-    on: {
-      "select": _vm.updateTask
     },
     model: {
       value: (_vm.statusDropDownValue),

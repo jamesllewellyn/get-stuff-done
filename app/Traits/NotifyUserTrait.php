@@ -11,6 +11,7 @@ use App\Notifications\UserRemovedFromTask;
 use App\Notifications\UserAssignedToTask;
 use App\Notifications\ProjectAdded;
 use App\Notifications\ProjectDeleted;
+use App\Notifications\UserAssignedTaskCompleted;
 use Illuminate\Support\Facades\Notification;
 
 trait NotifyUserTrait
@@ -53,19 +54,39 @@ trait NotifyUserTrait
         /** get team members  */
         $users = $team->users()->where('users.id', '<>', Auth::User()->id)->get();
         /** send notifications  */
-        Notification::send($users, new ProjectAdded($team, $project, Auth::User()));
+        if($users->isNotEmpty()){
+            Notification::send($users, new ProjectAdded($team, $project, Auth::User()));
+        }
     }
 
     /**
      * Notify team members that project has been deleted
      *
      * @param Team $team
-     * @param Project $project
+     * @param $projectName
      */
     private function notifyTeamMembersProjectDeleted(Team $team, $projectName){
         /** get team members  */
         $users = $team->users()->where('users.id', '<>', Auth::User()->id)->get();
         /** send notifications  */
-        Notification::send($users, new ProjectDeleted($team, $projectName, Auth::User()));
+        if($users->isNotEmpty()){
+            Notification::send($users, new ProjectDeleted($team, $projectName, Auth::User()));
+        }
+    }
+
+    /**
+     * Notify assigned user that task is complete
+     *
+     * @param Team $team
+     * @param Project $project
+     * @param Task $task
+     */
+    private function notifyAssignedUsersTaskIsComplete(Team $team, Project $project, Task $task){
+        /** get team members  */
+        $users = $task->assignedUsers()->where('users.id', '<>', Auth::User()->id)->get();
+        /** send notifications  */
+        if($users->isNotEmpty()){
+            Notification::send($users, new UserAssignedTaskCompleted($team, $project, $task, Auth::User()));
+        }
     }
 }

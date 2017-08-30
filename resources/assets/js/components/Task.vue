@@ -1,6 +1,5 @@
 <template>
     <div class="task-wrapper">
-        <!--<div class="task-background modal-background is-fullheight" ></div>-->
         <transition name="modal" mode="out-in">
             <div class="modal-background" v-if="isVisible" @click="hideTask"></div>
         </transition>
@@ -46,7 +45,7 @@
                             <div class="field">
                                 <label class="label">Priority</label>
                                 <p class="control">
-                                    <multi-select v-model="priorityDropDownValue" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"  @select="updateTask"></multi-select>
+                                    <multi-select v-model="priorityDropDownValue" :options="[{id:1, name:'High'}, {id:2, name:'Medium'}, {id:3, name:'Low'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set priority"></multi-select>
                                 </p>
                             </div>
                             <p class="help is-danger" v-text="getErrors('priority_id')"></p>
@@ -55,7 +54,7 @@
                             <div class="field">
                                 <label class="label">Status</label>
                                 <p class="control">
-                                    <multi-select v-model="statusDropDownValue" :options="[{id:1, name:'Done'}, {id:2, name:'Working On It'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set current status"  @select="updateTask"></multi-select>
+                                    <multi-select v-model="statusDropDownValue" :options="[{id:1, name:'Done'}, {id:2, name:'Working On It'}]" label="name" :searchable="false" :show-labels="false" placeholder="Set current status"></multi-select>
                                 </p>
                             </div>
                         </div>
@@ -111,7 +110,6 @@
                         case 1 :
                         case "1" :
                             return {id:1, name:'Done'};
-                            break;
                         case 2 :
                         case "2" :
                             return {id:2, name:'Working On It'};
@@ -119,17 +117,14 @@
                 },
                 set(value){
                     if(typeof value === 'object'){
+                        /** update task status id */
                         this.task.status_id = value.id;
+                        /** called update method */
+                        this.updateTask();
                         return false;
                     }
                     this.task.status_id = null;
                 }
-            },
-            status(){
-                if(typeof this.statusDropDownValue === 'object'){
-                    return this.statusDropDownValue.id;
-                }
-                return null;
             },
             priorityDropDownValue:{
                 get(){
@@ -147,17 +142,14 @@
                 },
                 set(value){
                     if(typeof value === 'object'){
+                        /** update task priority_id */
                         this.task.priority_id = value.id;
+                        /** called update method */
+                        this.updateTask();
                         return false;
                     }
                     this.task.priority_id = null;
                 }
-            },
-            priority(){
-                if(typeof this.priorityDropDownValue === 'object'){
-                    return this.priorityDropDownValue.id;
-                }
-                return null;
             },
             users() {
                 return store.getters.getTeamUser
@@ -177,9 +169,9 @@
                         name: this.task.name,
                         due_date: this.task.due_date,
                         note: this.task.note,
-                        priority_id : this.priority,
+                        priority_id : this.task.priority_id,
                         sort_order : this.task.sort_order,
-                        status_id : this.status,
+                        status_id : this.task.status_id,
                         users : this.task.users
                     }
                 })

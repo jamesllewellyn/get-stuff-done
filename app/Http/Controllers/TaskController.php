@@ -119,6 +119,8 @@ class TaskController extends Controller
         $this->authorize('access-task', [$team, $project, $section, $task]);
         /** validate the task data */
         $this->validate(Request(),$task->validation, $task->messages);
+        /** get current status_id to compare after update  */
+        $oldStatus_id = $task->status_id;
         /** update record */
         $task->name = $request->name;
         $task->due_date =  $request->due_date;
@@ -129,6 +131,11 @@ class TaskController extends Controller
             $task->status_id = $request->status_id;
         }
         $task->save();
+        /** check if status has change to done */
+        if($oldStatus_id != 1 && $task->status_id == 1){
+            /** notify assigned users that task has been completed */
+            $this->notifyAssignedUsersTaskIsComplete($team, $project, $task);
+        }
         /** get assigned userIds from request */
         $userIds = array_pluck($request->users, 'id');
         /** sync users assigned to task */
@@ -137,7 +144,7 @@ class TaskController extends Controller
         if($syncData['detached']){
             $this->notifyUsersRemovedFromTask($team, $task, $syncData['detached']);
         }
-        /** notify added users */
+        /** notify newly assigned users */
         if($syncData['attached']){
             $this->notifyUsersAddedToTask($team, $task, $syncData['attached']);
         }
@@ -159,6 +166,8 @@ class TaskController extends Controller
         /** flag task as done */
         $task->status_id = 1;
         $task->save();
+        /** notify assigned users that task is complete */
+        $this->notifyAssignedUsersTaskIsComplete($team, $project, $task);
         /** return success message */
         return response()->json(['success' => true, 'message' => 'Task '.$task->name.' has been flagged as done', 'task' => $task]);
     }

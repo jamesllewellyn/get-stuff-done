@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UserAddedToTeam extends Notification
+class AddedToTeam extends Notification
 {
     use Queueable;
     protected $team, $user;
