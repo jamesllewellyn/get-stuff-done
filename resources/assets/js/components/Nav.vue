@@ -33,7 +33,7 @@
                 <ul class="menu-list">
                     <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
                         <router-link exact active-class="is-active" tag="a" to="/inbox" >
-                            Inbox <span class="tag is-danger is-pulled-right" v-text="inboxCount" v-if="inboxCount"></span>
+                            Inbox <span class="tag is-light is-pulled-right" v-text="inboxCount" v-if="inboxCount"></span>
                         </router-link>
                     </li>
                     <li @click.prevent.stop="triggerEvent('toggleNav' , '')">

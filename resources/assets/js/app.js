@@ -36,6 +36,7 @@ const app = new Vue({
             Echo.private('App.User.' + this.user.id)
                 .notification((notification) => {
                     console.log(notification);
+                    this.$store.commit('NOTIFICATION_ADD', {notification:notification});
                 });
         },
         /** trigger event method */
@@ -49,6 +50,8 @@ const app = new Vue({
             if(this.user){
                 /** get users teams */
                 this.$store.dispatch('LOAD_TEAMS');
+                /** get user notifications */
+                this.$store.dispatch('GET_NOTIFICATIONS');
                 /** listen to users Echo channels */
                 this.listen();
             }
@@ -66,7 +69,7 @@ const app = new Vue({
         /** listen for notifications */
         Event.$on('notify', function(type, title, text) {
             this.$notify({
-                type:type,
+                type: type,
                 title: title,
                 text: text
             });

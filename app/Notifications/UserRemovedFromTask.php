@@ -61,11 +61,11 @@ class UserRemovedFromTask extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable)
+    public function toArray($notifiable)
     {
         $section =  Section::find($this->task->section_id);
         return [
-            'user' => $this->user,
+            'user' => [ 'full_name' => $this->user->getFullName(), 'avatar_url' => $this->user->avatar_url, 'handle' => $this->user->handle],
             'action' => 'Has removed you from task '.$this->task->name.' in team '.$this->team->name,
             'team_id' => $this->team->id,
             'project_id' => $section->project_id,
@@ -74,18 +74,18 @@ class UserRemovedFromTask extends Notification implements ShouldQueue
         ];
     }
 
-    /**
-     * Get the broadcastable representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return BroadcastMessage
-     */
-    public function toBroadcast($notifiable)
-    {
-        return new BroadcastMessage([
-            'team' => $this->team,
-            'task' => $this->task,
-            'user' => $this->user
-        ]);
-    }
+//    /**
+//     * Get the broadcastable representation of the notification.
+//     *
+//     * @param  mixed  $notifiable
+//     * @return BroadcastMessage
+//     */
+//    public function toBroadcast($notifiable)
+//    {
+//        return new BroadcastMessage([
+//            'team' => $this->team,
+//            'task' => $this->task,
+//            'user' => $this->user
+//        ]);
+//    }
 }

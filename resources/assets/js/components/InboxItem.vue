@@ -3,7 +3,7 @@
         <article class="media">
             <div class="media-left">
                 <figure class="image is-64x64">
-                    <img class="circle" :src="inboxItem.data.user.avatar_url" alt="Image">
+                    <img class="circle" :src="inboxItem.data.user.avatar_url" alt="Image" v-if="inboxItem">
                 </figure>
             </div>
             <div class="media-content">
@@ -53,20 +53,19 @@
             view: function () {
                 let type = this.inboxItem.type.split("\\");
                 switch(type['2']){
-                    case 'AssignedTask':
+                    case 'UserAssignedTask':
+                    case 'UserRemovedFromTask':
+                    case 'UserAssignedTaskCompleted':
                         return store.dispatch('USER_CAN_ACCESS_TASK', {
                             teamId: this.inboxItem.data.team_id,
                             projectId: this.inboxItem.data.project_id,
                             sectionId: this.inboxItem.data.section_id,
                             taskId : this.inboxItem.data.task_id }
-                            );
-                        break;
+                        );
                     case 'ProjectAdded':
                         return store.dispatch('USER_CAN_ACCESS_PROJECT', { teamId: this.inboxItem.data.team_id,  projectId: this.inboxItem.data.project_id });
-                        break;
                     case 'AddedToTeam':
                         return store.dispatch('USER_CAN_ACCESS_TEAM', { teamId: this.inboxItem.data.team_id});
-                        break;
                 }
             },
         },

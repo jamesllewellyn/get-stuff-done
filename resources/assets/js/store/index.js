@@ -4,13 +4,14 @@ import Section from '../core/Section';
 import Task from '../core/Task';
 import Team from '../core/Team';
 import User from '../core/User';
+import Notification from '../core/Notification';
 const store = new Vuex.Store({
     state: {
         teams: [],/** all users teams */
         projects: [],/** all current teams projects */
         project: null,/** all current projects sections and tasks */
         task: null,/** Current task being displayed */
-        notifications: {}, /** Users notifications */
+        notifications: [], /** Users notifications */
         myTasks: {},/** all tasks assigned to user */
         myTasksLoading: true, /** loading state for MyTask page, used when changing task filter to fade content in/out */
         myOverDue: {},/** all users tasks currently overDue */
@@ -501,6 +502,11 @@ const store = new Vuex.Store({
         },
         GET_NOTIFICATIONS_SUCCESS:(state, {notifications}) => {
             state.notifications = notifications;
+        },
+        NOTIFICATION_ADD: (state, {notification}) => {
+            notification = new Notification(notification);
+            state.notifications.unshift(notification);
+            Event.$emit('notify','success', notification.data.user.full_name, notification.data.action);
         },
         USER_CLEAR_INBOX_SUCCESS:(state) => {
             state.notifications = {};

@@ -6,7 +6,6 @@ use App\Team;
 use App\User;
 use App\Task;
 use App\Project;
-use App\Section;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -70,7 +69,7 @@ class UserAssignedTaskCompleted extends Notification implements ShouldQueue
             'user' => $this->user,
             'action' => 'Completed task '.$this->task->name.' in team '.$this->team->name,
             'team_id' => $this->team->id,
-            'project_id' => $this->project->project_id,
+            'project_id' => $this->project->id,
             'section_id' => $this->task->section_id,
             'task_id' => $this->task->id
         ];
