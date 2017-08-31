@@ -10065,6 +10065,86 @@ label.panel-block:hover {
   padding: 3rem 1.5rem 6rem;
 }
 
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  background: rgba(69, 77, 93, 0.9);
+  border-radius: 3px;
+  bottom: 100%;
+  color: #fff;
+  content: attr(data-tooltip);
+  display: block;
+  font-size: 0.75rem;
+  left: 50%;
+  max-width: 32rem;
+  opacity: 0;
+  overflow: hidden;
+  padding: .4rem .8rem;
+  pointer-events: none;
+  position: absolute;
+  text-overflow: ellipsis;
+  -webkit-transform: translate(-50%, 1rem);
+  transform: translate(-50%, 1rem);
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  white-space: nowrap;
+  z-index: 200;
+}
+
+.tooltip:focus::after,
+.tooltip:hover::after {
+  opacity: 1;
+  -webkit-transform: translate(-50%, -0.5rem);
+  transform: translate(-50%, -0.5rem);
+}
+
+.tooltip[disabled],
+.tooltip.disabled {
+  pointer-events: auto;
+}
+
+.tooltip.is-tooltip-right::after {
+  bottom: 50%;
+  left: 100%;
+  -webkit-transform: translate(-1rem, 50%);
+  transform: translate(-1rem, 50%);
+}
+
+.tooltip.is-tooltip-right:focus::after,
+.tooltip.is-tooltip-right:hover::after {
+  -webkit-transform: translate(0.5rem, 50%);
+  transform: translate(0.5rem, 50%);
+}
+
+.tooltip.is-tooltip-bottom::after {
+  bottom: auto;
+  top: 100%;
+  -webkit-transform: translate(-50%, -1rem);
+  transform: translate(-50%, -1rem);
+}
+
+.tooltip.is-tooltip-bottom:focus::after,
+.tooltip.is-tooltip-bottom:hover::after {
+  -webkit-transform: translate(-50%, 0.5rem);
+  transform: translate(-50%, 0.5rem);
+}
+
+.tooltip.is-tooltip-left::after {
+  bottom: 50%;
+  left: auto;
+  right: 100%;
+  -webkit-transform: translate(1rem, 50%);
+  transform: translate(1rem, 50%);
+}
+
+.tooltip.is-tooltip-left:focus::after,
+.tooltip.is-tooltip-left:hover::after {
+  -webkit-transform: translate(-0.5rem, 50%);
+  transform: translate(-0.5rem, 50%);
+}
+
 /** vue-multiselect */
 
 fieldset[disabled] .multiselect {
@@ -10671,6 +10751,11 @@ aside {
 aside .side-menu .menu-label,
 aside .side-menu .multi-select {
   padding-left: 0.25em;
+}
+
+aside .side-menu .menu-label .tooltip,
+aside .side-menu .multi-select .tooltip {
+  text-transform: none !important;
 }
 
 aside .side-menu .menu-list a {

@@ -9,7 +9,7 @@
                  <h3 v-else class="title blokk"> Section Name</h3>
              </div>
              <div class="level-right">
-                 <a  @click.prevent.stop="addTask()" v-if="!placeHolder"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
+                 <a  class="is-pulled-right align-vertical tooltip is-tooltip-right" data-tooltip="Add Task" @click.prevent.stop="addTask()" v-if="!placeHolder"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                  <i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>
              </div>
          </div>

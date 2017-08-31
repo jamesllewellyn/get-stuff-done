@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 258);
+/******/ 	return __webpack_require__(__webpack_require__.s = 259);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4641,7 +4641,7 @@ module.exports = function normalizeComponent (
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_Task__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_Team__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_User__ = __webpack_require__(164);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(264);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(165);
 
 
 
@@ -60391,7 +60391,7 @@ var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(163),
   /* template */
-  __webpack_require__(165),
+  __webpack_require__(166),
   /* styles */
   null,
   /* scopeId */
@@ -60485,6 +60485,47 @@ var User = function User() {
 
 /***/ }),
 /* 165 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Notification = function () {
+    function Notification(data) {
+        _classCallCheck(this, Notification);
+
+        this.id = data.id;
+        this.type = data.type;
+        this.created_at = moment();
+        this.data = {
+            action: data.action,
+            project_id: this.checkIfKeyAndReturn('project_id', data),
+            section_id: this.checkIfKeyAndReturn('section_id', data),
+            task_id: this.checkIfKeyAndReturn('task_id', data),
+            team_id: this.checkIfKeyAndReturn('team_id', data),
+            user: data.user
+        };
+    }
+
+    _createClass(Notification, [{
+        key: 'checkIfKeyAndReturn',
+        value: function checkIfKeyAndReturn(field, obj) {
+            if (field in obj) {
+                return obj[field];
+            }
+            return null;
+        }
+    }]);
+
+    return Notification;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Notification);
+
+/***/ }),
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -60525,15 +60566,15 @@ if (false) {
 }
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(167),
-  /* template */
   __webpack_require__(168),
+  /* template */
+  __webpack_require__(169),
   /* styles */
   null,
   /* scopeId */
@@ -60565,7 +60606,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60607,7 +60648,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -60666,15 +60707,15 @@ if (false) {
 }
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(170),
-  /* template */
   __webpack_require__(171),
+  /* template */
+  __webpack_require__(172),
   /* styles */
   null,
   /* scopeId */
@@ -60706,7 +60747,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60764,7 +60805,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -60959,7 +61000,6 @@ if (false) {
 }
 
 /***/ }),
-/* 172 */,
 /* 173 */,
 /* 174 */,
 /* 175 */,
@@ -61045,20 +61085,21 @@ if (false) {
 /* 255 */,
 /* 256 */,
 /* 257 */,
-/* 258 */
+/* 258 */,
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(259);
+module.exports = __webpack_require__(260);
 
 
 /***/ }),
-/* 259 */
+/* 260 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(261);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 
@@ -61094,7 +61135,7 @@ var app = new Vue({
 });
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61112,10 +61153,10 @@ var routes = [{
         redirect: 'user'
     }, {
         path: 'user',
-        component: __webpack_require__(169)
+        component: __webpack_require__(170)
     }, {
         path: 'set-up-team',
-        component: __webpack_require__(166)
+        component: __webpack_require__(167)
     }]
 }];
 
@@ -61123,50 +61164,6 @@ var routes = [{
     routes: routes,
     mode: 'hash'
 }));
-
-/***/ }),
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Notification = function () {
-    function Notification(data) {
-        _classCallCheck(this, Notification);
-
-        this.id = data.id;
-        this.type = data.type;
-        this.created_at = moment();
-        this.data = {
-            action: data.action,
-            project_id: this.checkIfKeyAndReturn('project_id', data),
-            section_id: this.checkIfKeyAndReturn('section_id', data),
-            task_id: this.checkIfKeyAndReturn('task_id', data),
-            team_id: this.checkIfKeyAndReturn('team_id', data),
-            user: data.user
-        };
-    }
-
-    _createClass(Notification, [{
-        key: 'checkIfKeyAndReturn',
-        value: function checkIfKeyAndReturn(field, obj) {
-            if (field in obj) {
-                return obj[field];
-            }
-            return null;
-        }
-    }]);
-
-    return Notification;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (Notification);
 
 /***/ })
 /******/ ]);

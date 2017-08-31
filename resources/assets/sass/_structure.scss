@@ -10,8 +10,6 @@ body{
   background-color:inherit;
 }
 html {font-size: 0.85em;}
-
-
 h1, h2, h3, h4 {
   font-weight: inherit;
   line-height: 1.2;
@@ -41,6 +39,9 @@ aside{
     }
     .menu-label, .multi-select{
       padding-left:0.25em;
+      .tooltip{
+        text-transform: none !important;
+      }
     }
     .menu-list{
       a{
@@ -57,7 +58,6 @@ aside{
           background-color: #ffffff;
           color:#4a4a4a ;
         }
-
       }
     }
   }
