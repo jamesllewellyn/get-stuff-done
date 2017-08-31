@@ -64328,6 +64328,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         },
         hideTask: function hideTask() {
             this.isVisible = false;
+            this.id = false;
             this.$store.commit('CLEAR_TASK');
         },
         /** method to get form field errors **/

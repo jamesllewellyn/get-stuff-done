@@ -178,6 +178,7 @@
             },
             hideTask:function(){
                 this.isVisible = false;
+                this.id = false;
                 this.$store.commit('CLEAR_TASK');
             },
             /** method to get form field errors **/
