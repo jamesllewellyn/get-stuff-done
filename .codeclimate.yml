@@ -32,4 +32,3 @@ exclude_paths:
 - config/
 - tests/
 - public/
-- app/Notifications
