@@ -64386,7 +64386,7 @@ if(false) {
 /* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(265)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
@@ -70960,33 +70960,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('span'), _vm._v(" "), _c('span'), _vm._v(" "), _c('span')]) : _vm._e(), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "has-text-centered"
   }, [_c('div', {
-    staticClass: "has-dropdown is-hoverable"
-  }, [_c('a', {
-    staticClass: "has-text-centered ",
+    staticClass: "dropdown is-hoverable"
+  }, [_c('div', {
+    staticClass: "dropdown-trigger"
+  }, [_c('button', {
+    staticClass: "button has-no-boarder",
     attrs: {
-      "href": "#",
-      "role": "button",
-      "aria-expanded": "false"
+      "aria-haspopup": "true",
+      "aria-controls": "dropdown-menu"
     }
   }, [_c('span', {
     domProps: {
       "textContent": _vm._s(_vm.getName())
     }
-  }, [_c('span', {
-    staticClass: "caret"
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "navbar-dropdown is-hidden-mobile",
+  }), _vm._v(" "), _vm._m(1)])]), _vm._v(" "), _c('div', {
+    staticClass: "dropdown-menu",
     attrs: {
-      "id": "userDropdown"
-    }
-  }, [_c('a', {
-    staticClass: "navbar-item",
-    attrs: {
-      "href": "#"
+      "id": "dropdown-menu",
+      "role": "menu"
     }
   }, [_c('div', {
-    staticClass: "navbar-content"
-  }, [_vm._t("default")], 2)])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
+    staticClass: "dropdown-content"
+  }, [_c('a', {
+    staticClass: "dropdown-item",
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        _vm.profileHandler($event)
+      }
+    }
+  }, [_vm._v("\n                                Profile\n                            ")]), _vm._v(" "), _vm._t("default")], 2)])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
     staticClass: "menu-label"
   }, [_vm._v("\n                General\n            ")]), _vm._v(" "), _c('ul', {
     staticClass: "menu-list"
@@ -71025,15 +71032,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "tag": "a",
       "to": "/my-tasks"
     }
-  }, [_vm._v("\n                        My Tasks\n                    ")])], 1), _vm._v(" "), _c('li', [_c('a', {
-    on: {
-      "click": function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        _vm.profileHandler($event)
-      }
-    }
-  }, [_vm._v("\n                        Profile\n                    ")])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
+  }, [_vm._v("\n                        My Tasks\n                    ")])], 1)]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', {
     staticClass: "menu-label"
   }, [_vm._v("\n                Team "), _c('a', {
     staticClass: "is-pulled-right align-vertical tooltip is-tooltip-right",
@@ -71120,6 +71119,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "alt": ""
     }
   })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-angle-down",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -71825,94 +71833,6 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */,
-/* 265 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
 
 /***/ })
 /******/ ]);

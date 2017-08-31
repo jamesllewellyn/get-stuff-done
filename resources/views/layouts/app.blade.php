@@ -41,9 +41,9 @@
                 </transition>
 
                 <navigation :add-class="'is-hidden-touch'" v-cloak>
-                    <p href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="has-text-centered">
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
                         Logout
-                    </p>
+                    </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                 </navigation>
                 <div class="hero is-fullheight column is-10-desktop is-12-tablet">
@@ -104,19 +104,6 @@
                             </nav>
                         </div>
                     </article>
-                </div>
-
-
-
-                <div>
-                    <a class="title">
-
-                    </a>
-                    <a class="close" @click="props.close">
-                        <i class="fa fa-fw fa-close"></i>
-                    </a>
-                    <div v-html="">
-                    </div>
                 </div>
             </template>
         </notifications>

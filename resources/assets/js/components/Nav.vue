@@ -12,19 +12,24 @@
                     </figure>
                 </div>
                 <div class="has-text-centered">
-                    <div class="has-dropdown is-hoverable">
-                        <a href="#" class="has-text-centered " role="button" aria-expanded="false">
-                            <span v-text="getName()"><span class="caret"></span></span>
-                        </a>
-                        <div id="userDropdown" class="navbar-dropdown is-hidden-mobile" >
-                            <a class="navbar-item" href="#">
-                                <div class="navbar-content">
-                                    <slot></slot>
-                                </div>
-                            </a>
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                            <button class="button has-no-boarder" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span v-text="getName()"></span>
+                                <span class="icon is-small">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                                <a href="#" class="dropdown-item" @click.prevent.stop="profileHandler">
+                                    Profile
+                                </a>
+                                <slot></slot>
+                            </div>
                         </div>
                     </div>
-
                 </div>
                 <hr/>
                 <p class="menu-label">
@@ -40,11 +45,6 @@
                         <router-link exact active-class="is-active" tag="a" to="/my-tasks" >
                             My Tasks
                         </router-link>
-                    </li>
-                    <li>
-                        <a @click.prevent.stop="profileHandler">
-                            Profile
-                        </a>
                     </li>
                 </ul>
                 <hr/>
