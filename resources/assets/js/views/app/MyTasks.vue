@@ -28,7 +28,16 @@
                                 <span class="tag is-light" v-text="section[0].section.name"></span>
                                 <table class="table task-table">
                                     <tbody>
-                                        <task-list v-for="task in section" class="reorder-item" :projectId="task.section.project.id" :sectionId="task.section.id" :task="task"  :key="task.id"></task-list>
+                                    <task-list v-for="(task, key) in section"
+                                               :key="key"
+                                               :project_id="task.section.project.id"
+                                               :section_id="task.section.id"
+                                               :id="task.id"
+                                               :name="task.name"
+                                               :status_id="task.status_id"
+                                               :priority_id="task.priority_id"
+                                               :due_date="task.due_date">
+                                    </task-list>
                                     </tbody>
                                 </table>
                             </section>

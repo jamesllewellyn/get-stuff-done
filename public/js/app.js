@@ -62524,6 +62524,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -67891,14 +67900,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }), _vm._v(" "), _c('table', {
         staticClass: "table task-table"
-      }, [_c('tbody', _vm._l((section), function(task) {
+      }, [_c('tbody', _vm._l((section), function(task, key) {
         return _c('task-list', {
-          key: task.id,
-          staticClass: "reorder-item",
+          key: key,
           attrs: {
-            "projectId": task.section.project.id,
-            "sectionId": task.section.id,
-            "task": task
+            "project_id": task.section.project.id,
+            "section_id": task.section.id,
+            "id": task.id,
+            "name": task.name,
+            "status_id": task.status_id,
+            "priority_id": task.priority_id,
+            "due_date": task.due_date
           }
         })
       }))])])
@@ -69511,7 +69523,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v(" Section Name")])], 1), _vm._v(" "), _c('div', {
     staticClass: "level-right"
   }, [(!_vm.placeHolder) ? _c('a', {
-    staticClass: "is-pulled-right align-vertical tooltip is-tooltip-right",
+    staticClass: "is-pulled-right align-vertical tooltip is-tooltip-left",
     attrs: {
       "data-tooltip": "Add Task"
     },
