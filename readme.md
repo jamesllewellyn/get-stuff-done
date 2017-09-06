@@ -1,52 +1,125 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Get Stuff Done
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Team based project To-Do List application. Allowing easy management of task across multiple teams and projects  
 
-## About Laravel
+## Getting Started
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+### Prerequisites
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Get stuff done is built on Laravel 5.4 and so has the same system requirements.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+* PHP >= 5.6.4
+* penSSL PHP Extension
+* PDO PHP Extension
+* Mbstring PHP Extension
+* Tokenizer PHP Extension
+* XML PHP Extension
+* npm
+* composer
 
-## Learning Laravel
+### Installing
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+A step by step series of examples that tell you how the application up and running in a development env
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+Clone project
 
-## Laravel Sponsors
+```
+git clone https://github.com/jamesllewellyn/laravel-tasks.git
+```
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+Install Composer
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
+```
+composer install
+```
+
+Create laravel application key
+
+```
+php artisan key:generate
+```
+
+Create database and setup your .env file to match your desired database credentials
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=databasename
+DB_USERNAME=username
+DB_PASSWORD=password
+```
+
+Run migration to create database tables
+
+```
+php artisan migrate
+```
+if you use the local driver link storage to public
+
+```
+php artisan storage:link 
+```
+
+Install javascript dependencies
+
+```
+npm install
+```
+
+###Further configuration
+
+####Email
+
+Enter your mail credentials in .env
+```
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=null
+```
+####Pusher
+
+Enter your pusher credentials in .env
+```
+BROADCAST_DRIVER=pusher
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+```
+####Queue
+
+Set up laravel queue worker to process job table tasks
+
+Set QUEUE_DRIVER to database in .env file
+
+```
+QUEUE_DRIVER=database
+```
+Set laravel worker running 
+
+```
+php artisan queue:work
+```
+
+## Built With
+
+* [Laravel 5.4](https://laravel.com/docs/5.4)
+* [Vue.js v2](https://vuejs.org/v2/guide/)
+* [npm](https://www.npmjs.com/)
+* [Composer](https://getcomposer.org/)
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Pull request are welcome 
 
-## Security Vulnerabilities
+## Authors
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+* **James Llewellyn** - *Initial work* - [PurpleBooth](https://github.com/jamesllewellyn)
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
-# laravel-tasks
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
