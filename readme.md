@@ -1,6 +1,8 @@
 # Get Stuff Done
 
-Team based project To-Do List application. Allowing easy management of task across multiple teams and projects  
+Team based project To-Do List application. Allowing easy management of task across multiple teams and projects.
+  
+Application is still under development
 
 ## Getting Started
 
@@ -69,7 +71,7 @@ npm install
 
 ###Further configuration
 
-####Email
+**Email**
 
 Enter your mail credentials in .env
 ```
@@ -80,7 +82,7 @@ MAIL_USERNAME=
 MAIL_PASSWORD=
 MAIL_ENCRYPTION=null
 ```
-####Pusher
+**Pusher**
 
 Enter your pusher credentials in .env
 ```
@@ -89,7 +91,7 @@ PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 ```
-####Queue
+**Queue**
 
 Set up laravel queue worker to process job table tasks
 
