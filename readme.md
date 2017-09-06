@@ -117,7 +117,7 @@ Pull request are welcome
 
 ## Authors
 
-* **James Llewellyn** - *Initial work* - [PurpleBooth](https://github.com/jamesllewellyn)
+* **James Llewellyn** - *Initial work* - [James Llewellyn](https://github.com/jamesllewellyn)
 
 ## License
 
