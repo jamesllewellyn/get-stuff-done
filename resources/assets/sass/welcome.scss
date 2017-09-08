@@ -1,0 +1,38 @@
+/** Fonts */
+@import url(//fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+/** Variables */
+@import "variables";
+
+/** Bulma */
+@import "node_modules/bulma/bulma";
+
+/** welcome page styles */
+body{
+  background-color:$body-bg;
+  font-family: $font-family;
+  font-weight: 400;
+}
+.button{
+  border-radius: 50px;
+  border:none;
+}
+
+.has-shadow{
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.2);
+}
+
+.is-orange{
+  background-color: $orange;
+  color:#ffffff;
+  a{
+    color:#ffffff;
+  }
+}
+.is-gray{
+  background-color: $brand-info;
+  color:#ffffff;
+  a{
+    color:#ffffff;
+  }
+}

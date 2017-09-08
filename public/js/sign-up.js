@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 259);
+/******/ 	return __webpack_require__(__webpack_require__.s = 260);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -60399,7 +60399,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/laravel-tasks/resources/assets/js/views/auth/CreateAccount.vue"
+Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/resources/assets/js/views/auth/CreateAccount.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] CreateAccount.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -60410,9 +60410,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-07badab2", Component.options)
+    hotAPI.createRecord("data-v-5f402a6e", Component.options)
   } else {
-    hotAPI.reload("data-v-07badab2", Component.options)
+    hotAPI.reload("data-v-5f402a6e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -60561,7 +60561,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-07badab2", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-5f402a6e", module.exports)
   }
 }
 
@@ -60582,7 +60582,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/laravel-tasks/resources/assets/js/views/auth/account-steps/SetUpTeam.vue"
+Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/resources/assets/js/views/auth/account-steps/SetUpTeam.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] SetUpTeam.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -60593,9 +60593,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-b786611a", Component.options)
+    hotAPI.createRecord("data-v-049ea42f", Component.options)
   } else {
-    hotAPI.reload("data-v-b786611a", Component.options)
+    hotAPI.reload("data-v-049ea42f", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -60702,7 +60702,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-b786611a", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-049ea42f", module.exports)
   }
 }
 
@@ -60723,7 +60723,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/laravel-tasks/resources/assets/js/views/auth/account-steps/MakeUser.vue"
+Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/resources/assets/js/views/auth/account-steps/MakeUser.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MakeUser.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -60734,9 +60734,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-e71e64e0", Component.options)
+    hotAPI.createRecord("data-v-2b391d58", Component.options)
   } else {
-    hotAPI.reload("data-v-e71e64e0", Component.options)
+    hotAPI.reload("data-v-2b391d58", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -60995,7 +60995,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-e71e64e0", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-2b391d58", module.exports)
   }
 }
 
@@ -61086,20 +61086,21 @@ if (false) {
 /* 256 */,
 /* 257 */,
 /* 258 */,
-/* 259 */
+/* 259 */,
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(260);
+module.exports = __webpack_require__(261);
 
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 
@@ -61135,7 +61136,7 @@ var app = new Vue({
 });
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

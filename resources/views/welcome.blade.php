@@ -5,17 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
+    <link href="//fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css">
+    <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
+
 </head>
 <body>
-<section class="hero is-primary is-large header-image">
+<section class="hero is-medium has-text-centered">
     <div class="hero-head">
         <header class="nav">
             <div class="container">
                 <div class="nav-left">
                     <a class="nav-item" href="{{ url('/home') }}">
+                        <img class="logo is-centered" src="/images/logo.png" alt="">
                     </a>
+
                 </div>
                 <span class="nav-toggle">
                     <span></span>
@@ -31,7 +35,7 @@
                     @if (Route::has('login'))
                         @if (Auth::check())
                             <span class="nav-item">
-                              <a class="button is-info is-outlined is-inverted" href="{{ url('/home') }}">
+                              <a class="button is-orange" href="{{ url('/home') }}">
                                 <span>Dashboard</span>
                               </a>
                             </span>
@@ -40,7 +44,7 @@
                                 Login
                             </a>
                             <span class="nav-item">
-                              <a class="button is-info is-outlined is-inverted" href="{{ url('/create') }}">
+                              <a class="button is-orange" href="{{ url('/create') }}">
                                 <span>Create Team</span>
                               </a>
                             </span>
@@ -59,7 +63,7 @@
                 Team based project to-do list application.
             </h2>
             <p>
-                <a class="button is-outlined" href="{{ url('/create') }}">
+                <a class="button has-shadow" href="{{ url('/create') }}">
                     {{--<span class="icon">--}}
                     {{--<i class="fa fa-download"></i>--}}
                     {{--</span>--}}
@@ -131,6 +135,5 @@
         </div>
     </div>
 </footer>
-<script async type="text/javascript" src="../js/bulma.js"></script>
 </body>
 </html>
