@@ -19,7 +19,6 @@
                     <a class="nav-item" href="{{ url('/home') }}">
                         <img class="logo is-centered" src="/images/logo.png" alt="">
                     </a>
-
                 </div>
                 <span class="nav-toggle">
                     <span></span>
