@@ -15,9 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/** create new account form */
+
+
+/** create new team */
 Route::get('/create', function () {
-    return view('auth.create-account');
+    return view('auth.create-team');
 });
 
 /** user invite */

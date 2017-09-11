@@ -1,18 +1,18 @@
 /** Fonts */
 @import url(//fonts.googleapis.com/css?family=Raleway:300,400,600);
 
-/** Variables */
-@import "variables";
-
 /** Bulma */
 @import "node_modules/bulma/bulma";
 
+/** Variables */
+@import "variables";
+@import "forms";
+@import "typography";
+@import "buttons";
 /** welcome page styles */
-body{
-  background-color:$body-bg;
-  font-family: $font-family;
-  font-weight: 400;
-}
+
+//.is-landing-page{font-size: 16px;}
+html{font-size: 16px;}
 .button{
   border-radius: 50px;
   border:none;

@@ -40,7 +40,7 @@ class User extends Authenticatable
         'last_name' => 'required',
         'email' => 'required|email|unique:users',
         'handle' => 'required',
-        'password' => 'required|min:7'
+        'password' => 'required|confirmed|min:7'
     ];
     /**
      * Modal update validation.
@@ -63,6 +63,7 @@ class User extends Authenticatable
         'handle.required' => 'Please provide a handle',
         'password.required' => 'Please provide a password',
         'password.min' => 'Please provide a password that at least 7 charters',
+        'password.confirmed' => 'The passwords you entered don\'t appear to match',
     ];
 
     /**

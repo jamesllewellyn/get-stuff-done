@@ -2,28 +2,6 @@ import VueRouter from 'vue-router';
 
 let routes = [
     {
-        path: '/team/',
-        component: require('./views/auth/CreateAccount.vue'),
-        children: [
-            {
-                path: '',
-                redirect: 'email'
-            },
-            {
-                path: 'email',
-                component: require('./views/auth/account-steps/Email.vue')
-            },
-            {
-                path: 'set-up-team',
-                component: require('./views/auth/account-steps/SetUpTeam.vue')
-            },
-            {
-                path: 'user',
-                component: require('./views/auth/account-steps/MakeUser.vue')
-            }
-        ]
-    },
-    {
         path: '',
         redirect: '/inbox/'
     },
@@ -55,5 +33,4 @@ let routes = [
 
 export default new VueRouter({
     routes,
-    mode: 'hash'
 });

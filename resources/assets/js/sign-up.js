@@ -28,8 +28,9 @@ const app = new Vue({
         }
     },
     mounted: function () {
+        /** Call method to get user data */
+        this.$store.dispatch('LOAD_USER');
         Event.$on('create-team-page', function($page){
             router.push($page);
         })
-    }
-});
+    }});

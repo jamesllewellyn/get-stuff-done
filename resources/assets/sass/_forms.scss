@@ -1,0 +1,32 @@
+input{
+  font-family: $font-family !important;
+  border:none !important;
+  font-size: 1.25em;
+  box-shadow: none !important;
+  &.clear-background{
+    background: none;
+  }
+  &.input-date{
+    font-size: 1.25em;
+  }
+  &:focus{
+    outline:none;
+    border-bottom: 1px solid $orange !important;
+  }
+}
+.select, select{
+  width: 100%;
+}
+.multiselect{
+  min-width: 145px;
+}
+textarea{
+  width: 100%;
+  min-height: 10em;
+  font-family: $font-family;
+  font-size: 1.25em;
+  padding:0.5em;
+  color: #363636 !important;
+  border-radius: 5px;
+  border: 1px solid #dbdbdb;
+}

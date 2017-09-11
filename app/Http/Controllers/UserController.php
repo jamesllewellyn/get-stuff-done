@@ -157,7 +157,7 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function team(Request $request, User $user) {
+    public function updateTeam(Request $request, User $user) {
         /** validate the request data */
         $this->validate(Request(),['teamId' => 'required']);
         /** get team */

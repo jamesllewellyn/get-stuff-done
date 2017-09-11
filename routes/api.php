@@ -34,7 +34,7 @@ use Illuminate\Http\Request;
     /** set users avatar */
     Route::post('/user/{user}/avatar', ['uses'=>'UserController@avatar', 'as'=>'user.store.avatar'] );
     /** update users current team */
-    Route::put('/user/{user}/team', ['uses'=>'UserController@team', 'as'=>'user.current_team'] );
+    Route::put('/user/{user}/team', ['uses'=>'UserController@updateTeam', 'as'=>'user.current_team'] );
     /** get users current tasks */
     Route::get('/user/{user}/tasks', ['uses'=>'UserController@tasks', 'as'=>'user.tasks'] );
     /** get users over due tasks */

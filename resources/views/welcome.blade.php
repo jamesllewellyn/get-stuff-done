@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html class="is-landing-page">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="//fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
@@ -43,7 +45,7 @@
                                 Login
                             </a>
                             <span class="nav-item">
-                              <a class="button is-orange" href="{{ url('/create') }}">
+                              <a class="button is-orange" href="{{ url('/register') }}">
                                 <span>Create Team</span>
                               </a>
                             </span>
@@ -62,7 +64,7 @@
                 Team based project to-do list application.
             </h2>
             <p>
-                <a class="button has-shadow" href="{{ url('/create') }}">
+                <a class="button has-shadow" href="{{ url('/register') }}">
                     {{--<span class="icon">--}}
                     {{--<i class="fa fa-download"></i>--}}
                     {{--</span>--}}

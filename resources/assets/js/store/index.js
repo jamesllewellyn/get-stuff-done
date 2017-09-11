@@ -29,9 +29,10 @@ const store = new Vuex.Store({
          * Sign Up Actions
          **********************/
         REGISTER_USER:function ({ commit }, user) {
-            axios.post('/register', user)
+            axios.post('/api/user', user)
                 .then((response) => {
-                console.log(response);
+                    console.log(response);
+                    console.log(response.data.user);
                     commit('REGISTER_USER_PASS', { user: response.data.user})
                 }, (error) => {
                     if(error.response.data){
@@ -428,7 +429,9 @@ const store = new Vuex.Store({
         REGISTER_USER_PASS: (state, { user }) => {
             /** add user */
             state.user = user;
-            Event.$emit('create-team-page','set-up-team');
+            /** take your to homepage */
+            window.location = '/home';
+            // Event.$emit('create-team-page','set-up-team');
         },
         REGISTER_USER_FAIL: (state, { errors }) => {
             /** add form errors */

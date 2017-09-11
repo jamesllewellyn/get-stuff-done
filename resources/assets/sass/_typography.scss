@@ -1,0 +1,58 @@
+[v-cloak] {
+  display: none;
+}
+
+body{
+  background-color:$body-bg;
+  font-family: $font-family;
+  color: #4a4a4a;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.hero{
+  background-color:inherit;
+}
+
+html {font-size: 0.85em;}
+
+h1, h2, h3, h4 {
+  font-weight: inherit;
+  line-height: 1.2;
+}
+
+h1, .h1 {
+  margin-top: 0;
+  font-size: 2.074em;
+}
+
+h2, .h2 {font-size: 1.728em;}
+
+h3, .h3 {font-size: 1.44em;}
+
+h3{
+  .caret{
+    padding-top: 5px;
+    margin-right: 5px;
+  }
+}
+
+h4 {font-size: 1.2em;}
+
+.bold{
+  font-weight: bold !important;
+}
+
+.blokk{
+  font-family: 'blokk' !important;
+  color:#dbdbdb;
+}
+
+@font-face {
+  font-family: 'blokk';
+  src: url('/fonts/blokk/blokkneue-regular-webfont.woff2') format('woff2'),
+  url('/fonts/blokk/blokkneue-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

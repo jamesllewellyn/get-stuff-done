@@ -31,7 +31,7 @@ class HomeController extends Controller
         /** check user is in a team */
         if(!$user->teams->first()){
             /** if user not in a team redirect to create team page */
-            return redirect()->to('/create');
+            return redirect()->to('/create/#/team');
         }
         /** set users current_team_id if not set */
         if (!$user->current_team_id) {

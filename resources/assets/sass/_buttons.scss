@@ -1,0 +1,41 @@
+.status{
+  .fa{
+    transition: color .3s ease;
+    color: #f2f4f6;
+    &:hover,  &.is-done{
+      color:$brand-success;
+    }
+    &.is-started{
+      color:$brand-warning;
+    }
+    &.is-over-due{
+      color:$brand-danger;
+    }
+  }
+}
+.dropdown{
+  button{
+    background: transparent;
+  }
+}
+
+.has-dropdown{
+  .navbar-dropdown{
+    border-radius: 5px;
+    border: 1px solid #dbdbdb;
+    top:auto;
+    min-width:auto;
+    left:25px;
+    background-color: white;
+    box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
+    display: none;
+    font-size: 0.875rem;
+    position: absolute;
+    z-index: 20;
+  }
+  &:hover{
+    .navbar-dropdown{
+      display:block!important;
+    }
+  }
+}

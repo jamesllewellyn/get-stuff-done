@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="app">
-        <div class="columns is-vcentered">
+        <div class="columns is-centered">
             <transition name="fade" mode="out-in">
                 <router-view ></router-view>
             </transition>

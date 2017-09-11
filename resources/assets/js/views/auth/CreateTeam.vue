@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="column is-5 is-centered">
         <div class="content">
             <h2 >
                 Create Team
@@ -19,16 +19,25 @@
         </div>
     </div>
 </template>
+
 <script>
-    import store from '../../../store';
-    import Team from '../../../core/Team';
+    import store from '../../store';
+    import Team from '../../core/Team';
+
     export default {
         data() {
             return{
                 team: new Team({name:''})
             }
         },
+        components: {
+
+        },
         methods: {
+            /** trigger toggle modal event */
+            triggerEvent: function(eventName, payload){
+                Event.$emit(eventName, payload);
+            },
             onSubmit() {
                 this.$store.dispatch('SIGN_UP_SUBMIT',this.team);
             },
@@ -36,6 +45,8 @@
             getErrors(fieldName) {
                 return store.getters.getFormErrors(fieldName);
             }
+        },
+        mounted() {
         }
     }
 </script>

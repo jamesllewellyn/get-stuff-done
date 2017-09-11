@@ -10691,57 +10691,6 @@ fieldset[disabled] .multiselect {
 
 /** main App Structure */
 
-[v-cloak] {
-  display: none;
-}
-
-body {
-  background-color: #f5f8fa;
-  font-family: "Raleway", sans-serif;
-  font-weight: 400;
-}
-
-.hero {
-  background-color: inherit;
-}
-
-html {
-  font-size: 0.85em;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-weight: inherit;
-  line-height: 1.2;
-}
-
-h1,
-.h1 {
-  margin-top: 0;
-  font-size: 2.074em;
-}
-
-h2,
-.h2 {
-  font-size: 1.728em;
-}
-
-h3,
-.h3 {
-  font-size: 1.44em;
-}
-
-h4 {
-  font-size: 1.2em;
-}
-
-.blokk {
-  font-family: 'blokk' !important;
-  color: #dbdbdb;
-}
-
 /** Sidebar menu */
 
 aside {
@@ -10774,25 +10723,6 @@ aside .side-menu .menu-list a.is-active {
 aside .side-menu .menu-list a:hover {
   background-color: #ffffff;
   color: #4a4a4a;
-}
-
-.has-dropdown .navbar-dropdown {
-  border-radius: 5px;
-  border: 1px solid #dbdbdb;
-  top: auto;
-  min-width: auto;
-  left: 25px;
-  background-color: white;
-  -webkit-box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
-          box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
-  display: none;
-  font-size: 0.875rem;
-  position: absolute;
-  z-index: 20;
-}
-
-.has-dropdown:hover .navbar-dropdown {
-  display: block !important;
 }
 
 .mobile-side-nav {
@@ -10836,11 +10766,6 @@ hr {
   margin-top: 0 !important;
 }
 
-h3 .caret {
-  padding-top: 5px;
-  margin-right: 5px;
-}
-
 .task-table {
   border-top: 1px solid #dbdbdb;
   border-bottom: 1px solid #dbdbdb;
@@ -10851,8 +10776,6 @@ h3 .caret {
 .header {
   padding-top: 1em;
 }
-
-/** typography */
 
 .box.place-holder {
   -webkit-box-shadow: none !important;
@@ -10881,10 +10804,6 @@ h3 .caret {
   color: #ffffff;
 }
 
-.bold {
-  font-weight: bold !important;
-}
-
 .has-no-boarder {
   border: none !important;
 }
@@ -10902,31 +10821,6 @@ h3 .caret {
   /* fallback if grab cursor is unsupported */
   cursor: grab;
   cursor: -webkit-grab;
-}
-
-/** buttons **/
-
-.status .fa {
-  -webkit-transition: color .3s ease;
-  transition: color .3s ease;
-  color: #f2f4f6;
-}
-
-.status .fa:hover,
-.status .fa.is-done {
-  color: #009B72;
-}
-
-.status .fa.is-started {
-  color: #F3CA40;
-}
-
-.status .fa.is-over-due {
-  color: #E55934;
-}
-
-.dropdown button {
-  background: transparent;
 }
 
 /** Task **/
@@ -10993,49 +10887,8 @@ h3 .caret {
 
 /** forms **/
 
-input {
-  font-family: "Raleway", sans-serif !important;
-  border: none !important;
-  font-size: 1.25em;
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-}
-
-input.clear-background {
-  background: none;
-}
-
-input.input-date {
-  font-size: 1.25em;
-}
-
-input:focus {
-  outline: none;
-  border-bottom: 1px solid #ff7739 !important;
-}
-
 .table.place-holder {
   background: none !important;
-}
-
-.select,
-select {
-  width: 100%;
-}
-
-.multiselect {
-  min-width: 145px;
-}
-
-textarea {
-  width: 100%;
-  min-height: 10em;
-  font-family: "Raleway", sans-serif;
-  font-size: 1.25em;
-  padding: 0.5em;
-  color: #363636 !important;
-  border-radius: 5px;
-  border: 1px solid #dbdbdb;
 }
 
 /** notifications  **/
@@ -11092,10 +10945,156 @@ textarea {
           align-items: center;
 }
 
+input {
+  font-family: "Raleway", sans-serif !important;
+  border: none !important;
+  font-size: 1.25em;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+input.clear-background {
+  background: none;
+}
+
+input.input-date {
+  font-size: 1.25em;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 1px solid #ff7739 !important;
+}
+
+.select,
+select {
+  width: 100%;
+}
+
+.multiselect {
+  min-width: 145px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 10em;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.25em;
+  padding: 0.5em;
+  color: #363636 !important;
+  border-radius: 5px;
+  border: 1px solid #dbdbdb;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+body {
+  background-color: #f5f8fa;
+  font-family: "Raleway", sans-serif;
+  color: #4a4a4a;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.hero {
+  background-color: inherit;
+}
+
+html {
+  font-size: 0.85em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: inherit;
+  line-height: 1.2;
+}
+
+h1,
+.h1 {
+  margin-top: 0;
+  font-size: 2.074em;
+}
+
+h2,
+.h2 {
+  font-size: 1.728em;
+}
+
+h3,
+.h3 {
+  font-size: 1.44em;
+}
+
+h3 .caret {
+  padding-top: 5px;
+  margin-right: 5px;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.blokk {
+  font-family: 'blokk' !important;
+  color: #dbdbdb;
+}
+
 @font-face {
   font-family: 'blokk';
   src: url("/fonts/blokk/blokkneue-regular-webfont.woff2") format("woff2"), url("/fonts/blokk/blokkneue-regular-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
+}
+
+.status .fa {
+  -webkit-transition: color .3s ease;
+  transition: color .3s ease;
+  color: #f2f4f6;
+}
+
+.status .fa:hover,
+.status .fa.is-done {
+  color: #009B72;
+}
+
+.status .fa.is-started {
+  color: #F3CA40;
+}
+
+.status .fa.is-over-due {
+  color: #E55934;
+}
+
+.dropdown button {
+  background: transparent;
+}
+
+.has-dropdown .navbar-dropdown {
+  border-radius: 5px;
+  border: 1px solid #dbdbdb;
+  top: auto;
+  min-width: auto;
+  left: 25px;
+  background-color: white;
+  -webkit-box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
+          box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
+  display: none;
+  font-size: 0.875rem;
+  position: absolute;
+  z-index: 20;
+}
+
+.has-dropdown:hover .navbar-dropdown {
+  display: block !important;
 }
 
