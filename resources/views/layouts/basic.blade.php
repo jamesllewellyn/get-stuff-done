@@ -13,7 +13,7 @@
 
 </head>
 <body>
-<section class="hero is-small ">
+<section class="hero is-fullheight ">
     <div class="hero-head">
         <header class="nav">
             <div class="container">
