@@ -1,0 +1,101 @@
+<template>
+    <div class="team-dashboard">
+        <div class="level header is-mobile">
+            <div class="level-left">
+                <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Team', event: 'team.'+team.id+'.delete', action: 'delete this team', areYouSure : true}]"></drop-down-button>
+                <input v-if="team.name != ''" class="title clear-background h1" type="text" name="name" @change="updateTeam" v-model="team.name" v-cloak>
+                <h1 v-else class="blokk title" >Project Title</h1>
+            </div>
+            <div class="level-right">
+                <div class="has-text-right">
+                    <span class="button is-orange">
+                        <a  @click.prevent.stop="triggerEvent('toggleModal','addUser')" class="orange">Add Team Member</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="columns">
+            <div class="column is-one-third">
+                <div class="box">
+                    <div class="level">
+                        <div class="level-left">
+                            <h3 class="h3 title">Team Members</h3>
+                        </div>
+                        <div class="level-right">
+                            <a  class="is-pulled-right align-vertical tooltip is-tooltip-left" data-tooltip="Add Team Member" @click.prevent.stop="triggerEvent('toggleModal','addUser')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <template v-for="user in teamMembers">
+                        <!--<div class="user-list-item">-->
+                            <div class="level">
+                                <div class="level-right ">
+                                    <img class="circle small-avatar" :src="user.avatar_url" >
+                                </div>
+                                <div class="level-item has-text-centered">
+                                    <span class="is-text-centered">{{ user.full_name }}</span>
+                                </div>
+                            </div>
+                        <!--</div>-->
+                    </template>
+                </div>
+
+            </div>
+            <div class="column">
+
+            </div>
+        </div>
+        <modal modal-name="addUser" title="Add Team Memeber">
+            <template slot="body">
+                <add-user></add-user>
+            </template>
+        </modal>
+    </div>
+</template>
+
+<script>
+    import store from '../../store';
+    import dropDownButton from '../../components/DropDownButton.vue';
+    import Modal from '../../components/Modal.vue';
+    import addUser from '../../components/modals/AddUser.vue';
+    export default {
+        data() {
+            return{
+
+            }
+        },
+        components:{dropDownButton, Modal, addUser},
+        computed: {
+            team: function(){
+                return store.getters.getActiveTeam;
+            },
+            teamMembers: function(){
+                return store.getters.getTeamUser;
+            }
+        },
+        methods: {
+            updateTeam:function(){
+                this.$store.dispatch('UPDATE_TEAM', {team :this.team})
+            },
+            /** trigger toggle modal event */
+            triggerEvent: function(eventName, payload){
+                Event.$emit(eventName, payload);
+            },
+        },
+        watch: {
+            /** whenever id changes, get team data */
+//            id () {
+//                /** dispatch action */
+//                if(this.id){
+//                    this.$store.dispatch('GET_TEAM', {id: this.id});
+//                }
+//            },
+        },
+        created() {
+//
+        },
+        beforeRouteUpdate (to, from, next) {
+            next();
+        },
+    }
+</script>

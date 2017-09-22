@@ -90,7 +90,7 @@ const store = new Vuex.Store({
                     commit('SERVER_ERROR');
                 });
         },
-        ADD_TEAM_MEMBER: function ({ commit, getters , state}, email) {
+        ADD_TEAM_MEMBER: function ({ commit, getters }, email) {
             axios.post('/api/team/'+getters.getActiveTeam.id+'/user', {email:email})
                 .then((response) => {
                     /** clear button loading state */
@@ -101,10 +101,25 @@ const store = new Vuex.Store({
                         commit('ADD_TEAM_MEMBER_ERROR', { message:  response.data.message });
                         return false;
                     }
-                    /** close modal */
+                    /** close modal **/
                     commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'addUser'});
-                    commit('ADD_TEAM_MEMBER_SUCCESS', { message:  response.data.message, user: response.data.user});
+                    /** if user is set in response then the user is already in the db and has been added to the team */
+                    if (typeof response.data.user !== 'undefined') {
+                        commit('ADD_TEAM_MEMBER_SUCCESS', { message:  response.data.message, user: response.data.user});
+                        return false;
+                    }
+                    /** the user has been sent an email asking them to join and has been put in the pending users table */
+                    commit('ADD_TEAM_PENDING_MEMBER_SUCCESS', { message:  response.data.message});
                 }, (error) => {
+                    /** clear button loading state */
+                    commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addUser'});
+                    /** check for error data */
+                    if(error.response.data){
+                        /** if error display feedback to user */
+                        commit('ADD_TEAM_MEMBER_FAILURE', { errors:  error.response.data });
+                        return false;
+                    }
+                    /** show default error */
                     commit('SERVER_ERROR');
                 });
         },
@@ -127,7 +142,6 @@ const store = new Vuex.Store({
                     commit('GET_MY_TASKS_SUCCESS', {tasks : response.data});
                 })
                 .catch(function (error) {
-                    console.log(error);
                     commit('SERVER_ERROR');
                 });
         },
@@ -243,7 +257,7 @@ const store = new Vuex.Store({
                         commit('ADD_NEW_TEAM_FAILURE', { errors:  error.response.data });
                         return false;
                     }
-                    commit('SERVER_ERROR');
+                    commit('ADD_NEW_TEAM_FAILURE', { errors:  error.response.data });
                 });
         },
         UPDATE_TEAM: function({ commit, getters }, {team}){
@@ -569,9 +583,13 @@ const store = new Vuex.Store({
         },
         ADD_TEAM_MEMBER_SUCCESS: (state, {message, user}) => {
             /** get current team index **/
-            let tIdx = state.teams.map(team => team.active).indexOf(true);
+            let tIdx = state.teams.map(team => team.id).indexOf(state.user.current_team_id);
             /** add new user to team object*/
             state.teams[tIdx].users.push(user);
+            /** send user success message */
+            Event.$emit('notify','success', 'Success', message);
+        },
+        ADD_TEAM_PENDING_MEMBER_SUCCESS: (state, {message}) => {
             /** send user success message */
             Event.$emit('notify','success', 'Success', message);
         },
@@ -579,9 +597,9 @@ const store = new Vuex.Store({
             /** send user error message */
             Event.$emit('notify','error', 'Whoops', message);
         },
-        ADD_TEAM_MEMBER_FAILURE: (state, {message}) => {
-            /** send user error message */
-            Event.$emit('notify','error', 'Whoops', message);
+        ADD_TEAM_MEMBER_FAILURE: (state, {errors}) => {
+            /** add form errors */
+            state.formErrors = errors;
         },
         SWITCH_TEAM_SUCCESS: (state, {teamId}) => {
             /** parse id to int */

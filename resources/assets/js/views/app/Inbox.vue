@@ -6,7 +6,7 @@
             </div>
             <div class="level-right">
                 <div class="has-text-right">
-                    <span class="tag is-orange is-medium" v-if="Object.keys(notifications).length > 0">
+                    <span class="button is-orange" v-if="Object.keys(notifications).length > 0">
                         <a  @click.prevent.stop="clearInbox" class="orange">Clear Inbox</a>
                     </span>
                 </div>

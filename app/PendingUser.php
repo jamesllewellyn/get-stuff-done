@@ -23,7 +23,7 @@ class PendingUser extends Model
      * @var array
      */
     public $validation = [
-        'email' => 'required|email|unique:users',
+        'email' => 'required|email|unique:users|unique_with:users_pending,email'
     ];
 
     /**
@@ -33,5 +33,6 @@ class PendingUser extends Model
     public $messages = [
         'email.unique' => 'User already exists',
         'email.email' => 'That email address doesn\'t look quiet right',
+        'email.unique_with' => 'Looks like this user has already been invited to this team',
     ];
 }

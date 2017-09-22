@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 248);
+/******/ 	return __webpack_require__(__webpack_require__.s = 254);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4942,9 +4942,9 @@ module.exports = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_Project__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_Project__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_Section__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_Task__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_Task__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_Team__ = __webpack_require__(133);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_User__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(163);
@@ -5049,8 +5049,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         ADD_TEAM_MEMBER: function ADD_TEAM_MEMBER(_ref6, email) {
             var commit = _ref6.commit,
-                getters = _ref6.getters,
-                state = _ref6.state;
+                getters = _ref6.getters;
 
             axios.post('/api/team/' + getters.getActiveTeam.id + '/user', { email: email }).then(function (response) {
                 /** clear button loading state */
@@ -5061,10 +5060,25 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                     commit('ADD_TEAM_MEMBER_ERROR', { message: response.data.message });
                     return false;
                 }
-                /** close modal */
+                /** close modal **/
                 commit('TOGGLE_MODAL_IS_VISIBLE', { name: 'addUser' });
-                commit('ADD_TEAM_MEMBER_SUCCESS', { message: response.data.message, user: response.data.user });
+                /** if user is set in response then the user is already in the db and has been added to the team */
+                if (typeof response.data.user !== 'undefined') {
+                    commit('ADD_TEAM_MEMBER_SUCCESS', { message: response.data.message, user: response.data.user });
+                    return false;
+                }
+                /** the user has been sent an email asking them to join and has been put in the pending users table */
+                commit('ADD_TEAM_PENDING_MEMBER_SUCCESS', { message: response.data.message });
             }, function (error) {
+                /** clear button loading state */
+                commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addUser' });
+                /** check for error data */
+                if (error.response.data) {
+                    /** if error display feedback to user */
+                    commit('ADD_TEAM_MEMBER_FAILURE', { errors: error.response.data });
+                    return false;
+                }
+                /** show default error */
                 commit('SERVER_ERROR');
             });
         },
@@ -5089,7 +5103,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 /** call success */
                 commit('GET_MY_TASKS_SUCCESS', { tasks: response.data });
             }).catch(function (error) {
-                console.log(error);
                 commit('SERVER_ERROR');
             });
         },
@@ -5222,7 +5235,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                     commit('ADD_NEW_TEAM_FAILURE', { errors: error.response.data });
                     return false;
                 }
-                commit('SERVER_ERROR');
+                commit('ADD_NEW_TEAM_FAILURE', { errors: error.response.data });
             });
         },
         UPDATE_TEAM: function UPDATE_TEAM(_ref24, _ref25) {
@@ -5634,27 +5647,33 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
-                return team.active;
-            }).indexOf(true);
+                return team.id;
+            }).indexOf(state.user.current_team_id);
             /** add new user to team object*/
             state.teams[tIdx].users.push(user);
             /** send user success message */
             Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref68) {
+        ADD_TEAM_PENDING_MEMBER_SUCCESS: function ADD_TEAM_PENDING_MEMBER_SUCCESS(state, _ref68) {
             var message = _ref68.message;
 
-            /** send user error message */
-            Event.$emit('notify', 'error', 'Whoops', message);
+            /** send user success message */
+            Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref69) {
+        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref69) {
             var message = _ref69.message;
 
             /** send user error message */
             Event.$emit('notify', 'error', 'Whoops', message);
         },
-        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref70) {
-            var teamId = _ref70.teamId;
+        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref70) {
+            var errors = _ref70.errors;
+
+            /** add form errors */
+            state.formErrors = errors;
+        },
+        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref71) {
+            var teamId = _ref71.teamId;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5669,8 +5688,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** display notification to user */
             Event.$emit('notify', 'success', 'Success', 'Team has been switched');
         },
-        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref71) {
-            var team = _ref71.team;
+        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref72) {
+            var team = _ref72.team;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5687,8 +5706,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Project Mutations
          **********************/
-        SET_PROJECT: function SET_PROJECT(state, _ref72) {
-            var project = _ref72.project;
+        SET_PROJECT: function SET_PROJECT(state, _ref73) {
+            var project = _ref73.project;
 
             state.project = project;
             var idx = 0;
@@ -5700,8 +5719,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         CLEAR_PROJECT: function CLEAR_PROJECT(state) {
             state.project = null;
         },
-        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref73) {
-            var project = _ref73.project;
+        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref74) {
+            var project = _ref74.project;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5714,14 +5733,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New project has been created');
         },
-        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref74) {
-            var errors = _ref74.errors;
+        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref75) {
+            var errors = _ref75.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref75) {
-            var project = _ref75.project;
+        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref76) {
+            var project = _ref76.project;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5739,10 +5758,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_PROJECT_FAILURE: function UPDATE_PROJECT_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Project name couldn\'t be updated');
         },
-        DELETE_PROJECT_SUCCESS: function DELETE_PROJECT_SUCCESS(state, _ref76) {
-            var teamId = _ref76.teamId,
-                id = _ref76.id,
-                message = _ref76.message;
+        DELETE_PROJECT_SUCCESS: function DELETE_PROJECT_SUCCESS(state, _ref77) {
+            var teamId = _ref77.teamId,
+                id = _ref77.id,
+                message = _ref77.message;
 
             /** cast id to int **/
             var pId = parseInt(id);
@@ -5764,22 +5783,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Section Mutations
          **********************/
-        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref77) {
-            var section = _ref77.section;
+        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref78) {
+            var section = _ref78.section;
 
             /** add section to currently loaded project **/
             state.project.sections.push(new __WEBPACK_IMPORTED_MODULE_2__core_Section__["a" /* default */](section));
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New section has been created');
         },
-        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref78) {
-            var errors = _ref78.errors;
+        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref79) {
+            var errors = _ref79.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref79) {
-            var section = _ref79.section;
+        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref80) {
+            var section = _ref80.section;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5793,9 +5812,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_SECTION_FAILURE: function UPDATE_SECTION_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Section name couldn\'t be updated');
         },
-        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref80) {
-            var id = _ref80.id,
-                message = _ref80.message;
+        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref81) {
+            var id = _ref81.id,
+                message = _ref81.message;
 
             /** cast id to int **/
             var sId = parseInt(id);
@@ -5816,15 +5835,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear any form errors **/
             state.formErrors = {};
         },
-        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref81) {
-            var task = _ref81.task;
+        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref82) {
+            var task = _ref82.task;
 
             /** add task to active task state **/
             state.task = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
         },
-        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref82) {
-            var sectionId = _ref82.sectionId,
-                task = _ref82.task;
+        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref83) {
+            var sectionId = _ref83.sectionId,
+                task = _ref83.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId);
@@ -5839,15 +5858,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
-        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref83) {
-            var errors = _ref83.errors;
+        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref84) {
+            var errors = _ref84.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref84) {
-            var sectionId = _ref84.sectionId,
-                task = _ref84.task;
+        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref85) {
+            var sectionId = _ref85.sectionId,
+                task = _ref85.task;
 
             /** clear any form errors **/
             state.formErrors = {};
@@ -5865,15 +5884,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify section component of update **/
             Event.$emit('section.' + sId + '.updated');
         },
-        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref85) {
-            var errors = _ref85.errors;
+        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref86) {
+            var errors = _ref86.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref86) {
-            var section = _ref86.section,
-                tasks = _ref86.tasks;
+        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref87) {
+            var section = _ref87.section,
+                tasks = _ref87.tasks;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5884,9 +5903,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 return task.sort_order;
             });
         },
-        TASK_SET_TO_DONE_SUCCESS: function TASK_SET_TO_DONE_SUCCESS(state, _ref87) {
-            var sectionId = _ref87.sectionId,
-                task = _ref87.task;
+        TASK_SET_TO_DONE_SUCCESS: function TASK_SET_TO_DONE_SUCCESS(state, _ref88) {
+            var sectionId = _ref88.sectionId,
+                task = _ref88.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId);
@@ -5906,13 +5925,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Modal Mutations
          **********************/
-        ADD_MODAL: function ADD_MODAL(state, _ref88) {
-            var name = _ref88.name;
+        ADD_MODAL: function ADD_MODAL(state, _ref89) {
+            var name = _ref89.name;
 
             state.modals.push({ name: name, isVisible: false, isLoading: false });
         },
-        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref89) {
-            var name = _ref89.name;
+        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref90) {
+            var name = _ref90.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -5921,16 +5940,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear all form errors **/
             state.formErrors = {};
         },
-        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref90) {
-            var name = _ref90.name;
+        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref91) {
+            var name = _ref91.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isLoading = true;
         },
-        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref91) {
-            var name = _ref91.name;
+        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref92) {
+            var name = _ref92.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -6037,8 +6056,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             return false;
         },
         getSectionById: function getSectionById(state, getters) {
-            return function (_ref92) {
-                var sectionId = _ref92.sectionId;
+            return function (_ref93) {
+                var sectionId = _ref93.sectionId;
 
                 /** cast id to int **/
                 var sId = parseInt(sectionId);
@@ -6060,9 +6079,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         /** returns a task **/
         getTaskById: function getTaskById(state, getters) {
-            return function (_ref93) {
-                var sectionId = _ref93.sectionId,
-                    id = _ref93.id;
+            return function (_ref94) {
+                var sectionId = _ref94.sectionId,
+                    id = _ref94.id;
 
                 /** cast ids to int **/
                 var sId = parseInt(sectionId);
@@ -7038,6 +7057,40 @@ module.exports = defaults;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Section__ = __webpack_require__(8);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Project = function () {
+    function Project(data) {
+        _classCallCheck(this, Project);
+
+        this.id = data.id;
+        this.name = data.name;
+        this.created_at = data.created_at;
+        this.sections = [];
+    }
+
+    _createClass(Project, [{
+        key: 'addSection',
+        value: function addSection(section) {
+            this.sections.push(new __WEBPACK_IMPORTED_MODULE_0__Section__["a" /* default */](section));
+        }
+    }]);
+
+    return Project;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Project);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -7118,45 +7171,11 @@ var Task = function () {
 /* harmony default export */ __webpack_exports__["a"] = (Task);
 
 /***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Section__ = __webpack_require__(8);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var Project = function () {
-    function Project(data) {
-        _classCallCheck(this, Project);
-
-        this.id = data.id;
-        this.name = data.name;
-        this.created_at = data.created_at;
-        this.sections = [];
-    }
-
-    _createClass(Project, [{
-        key: 'addSection',
-        value: function addSection(section) {
-            this.sections.push(new __WEBPACK_IMPORTED_MODULE_0__Section__["a" /* default */](section));
-        }
-    }]);
-
-    return Project;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (Project);
-
-/***/ }),
 /* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Task__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Task__ = __webpack_require__(7);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31204,7 +31223,7 @@ return zhTw;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project__ = __webpack_require__(6);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -60531,20 +60550,26 @@ var Notification = function () {
 /* 245 */,
 /* 246 */,
 /* 247 */,
-/* 248 */
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(249);
+module.exports = __webpack_require__(255);
 
 
 /***/ }),
-/* 249 */
+/* 255 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(250);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(256);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 
@@ -60581,7 +60606,7 @@ var app = new Vue({
     } });
 
 /***/ }),
-/* 250 */
+/* 256 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60616,10 +60641,10 @@ var routes = [
     redirect: '/user/'
 }, {
     path: '/user/',
-    component: __webpack_require__(264)
+    component: __webpack_require__(257)
 }, {
     path: '/team/',
-    component: __webpack_require__(267)
+    component: __webpack_require__(260)
 }];
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
@@ -60628,28 +60653,15 @@ var routes = [
 }));
 
 /***/ }),
-/* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(265),
+  __webpack_require__(258),
   /* template */
-  __webpack_require__(266),
+  __webpack_require__(259),
   /* styles */
   null,
   /* scopeId */
@@ -60681,7 +60693,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 265 */
+/* 258 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60764,7 +60776,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 266 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -60980,15 +60992,15 @@ if (false) {
 }
 
 /***/ }),
-/* 267 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(268),
+  __webpack_require__(261),
   /* template */
-  __webpack_require__(269),
+  __webpack_require__(262),
   /* styles */
   null,
   /* scopeId */
@@ -61020,7 +61032,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 268 */
+/* 261 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61079,7 +61091,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 269 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;

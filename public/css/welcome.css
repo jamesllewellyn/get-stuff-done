@@ -10298,6 +10298,11 @@ h4 {
   display: block !important;
 }
 
+.button {
+  border-radius: 50px;
+  border: none;
+}
+
 /** welcome page styles */
 
 html {

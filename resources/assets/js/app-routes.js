@@ -28,7 +28,11 @@ let routes = [
                 component: require('./views/app/Project.vue')
             }
         ]
-    }
+    },
+    {
+        path: '/team-dashboard/',
+        component: require('./views/app/TeamDashboard.vue')
+    },
 ];
 
 export default new VueRouter({

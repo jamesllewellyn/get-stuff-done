@@ -54,6 +54,15 @@
                 <p class="control multi-select">
                     <multi-select :value.sync="activeTeam" :options="teams" label="name" :searchable="false" :show-labels="false" placeholder="Switch Teams"  @select="switchTeam"></multi-select>
                 </p>
+                <p class="menu-label"></p>
+                <ul class="menu-list">
+                    <li @click.prevent.stop="triggerEvent('toggleNav' , '')">
+                        <router-link exact active-class="is-active" tag="a" to="/team-dashboard/" >
+                            Team Dashboard
+                        </router-link>
+                    </li>
+                </ul>
+                <hr/>
                 <p class="menu-label">
                     Projects <a class="is-pulled-right align-vertical tooltip is-tooltip-right" data-tooltip="Add Project" @click.prevent.stop="triggerEvent('toggleModal', 'addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>

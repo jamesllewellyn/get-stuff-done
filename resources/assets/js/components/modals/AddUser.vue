@@ -12,7 +12,7 @@
             </form>
         </section>
         <footer class="modal-card-foot">
-            <a class="button is-success" :class="{'is-loading': isLoading}"  @click="addUser()">Save changes</a>
+            <a class="button is-success" :class="{'is-loading': isLoading}"  @click="addUser()">Add new member</a>
             <a class="button"  @click="hideModal()">Cancel</a>
         </footer>
     </div>

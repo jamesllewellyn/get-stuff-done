@@ -8,7 +8,7 @@
             </div>
             <div class="level-right">
                 <div class="has-text-right">
-                    <span class="tag is-orange is-medium">
+                    <span class="button is-orange">
                         <a  @click.prevent.stop="triggerEvent('toggleModal','addSection')" class="orange">Add Section</a>
                     </span>
                 </div>
