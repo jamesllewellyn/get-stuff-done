@@ -10240,13 +10240,27 @@ h4 {
   font-size: 1.2em;
 }
 
-.bold {
+.bold,
+.is-bold {
   font-weight: bold !important;
 }
 
 .blokk {
   font-family: 'blokk' !important;
   color: #dbdbdb;
+}
+
+.is-yellow {
+  color: #F3CA40;
+}
+
+.is-orange {
+  background-color: #ff7739;
+  color: #ffffff;
+}
+
+.is-orange a {
+  color: #ffffff;
 }
 
 @font-face {
@@ -10301,6 +10315,30 @@ h4 {
 .button {
   border-radius: 50px;
   border: none;
+}
+
+.tag {
+  border-radius: 50px !important;
+}
+
+.tag.is-yellow {
+  background-color: #F3CA40;
+  color: #ffffff !important;
+}
+
+.tag.is-red {
+  background-color: #E55934;
+  color: #ffffff !important;
+}
+
+.tag.is-green {
+  background-color: #009B72;
+  color: #ffffff !important;
+}
+
+.tag.is-orange {
+  background-color: #ff7739;
+  color: #ffffff;
 }
 
 /** welcome page styles */

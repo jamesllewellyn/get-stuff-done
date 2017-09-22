@@ -63703,7 +63703,7 @@ if(false) {
 /* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(267)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
@@ -69116,6 +69116,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -69438,7 +69474,60 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v(_vm._s(user.full_name))])])])]
   })], 2)]), _vm._v(" "), _c('div', {
     staticClass: "column"
-  })]), _vm._v(" "), _c('modal', {
+  }, [_c('div', {
+    staticClass: "box"
+  }, [_c('div', {
+    staticClass: "level"
+  }, [_vm._m(1), _vm._v(" "), _c('div', {
+    staticClass: "level-right"
+  }, [_c('a', {
+    staticClass: "is-pulled-right align-vertical tooltip is-tooltip-left",
+    attrs: {
+      "data-tooltip": "Add Project"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        _vm.triggerEvent('toggleModal', 'addProject')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-plus-circle is-pulled-right align-vertical",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])])]), _vm._v(" "), _c('table', {
+    staticClass: "is-fullwidth table has-no-boarders",
+    attrs: {
+      "id": "project-overview-table"
+    }
+  }, [_vm._m(2), _vm._v(" "), _c('tbody', [_vm._l((_vm.team.projects), function(project) {
+    return [_c('router-link', {
+      attrs: {
+        "exact": "",
+        "active-class": "is-active",
+        "tag": "tr",
+        "to": '/project/' + project.id
+      }
+    }, [_c('td', [_vm._v(_vm._s(project.name))]), _vm._v(" "), _c('td', {
+      staticClass: "has-text-centered"
+    }, [_c('span', {
+      staticClass: "tag is-light"
+    }, [_vm._v("1")])]), _vm._v(" "), _c('td', {
+      staticClass: "has-text-centered"
+    }, [_c('span', {
+      staticClass: "tag is-yellow"
+    }, [_vm._v("1")])]), _vm._v(" "), _c('td', {
+      staticClass: "has-text-centered"
+    }, [_c('span', {
+      staticClass: "tag is-green"
+    }, [_vm._v("1")])]), _vm._v(" "), _c('td', {
+      staticClass: "has-text-centered"
+    }, [_c('span', {
+      staticClass: "tag is-red"
+    }, [_vm._v("1")])])])]
+  })], 2)])])])]), _vm._v(" "), _c('modal', {
     attrs: {
       "modal-name": "addUser",
       "title": "Add Team Memeber"
@@ -69452,6 +69541,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h3', {
     staticClass: "h3 title"
   }, [_vm._v("Team Members")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "level-left"
+  }, [_c('h3', {
+    staticClass: "h3 title"
+  }, [_vm._v("Project Overview")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th'), _vm._v(" "), _c('th', {
+    staticClass: "has-text-centered"
+  }, [_vm._v("Not Started")]), _vm._v(" "), _c('th', {
+    staticClass: "has-text-centered"
+  }, [_vm._v("Working On")]), _vm._v(" "), _c('th', {
+    staticClass: "has-text-centered"
+  }, [_vm._v("Complete")]), _vm._v(" "), _c('th', {
+    staticClass: "has-text-centered"
+  }, [_vm._v("Over Due")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -71637,101 +71742,6 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */,
-/* 265 */,
-/* 266 */,
-/* 267 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
 
 /***/ })
 /******/ ]);

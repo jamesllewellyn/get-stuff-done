@@ -27,7 +27,6 @@
                         </div>
                     </div>
                     <template v-for="user in teamMembers">
-                        <!--<div class="user-list-item">-->
                             <div class="level">
                                 <div class="level-right ">
                                     <img class="circle small-avatar" :src="user.avatar_url" >
@@ -36,13 +35,50 @@
                                     <span class="is-text-centered">{{ user.full_name }}</span>
                                 </div>
                             </div>
-                        <!--</div>-->
                     </template>
                 </div>
-
             </div>
             <div class="column">
-
+                <div class="box">
+                    <div class="level">
+                        <div class="level-left">
+                            <h3 class="h3 title">Project Overview</h3>
+                        </div>
+                        <div class="level-right">
+                            <a  class="is-pulled-right align-vertical tooltip is-tooltip-left" data-tooltip="Add Project" @click.prevent.stop="triggerEvent('toggleModal','addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <table id="project-overview-table" class="is-fullwidth table has-no-boarders">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="has-text-centered">Not Started</th>
+                                <th class="has-text-centered">Working On</th>
+                                <th class="has-text-centered">Complete</th>
+                                <th class="has-text-centered">Over Due</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="project in team.projects">
+                                <router-link exact active-class="is-active" tag="tr" :to="'/project/'+ project.id" >
+                                    <td>{{project.name}}</td>
+                                    <td class="has-text-centered">
+                                        <span class="tag is-light">1</span>
+                                    </td>
+                                    <td class="has-text-centered">
+                                        <span class="tag is-yellow">1</span>
+                                    </td>
+                                    <td class="has-text-centered">
+                                        <span class="tag is-green">1</span>
+                                    </td>
+                                    <td class="has-text-centered">
+                                        <span class="tag is-red">1</span>
+                                    </td>
+                                </router-link>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <modal modal-name="addUser" title="Add Team Memeber">

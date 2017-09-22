@@ -40,13 +40,30 @@ h3{
 
 h4 {font-size: 1.2em;}
 
-.bold{
+.bold, .is-bold{
   font-weight: bold !important;
 }
 
 .blokk{
   font-family: 'blokk' !important;
   color:#dbdbdb;
+}
+
+.is-yellow{
+  color:$brand-warning;
+}
+.is-red{
+  $brand-danger: #E55934;
+}
+.is-green{
+  $brand-success: #009B72;
+}
+.is-orange{
+  background-color: $orange;
+  color:#ffffff;
+  a{
+    color:#ffffff;
+  }
 }
 
 @font-face {

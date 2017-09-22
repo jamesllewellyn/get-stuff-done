@@ -1,0 +1,14 @@
+.has-no-boarders{
+    th, td{
+      border: none !important;
+    }
+}
+
+#project-overview-table{
+    td{
+       padding:1em 0;
+    }
+  tr{
+    cursor: pointer;
+  }
+}

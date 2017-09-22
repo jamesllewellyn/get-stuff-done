@@ -43,3 +43,23 @@
   border-radius: 50px;
   border: none;
 }
+
+.tag{
+  border-radius: 50px !important;
+  &.is-yellow{
+    background-color:$brand-warning;
+    color:#ffffff !important;
+  }
+  &.is-red{
+    background-color: $brand-danger;
+    color:#ffffff !important;
+  }
+  &.is-green{
+    background-color: $brand-success;
+    color:#ffffff !important;
+  }
+  &.is-orange{
+    background-color: $orange;
+    color:#ffffff;
+  }
+}
