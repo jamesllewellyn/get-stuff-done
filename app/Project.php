@@ -45,5 +45,19 @@ class Project extends Model
     public function sections(){
         return $this->hasMany(Section::class, 'project_id', 'id' );
     }
-
+    /**
+     * Get all project tasks.
+     */
+    public function getTasks(){
+        $sections = Section::where('project_id',$this->id)->get();
+        $sectionIds = $sections->pluck('id');
+        return Task::whereIn('section_id',$sectionIds)->get();
+    }
+    /** format tasks into overview */
+    public function getOverview(){
+        $tasks = $this->getTasks();
+        foreach ($tasks as $task){
+            
+        }
+    }
 }

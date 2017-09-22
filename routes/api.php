@@ -23,6 +23,8 @@ use Illuminate\Http\Request;
     Route::get('/team/{team}/projects', ['uses'=>'TeamController@projects', 'as'=>'team.projects'] );
     /** add user to team */
     Route::post('/team/{team}/user/', ['uses'=>'TeamController@user', 'as'=>'team.user'] );
+    /** get team overview */
+    Route::get('/team/{team}/overview/', ['uses'=>'TeamController@overview', 'as'=>'team.overview'] );
 
 /***********************
  * User API

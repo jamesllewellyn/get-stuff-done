@@ -70,6 +70,24 @@ class TeamController extends Controller
     }
 
     /**
+     * Get overview of projects data
+     *
+     * @param  Team  $team
+     * @return \Illuminate\Http\Response
+     */
+    public function overview(Team $team)
+    {
+        $projects = $team->projects()->get();
+
+        foreach ($projects as $project){
+            $tasks = $project->overview();
+            compile$tasks
+
+        }
+
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

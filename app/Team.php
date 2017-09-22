@@ -56,4 +56,5 @@ class Team extends Model
         return $this->HasMany(UserTeam::class);
     }
 
+
 }
