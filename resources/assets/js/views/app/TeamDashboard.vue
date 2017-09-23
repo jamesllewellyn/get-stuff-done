@@ -63,16 +63,16 @@
                                 <router-link exact active-class="is-active" tag="tr" :to="'/project/'+ project.id" >
                                     <td>{{project.name}}</td>
                                     <td class="has-text-centered">
-                                        <span class="tag is-light">1</span>
+                                        <span class="tag is-light" v-text="getOverview(project.id).not_started"></span>
                                     </td>
                                     <td class="has-text-centered">
-                                        <span class="tag is-yellow">1</span>
+                                        <span class="tag is-yellow" v-text="getOverview(project.id).working_on"></span>
                                     </td>
                                     <td class="has-text-centered">
-                                        <span class="tag is-green">1</span>
+                                        <span class="tag is-green" v-text="getOverview(project.id).complete"></span>
                                     </td>
                                     <td class="has-text-centered">
-                                        <span class="tag is-red">1</span>
+                                        <span class="tag is-red" v-text="getOverview(project.id).over_due"></span>
                                     </td>
                                 </router-link>
                             </template>
@@ -117,18 +117,23 @@
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);
             },
+            getOverview: function(projectId){
+//                if(!this.store.getters.getProjectOverviewById(projectId)){
+//                    return
+//                }
+                return store.getters.getProjectOverviewById(projectId);
+            }
         },
         watch: {
-            /** whenever id changes, get team data */
-//            id () {
-//                /** dispatch action */
-//                if(this.id){
-//                    this.$store.dispatch('GET_TEAM', {id: this.id});
-//                }
-//            },
+            /** whenever Team changes, get team overview */
+            team(){
+                this.$store.dispatch('GET_TEAM_OVERVIEW');
+            }
         },
         created() {
-//
+            if(this.team) {
+                this.$store.dispatch('GET_TEAM_OVERVIEW');
+            }
         },
         beforeRouteUpdate (to, from, next) {
             next();

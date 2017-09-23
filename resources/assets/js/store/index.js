@@ -8,6 +8,7 @@ import Notification from '../core/Notification';
 const store = new Vuex.Store({
     state: {
         teams: [],/** all users teams */
+        teamOverview: null, /** overview of status of tasks in all projects in team **/
         projects: [],/** all current teams projects */
         project: null,/** all current projects sections and tasks */
         task: null,/** Current task being displayed */
@@ -281,6 +282,14 @@ const store = new Vuex.Store({
                         commit('UPDATE_TEAM_FAILURE', { errors:  error.response.data });
                         return false;
                     }
+                    commit('SERVER_ERROR');
+                });
+        },
+        GET_TEAM_OVERVIEW: function({ commit, getters}){
+            axios.get('/api/team/'+ getters.getActiveTeam.id +'/overview')
+                .then((response) => {
+                    commit('GET_TEAM_OVERVIEW_SUCCESS', { overview: response.data.overview});
+                }, (error) => {
                     commit('SERVER_ERROR');
                 });
         },
@@ -624,6 +633,10 @@ const store = new Vuex.Store({
         UPDATE_TEAM_FAILURE: (state) => {
             Event.$emit('notify','error', 'Whoops', 'Team name couldn\'t be updated');
         },
+        GET_TEAM_OVERVIEW_SUCCESS:(state, {overview}) => {
+            /** set team overview */
+            state.teamOverview = overview;
+        },
         /***********************
          * Project Mutations
          **********************/
@@ -876,6 +889,22 @@ const store = new Vuex.Store({
             /** cast id to int **/
             let id = parseInt(projectId);
             return state.projects.find(project => project.id === id)
+        },
+        getProjectOverviewById: (state, getters) => (projectId) => {
+            /** cast id to int **/
+            let id = parseInt(projectId);
+            /** if teamOverview not set return blank overview */
+            if(!state.teamOverview){
+                return {complete:0, not_started:0, over_due:0, working_on:0};
+            }
+            /** find project in team overview */
+            let overview = state.teamOverview.find(overview => overview.project_id === id);
+            /** if project not found in team overview return blank overview */
+            if(!overview){
+                return {complete:0, not_started:0, over_due:0, working_on:0};
+            }
+            /** return overview **/
+            return  overview;
         },
         /***********************
          * Section Getters

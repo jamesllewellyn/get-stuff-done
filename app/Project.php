@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Project extends Model
 {
@@ -49,15 +50,30 @@ class Project extends Model
      * Get all project tasks.
      */
     public function getTasks(){
+        /** get all sections in project */
         $sections = Section::where('project_id',$this->id)->get();
+        /** pluck section ids from project sections */
         $sectionIds = $sections->pluck('id');
+        /** get and return all tasks which belong to array of sectionIds */
         return Task::whereIn('section_id',$sectionIds)->get();
     }
     /** format tasks into overview */
     public function getOverview(){
+        /** create new standard class for overview object*/
+        $overview = new \stdClass();
+        /** get all this projects tasks */
         $tasks = $this->getTasks();
-        foreach ($tasks as $task){
-            
-        }
+        /** add project id to overview */
+        $overview->project_id = $this->id;
+        /** count number of tasks that are complete */
+        $overview->complete = $tasks->where('status_id', 1)->count();
+        /** count number of tasks that are being worked on */
+        $overview->working_on = $tasks->where('status_id', 2)->count();
+        /** count number of tasks that are over due */
+        $overview->over_due = $tasks->where('due_date', '<', Carbon::now())->count();
+        /** count number of tasks that have bot been started */
+        $overview->not_started = $tasks->where('status_id', null)->count();
+        /** return overview collection */
+        return $overview;
     }
 }

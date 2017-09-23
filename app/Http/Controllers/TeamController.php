@@ -77,14 +77,17 @@ class TeamController extends Controller
      */
     public function overview(Team $team)
     {
+        /** create array from overview */
+        $teamOverview = [];
+        /** get all project in team */
         $projects = $team->projects()->get();
-
-        foreach ($projects as $project){
-            $tasks = $project->overview();
-            compile$tasks
-
+        /** loop each project and get its overview */
+        foreach ($projects as $project) {
+            /** add projects overview to team overview */
+            $teamOverview[] =  $project->getOverview();
         }
-
+        /** return response */
+        return response()->json(['success' => true, 'overview' =>$teamOverview]);
     }
 
     /**
