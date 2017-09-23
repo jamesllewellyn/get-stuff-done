@@ -617,10 +617,10 @@ const store = new Vuex.Store({
             state.user.current_team_id = tId;
             /** get current team */
             let team = state.teams.find(team => team.id === state.user.current_team_id);
-            /** take user to project in team */
-            Event.$emit('changePage', '/project/'+team.projects[0].id);
+            /** take user to team dashboard */
+            Event.$emit('changePage', '/team-dashboard/');
             /** display notification to user */
-            Event.$emit('notify','success', 'Success', 'Team has been switched');
+            Event.$emit('notify','success', 'Team has been switched', team.name);
         },
         UPDATE_TEAM_SUCCESS: (state, {team}) => {
             /** clear form errors */

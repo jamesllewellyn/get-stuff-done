@@ -68,6 +68,9 @@ const app = new Vue({
         });
         /** listen for notifications */
         Event.$on('notify', function(type, title, text) {
+            if (typeof text === 'undefined') {
+                text = '';
+            }
             this.$notify({
                 type: type,
                 title: title,
