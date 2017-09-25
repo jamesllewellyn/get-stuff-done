@@ -73,10 +73,9 @@
         </modal>
         <notifications :position="['top', 'right']" animation-type="velocity"   :width=350>
             <template slot="body" scope="props">
-                <div class="box notification">
+                <div class="notification box">
                     <article class="media">
                         <div class="media-left">
-                            {{--<img class="circle" src="https://api.adorable.io/avatars/100/jimmyl@laravel-tasks.png" alt="Image">--}}
                             <div class="circle notification-circle" :class="props.item.type">
                             </div>
                         </div>
@@ -89,19 +88,6 @@
                                     </span>
                                 </p>
                             </div>
-                            <nav class="level is-mobile">
-                                <div class="level-left">
-                                    <a class="level-item">
-                                        {{--<span class="icon is-small" @click="view()"><i class="fa fa-reply"></i></span>--}}
-                                    </a>
-                                    <!--<a class="level-item">-->
-                                    <!--<span class="icon is-small" ><i class="fa fa-retweet"></i></span>-->
-                                    <!--</a>-->
-                                    <a class="level-item">
-                                        {{--<span class="icon is-small" @click="markAsRead()"><i class="fa fa-check"></i></span>--}}
-                                    </a>
-                                </div>
-                            </nav>
                         </div>
                     </article>
                 </div>
