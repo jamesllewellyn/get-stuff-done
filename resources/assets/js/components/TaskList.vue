@@ -1,11 +1,14 @@
 <template>
     <tr >
         <td>
-            <span class="handle is-hidden-mobile" aria-hidden="true">: :</span>
-            <a v-if="!placeHolder" class="status" @click.prevent.stop="done()"><i class="fa fa-circle" aria-hidden="true" :class="status"></i> </a>
+            <!--<span class="handle is-hidden-mobile" aria-hidden="true">: :</span>-->
+            <a v-if="!placeHolder" class="status" data-tooltip="Complete Task" @click.prevent.stop="done()" :class="status_id != 1 ? 'tooltip is-tooltip-left' : ''">
+                <i class="fa fa-circle" aria-hidden="true" :class="status">
+                </i>
+            </a>
             <i v-else class="fa fa-circle" aria-hidden="true" :class="status"></i>
         </td>
-        <td class="is-centered-text" :class="placeHolder ? 'blokk' : ''">
+        <td class="is-centered-text tooltip is-tooltip-left" data-tooltip="View Task" :class="placeHolder ? 'blokk' : ''">
             <a v-if="!placeHolder" @click.prevent.stop="showTask()">{{name}}</a>
             <span v-else>{{name}}</span>
         </td>
@@ -94,6 +97,12 @@
                 }
             },
             done: function () {
+                /** if task is already completed display alert*/
+                if(this.status_id === 1){
+                    Event.$emit('notify','information', 'Information', 'Task is already flagged as compelted');
+                    /** end process */
+                    return false;
+                }
                 /** flag task as done **/
                 this.$store.dispatch('TASK_SET_TO_DONE', {projectId: this.project_id, sectionId: this.section_id, id: this.id});
             },
