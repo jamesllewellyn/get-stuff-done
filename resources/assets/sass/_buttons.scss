@@ -62,4 +62,7 @@
     background-color: $orange;
     color:#ffffff;
   }
+  &.is-square{
+    border-radius:0 !important;
+  }
 }

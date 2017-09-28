@@ -41,12 +41,12 @@
                         </p>
                         <p class="help is-danger" v-text="getErrors('handle')"></p>
                     </div>
-                    <div class="field">
-                        <label class="label">Avatar</label>
-                        <p class="control">
-                            <a class="button" @click="triggerEvent('toggleModal', 'uploadAvatar')">Set Avatar</a>
-                        </p>
-                    </div>
+                    <!--<div class="field">-->
+                        <!--<label class="label">Avatar</label>-->
+                        <!--<p class="control">-->
+                            <!--<a class="button" @click="triggerEvent('toggleModal', 'uploadAvatar')">Set Avatar</a>-->
+                        <!--</p>-->
+                    <!--</div>-->
                 </div>
             </aside>
         </transition>

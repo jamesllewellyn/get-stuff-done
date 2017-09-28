@@ -102,6 +102,10 @@ hr{
   cursor: -moz-grab;
   cursor: -webkit-grab;
 }
+/** Section **/
+.project-section{
+  padding-bottom: 1.5rem;
+}
 /** Task **/
 .task{
   z-index: 5;
@@ -188,20 +192,20 @@ hr{
 
 }
 
-//.notification{
-//  border: 1px solid #dbdbdb;
-//  padding:1em;
-//  margin-top:0.5em;
-//  &.warn {
-//    border-left: 5px solid #ff7739;
-//  }
-//  &.info {
-//    border-left: 5px solid $brand-info;
-//  }
-//  &.success {
-//    border-left: 5px solid $brand-success;
-//  }
-//}
+.lable{
+  border: 1px solid #dbdbdb;
+  padding:1em;
+  margin-top:0.5em;
+  &.warn {
+    border-left: 5px solid #ff7739;
+  }
+  &.info {
+    border-left: 5px solid $brand-info;
+  }
+  &.success {
+    border-left: 5px solid $brand-success;
+  }
+}
 /** Image Cropper */
 .vue-cropper{
   min-height:400px;

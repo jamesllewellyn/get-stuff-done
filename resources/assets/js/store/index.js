@@ -440,7 +440,18 @@ const store = new Vuex.Store({
                     /** all success mutation **/
                     commit('TASK_SET_TO_DONE_SUCCESS', {sectionId: sectionId, task: response.data.task });
                 })
-                .catch(function (error) {
+                .catch(function () {
+                    commit('SERVER_ERROR');
+                });
+        },
+        DELETE_TASK: function ({ commit, getters } ,{projectId, sectionId, id}) {
+            axios.delete('/api/team/' + getters.getActiveTeam.id + '/project/'+ projectId +'/section/' + sectionId + '/task/' + id)
+                .then(function (response) {
+                    console.log(response);
+                    /**  **/
+                    commit('DELETE_TASK_SUCCESS', {projectId: projectId, sectionId : sectionId , id : id, message : response.data.message});
+                })
+                .catch(function () {
                     commit('SERVER_ERROR');
                 });
         },
@@ -760,10 +771,17 @@ const store = new Vuex.Store({
             /** cast id to int **/
             let sId = parseInt(sectionId);
             let tId = parseInt(task.id);
-            let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
-            let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(tId);
-            /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx] = new Task(task);
+            if(state.project){
+                let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
+                if(sIdx >= 0) {
+                    let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(tId);
+                    /** update task to data array **/
+                    state.project.sections[sIdx].tasks[tIdx] = new Task(task);
+                }
+            }
+
+            /** notify myTasks component of update **/
+            Event.$emit('myTasks.updated');
             /** notify section component of update **/
             Event.$emit('section.'+sId+'.updated');
         },
@@ -780,14 +798,36 @@ const store = new Vuex.Store({
         TASK_SET_TO_DONE_SUCCESS: (state, { sectionId, task }) => {
             /** cast id to int **/
             let sId = parseInt(sectionId);
-            let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
-            let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(task.id);
-            /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+            if(state.project){
+                let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
+                if(sIdx >= 0){
+                    let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(task.id);
+                    /** update task to data array **/
+                    state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+                }
+            }
+            /** notify myTasks component of update **/
+            Event.$emit('myTasks.updated');
             /** notify section component of update **/
             Event.$emit('section.'+sId+'.updated');
             /** notify user of success **/
             Event.$emit('notify','success', 'Success', 'Task Completed');
+        },
+        DELETE_TASK_SUCCESS:(state, {projectId, sectionId, id, message}) => {
+            /** cast id to int **/
+            let sId = parseInt(sectionId);
+            /** get index of section **/
+            let sectionIndex = state.project.sections.map(section => section.id).indexOf(sId);
+            /** remove deleted section from state.project.sections **/
+            state.project.sections[sectionIndex].tasks = _.reject(state.project.sections[sectionIndex].tasks, function(task) { return task.id === id; });
+            /** notify section of update **/
+            Event.$emit('section.'+sId+'.updated');
+            /** notify project component of update **/
+            Event.$emit('project.'+projectId+'.updated');
+            /** close are you sure modal **/
+            Event.$emit('hideAreYouSure');
+            /** notify user of section delete **/
+            Event.$emit('notify','success', 'Success', message);
         },
         /***********************
          * Modal Mutations

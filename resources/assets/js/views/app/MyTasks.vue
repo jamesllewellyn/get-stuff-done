@@ -25,8 +25,8 @@
                                 </div>
                             </div>
                             <section v-for="section in project">
-                                <span class="tag is-light" v-text="section[0].section.name"></span>
-                                <table class="table task-table">
+                                <span class="tag is-light is-square" v-text="section[0].section.name"></span>
+                                <table class="table task-table is-fullwidth">
                                     <tbody>
                                     <task-list v-for="(task, key) in section"
                                                :key="key"
@@ -36,7 +36,9 @@
                                                :name="task.name"
                                                :status_id="task.status_id"
                                                :priority_id="task.priority_id"
-                                               :due_date="task.due_date">
+                                               :due_date="task.due_date"
+                                               :page="'myTasks'"
+                                    >
                                     </task-list>
                                     </tbody>
                                 </table>
@@ -107,19 +109,8 @@
             /** trigger toggle modal event */
             triggerEvent: function(eventName, payload){
                 Event.$emit(eventName, payload);
-            }
-        },
-        watch: {
-            user () {
-                /** wait for user data before fetching users tasks **/
-                if(this.user){
-                    this.$store.dispatch('GET_MY_TASKS');
-                }
             },
-            /** filter tasks */
-            filter(){
-                /** set my tasks page to loading state */
-                this.$store.commit('MY_TASKS_LOADING');
+            getTasks(){
                 /** show ajax loader */
                 switch (this.filter){
                     case 'All' :
@@ -134,13 +125,41 @@
                     default:
                         store.dispatch('GET_MY_TASKS');
                 }
+            },
+            /**
+             * use force update to re-render instance
+             * when section task object had been updated
+             * **/
+            forceUpdate(){
+                this.$forceUpdate();
+                this.getTasks()
+            }
+        },
+        watch: {
+            user () {
+                /** wait for user data before fetching users tasks **/
+                if(this.user){
+                    this.$store.dispatch('GET_MY_TASKS');
+                }
+            },
+            /** filter tasks */
+            filter(){
+                /** set my tasks page to loading state */
+                this.$store.commit('MY_TASKS_LOADING');
+                /** get tasks */
+                this.getTasks()
             }
         },
         mounted: function () {
+            let self = this;
             /** we have user data Call method to get users tasks */
             if(this.user){
                 this.$store.dispatch('GET_MY_TASKS');
             }
+            /** listen section updated */
+            Event.$on('myTasks.updated', function() {
+                self.forceUpdate();
+            });
         }
     }
 </script>

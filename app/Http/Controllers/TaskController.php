@@ -67,7 +67,8 @@ class TaskController extends Controller
             'due_time' => $request->get('due_time'),
             'sort_order' => $sortOrder,
             'priority_id' => $request->get('priority_id')['id'], /** vue-select component returns an object */
-            'note' => $request->get('note')
+            'note' => $request->get('note'),
+            'status_id' => null
         ]);
         /** assign task to users */
         if($request->has('users')){

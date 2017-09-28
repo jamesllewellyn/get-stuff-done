@@ -15,14 +15,24 @@
             </div>
         </div>
         <hr>
-        <div>
-            <div class="columns is-multiline" v-if="project">
-                <!--<transition-group tag="template" name="fade" mode="out-in">-->
-                    <project-section v-for="(section, key) in project.sections" :projectId="id" :id="section.id" :sectionName="section.name" :key="key" ></project-section>
+        <div class="columns">
+            <div class="column is-half">
+                <div v-if="project">
+                    <!--<transition-group tag="template" name="fade" mode="out-in">-->
+                    <project-section v-for="(section, key) in sectionsColumnOne" :projectId="id" :id="section.id" :sectionName="section.name" :key="key" ></project-section>
                     <project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>
-                <!--</transition-group>-->
+                    <!--</transition-group>-->
+                </div>
+            </div>
+            <div class="column is-half">
+                <div  v-if="project">
+                    <!--<transition-group tag="template" name="fade" mode="out-in">-->
+                    <project-section v-for="(section, key) in sectionsColumnTwo" :projectId="id" :id="section.id" :sectionName="section.name" :key="key" ></project-section>
+                    <!--</transition-group>-->
+                </div>
             </div>
         </div>
+
         <!--
         *************
         *  Modals
@@ -69,7 +79,21 @@
             project () { return this.$store.getters.getProject },
             TeamId: function(){
                 return store.getters.getActiveTeam.id;
-            }
+            },
+            sectionsColumnOne (){
+                if(!this.project){
+                    return false;
+                }
+                let halfLength = Math.ceil(_.size(this.project.sections) / 2);
+                return _.slice(this.project.sections,0,halfLength);
+            },
+            sectionsColumnTwo (){
+                if(!this.project){
+                    return false;
+                }
+                let halfLength = Math.ceil(_.size(this.project.sections) / 2);
+                return _.slice(this.project.sections,halfLength);
+            },
         },
         methods: {
             /** trigger event */
@@ -81,6 +105,14 @@
             },
             deleteProject(){
                 this.$store.dispatch('DELETE_PROJECT', {id: this.id})
+            },
+            /**
+             * use force update to re-render instance
+             * when section or task objects had been updated
+             * **/
+            forceUpdate(){
+                this.$forceUpdate();
+                this.$store.dispatch('GET_PROJECT', {id: this.id});
             }
         },
         watch: {
@@ -114,6 +146,10 @@
             /** listen for project delete event **/
             Event.$on('project.'+this.id+'.delete', function() {
                 self.deleteProject();
+            });
+            /** listen project updates */
+            Event.$on('project.'+this.id+'.updated', function() {
+                self.forceUpdate();
             });
         },
         beforeRouteUpdate (to, from, next) {

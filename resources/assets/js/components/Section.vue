@@ -1,5 +1,5 @@
 <template>
- <div class=" column is-half">
+ <div class="project-section">
      <div class="box" :class="placeHolder ? 'place-holder' : ''">
          <div class="level">
              <div class="level-left">
@@ -13,8 +13,8 @@
                  <i v-else class="fa fa-circle is-pulled-right align-vertical" aria-hidden="true"></i>
              </div>
          </div>
-         <table class="table place-holder" v-if="tasks.length > 0">
-             <tbody>
+         <table class="table is-fullwidth" v-if="tasks.length > 0">
+           <transition-group :tag="'tbody'" name="fade" mode="out-in">
                 <task-list v-for="(task, key) in tasks"
                            :key="key"
                            :project_id="projectId"
@@ -23,10 +23,9 @@
                            :name="task.name"
                            :status_id="task.status_id"
                            :priority_id="task.priority_id"
-                           :due_date="task.due_date"
-
-                ></task-list>
-             </tbody>
+                           :due_date="task.due_date">
+                </task-list>
+           </transition-group>
          </table>
          <notification v-else-if="!placeHolder" :status="'info'">This section currently has no tasks</notification>
          <!--<draggable v-if="tasks.length > 0" v-model="tasks" @start="drag=true" :options="{handle:'.handle'}"  @end="drag=false"  :element="'table'" class="table task-table" >-->

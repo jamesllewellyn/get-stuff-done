@@ -70,7 +70,7 @@ class Project extends Model
         /** count number of tasks that are being worked on */
         $overview->working_on = $tasks->where('status_id', 2)->count();
         /** count number of tasks that are over due */
-        $overview->over_due = $tasks->where('due_date', '<', Carbon::now())->count();
+        $overview->over_due = $tasks->where('status_id', '!=', 1)->where('due_date', '<', Carbon::now())->count();
         /** count number of tasks that have bot been started */
         $overview->not_started = $tasks->where('status_id', null)->count();
         /** return overview collection */

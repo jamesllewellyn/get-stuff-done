@@ -1896,7 +1896,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(157)("./" + name);
+            __webpack_require__(158)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -4946,8 +4946,8 @@ module.exports = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_Section__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_Task__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_Team__ = __webpack_require__(134);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_User__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_User__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(164);
 
 
 
@@ -5466,7 +5466,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id + '/done').then(function (response) {
                 /** all success mutation **/
                 commit('TASK_SET_TO_DONE_SUCCESS', { sectionId: sectionId, task: response.data.task });
-            }).catch(function (error) {
+            }).catch(function () {
+                commit('SERVER_ERROR');
+            });
+        },
+        DELETE_TASK: function DELETE_TASK(_ref52, _ref53) {
+            var commit = _ref52.commit,
+                getters = _ref52.getters;
+            var projectId = _ref53.projectId,
+                sectionId = _ref53.sectionId,
+                id = _ref53.id;
+
+            axios.delete('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id).then(function (response) {
+                console.log(response);
+                /**  **/
+                commit('DELETE_TASK_SUCCESS', { projectId: projectId, sectionId: sectionId, id: id, message: response.data.message });
+            }).catch(function () {
                 commit('SERVER_ERROR');
             });
         }
@@ -5475,8 +5490,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Sign up Mutations
          **********************/
-        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref52) {
-            var user = _ref52.user;
+        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref54) {
+            var user = _ref54.user;
 
             /** add user */
             state.user = user;
@@ -5484,8 +5499,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             window.location = '/home';
             // Event.$emit('create-team-page','set-up-team');
         },
-        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref53) {
-            var errors = _ref53.errors;
+        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref55) {
+            var errors = _ref55.errors;
 
             /** add form errors */
             state.formErrors = errors;
@@ -5501,27 +5516,27 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * User Mutations
          **********************/
-        SET_USER: function SET_USER(state, _ref54) {
-            var user = _ref54.user;
+        SET_USER: function SET_USER(state, _ref56) {
+            var user = _ref56.user;
 
             state.user = user;
         },
         ADD_USER_AVATAR_SUCCESS: function ADD_USER_AVATAR_SUCCESS(state) {
             Event.$emit('notify', 'success', 'Success', 'Your avatar has been updated');
         },
-        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref55) {
-            var user = _ref55.user;
+        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref57) {
+            var user = _ref57.user;
 
             state.user = user;
         },
-        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref56) {
-            var errors = _ref56.errors;
+        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref58) {
+            var errors = _ref58.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref57) {
-            var tasks = _ref57.tasks;
+        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref59) {
+            var tasks = _ref59.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5534,8 +5549,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear loading state on myTasks page */
             state.myTasksLoading = false;
         },
-        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref58) {
-            var tasks = _ref58.tasks;
+        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref60) {
+            var tasks = _ref60.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5548,8 +5563,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear loading state on myTasks page */
             state.myTasksLoading = false;
         },
-        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref59) {
-            var tasks = _ref59.tasks;
+        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref61) {
+            var tasks = _ref61.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5568,13 +5583,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         MY_TASKS_LOADING_CLEAR: function MY_TASKS_LOADING_CLEAR(state) {
             state.myTasksLoading = false;
         },
-        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref60) {
-            var notifications = _ref60.notifications;
+        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref62) {
+            var notifications = _ref62.notifications;
 
             state.notifications = notifications;
         },
-        NOTIFICATION_ADD: function NOTIFICATION_ADD(state, _ref61) {
-            var notification = _ref61.notification;
+        NOTIFICATION_ADD: function NOTIFICATION_ADD(state, _ref63) {
+            var notification = _ref63.notification;
 
             notification = new __WEBPACK_IMPORTED_MODULE_6__core_Notification__["a" /* default */](notification);
             state.notifications.unshift(notification);
@@ -5583,9 +5598,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         USER_CLEAR_INBOX_SUCCESS: function USER_CLEAR_INBOX_SUCCESS(state) {
             state.notifications = {};
         },
-        TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref62) {
-            var teamId = _ref62.teamId,
-                projectId = _ref62.projectId;
+        TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref64) {
+            var teamId = _ref64.teamId,
+                projectId = _ref64.projectId;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5594,11 +5609,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** take user to project page */
             Event.$emit('changePage', '/project/' + projectId);
         },
-        TAKE_USER_TO_TASK: function TAKE_USER_TO_TASK(state, _ref63) {
-            var teamId = _ref63.teamId,
-                projectId = _ref63.projectId,
-                sectionId = _ref63.sectionId,
-                task = _ref63.task;
+        TAKE_USER_TO_TASK: function TAKE_USER_TO_TASK(state, _ref65) {
+            var teamId = _ref65.teamId,
+                projectId = _ref65.projectId,
+                sectionId = _ref65.sectionId,
+                task = _ref65.task;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5614,8 +5629,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Team Mutations
          **********************/
-        SET_TEAM_LIST: function SET_TEAM_LIST(state, _ref64) {
-            var teams = _ref64.teams;
+        SET_TEAM_LIST: function SET_TEAM_LIST(state, _ref66) {
+            var teams = _ref66.teams;
 
             /** clear current teams **/
             state.teams = [];
@@ -5624,13 +5639,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
             });
         },
-        SET_ACTIVE_TEAM: function SET_ACTIVE_TEAM(state, _ref65) {
-            var team = _ref65.team;
+        SET_ACTIVE_TEAM: function SET_ACTIVE_TEAM(state, _ref67) {
+            var team = _ref67.team;
 
             state.user.current_team_id = team.id;
         },
-        ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref66) {
-            var team = _ref66.team;
+        ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref68) {
+            var team = _ref68.team;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5646,15 +5661,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 }
             });
         },
-        ADD_NEW_TEAM_FAILURE: function ADD_NEW_TEAM_FAILURE(state, _ref67) {
-            var errors = _ref67.errors;
+        ADD_NEW_TEAM_FAILURE: function ADD_NEW_TEAM_FAILURE(state, _ref69) {
+            var errors = _ref69.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        ADD_TEAM_MEMBER_SUCCESS: function ADD_TEAM_MEMBER_SUCCESS(state, _ref68) {
-            var message = _ref68.message,
-                user = _ref68.user;
+        ADD_TEAM_MEMBER_SUCCESS: function ADD_TEAM_MEMBER_SUCCESS(state, _ref70) {
+            var message = _ref70.message,
+                user = _ref70.user;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5665,26 +5680,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** send user success message */
             Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_PENDING_MEMBER_SUCCESS: function ADD_TEAM_PENDING_MEMBER_SUCCESS(state, _ref69) {
-            var message = _ref69.message;
+        ADD_TEAM_PENDING_MEMBER_SUCCESS: function ADD_TEAM_PENDING_MEMBER_SUCCESS(state, _ref71) {
+            var message = _ref71.message;
 
             /** send user success message */
             Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref70) {
-            var message = _ref70.message;
+        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref72) {
+            var message = _ref72.message;
 
             /** send user error message */
             Event.$emit('notify', 'error', 'Whoops', message);
         },
-        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref71) {
-            var errors = _ref71.errors;
+        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref73) {
+            var errors = _ref73.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref72) {
-            var teamId = _ref72.teamId;
+        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref74) {
+            var teamId = _ref74.teamId;
 
             /** parse id to int */
             var tId = parseInt(teamId);
@@ -5699,8 +5714,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** display notification to user */
             Event.$emit('notify', 'success', 'Team has been switched', team.name);
         },
-        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref73) {
-            var team = _ref73.team;
+        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref75) {
+            var team = _ref75.team;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5714,8 +5729,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_TEAM_FAILURE: function UPDATE_TEAM_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Team name couldn\'t be updated');
         },
-        GET_TEAM_OVERVIEW_SUCCESS: function GET_TEAM_OVERVIEW_SUCCESS(state, _ref74) {
-            var overview = _ref74.overview;
+        GET_TEAM_OVERVIEW_SUCCESS: function GET_TEAM_OVERVIEW_SUCCESS(state, _ref76) {
+            var overview = _ref76.overview;
 
             /** set team overview */
             state.teamOverview = overview;
@@ -5723,8 +5738,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Project Mutations
          **********************/
-        SET_PROJECT: function SET_PROJECT(state, _ref75) {
-            var project = _ref75.project;
+        SET_PROJECT: function SET_PROJECT(state, _ref77) {
+            var project = _ref77.project;
 
             state.project = project;
             var idx = 0;
@@ -5736,8 +5751,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         CLEAR_PROJECT: function CLEAR_PROJECT(state) {
             state.project = null;
         },
-        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref76) {
-            var project = _ref76.project;
+        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref78) {
+            var project = _ref78.project;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5750,14 +5765,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New project has been created');
         },
-        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref77) {
-            var errors = _ref77.errors;
+        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref79) {
+            var errors = _ref79.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref78) {
-            var project = _ref78.project;
+        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref80) {
+            var project = _ref80.project;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5775,10 +5790,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_PROJECT_FAILURE: function UPDATE_PROJECT_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Project name couldn\'t be updated');
         },
-        DELETE_PROJECT_SUCCESS: function DELETE_PROJECT_SUCCESS(state, _ref79) {
-            var teamId = _ref79.teamId,
-                id = _ref79.id,
-                message = _ref79.message;
+        DELETE_PROJECT_SUCCESS: function DELETE_PROJECT_SUCCESS(state, _ref81) {
+            var teamId = _ref81.teamId,
+                id = _ref81.id,
+                message = _ref81.message;
 
             /** cast id to int **/
             var pId = parseInt(id);
@@ -5800,22 +5815,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Section Mutations
          **********************/
-        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref80) {
-            var section = _ref80.section;
+        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref82) {
+            var section = _ref82.section;
 
             /** add section to currently loaded project **/
             state.project.sections.push(new __WEBPACK_IMPORTED_MODULE_2__core_Section__["a" /* default */](section));
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New section has been created');
         },
-        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref81) {
-            var errors = _ref81.errors;
+        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref83) {
+            var errors = _ref83.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref82) {
-            var section = _ref82.section;
+        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref84) {
+            var section = _ref84.section;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5829,9 +5844,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_SECTION_FAILURE: function UPDATE_SECTION_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Section name couldn\'t be updated');
         },
-        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref83) {
-            var id = _ref83.id,
-                message = _ref83.message;
+        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref85) {
+            var id = _ref85.id,
+                message = _ref85.message;
 
             /** cast id to int **/
             var sId = parseInt(id);
@@ -5852,15 +5867,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear any form errors **/
             state.formErrors = {};
         },
-        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref84) {
-            var task = _ref84.task;
+        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref86) {
+            var task = _ref86.task;
 
             /** add task to active task state **/
             state.task = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
         },
-        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref85) {
-            var sectionId = _ref85.sectionId,
-                task = _ref85.task;
+        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref87) {
+            var sectionId = _ref87.sectionId,
+                task = _ref87.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId);
@@ -5875,41 +5890,48 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
-        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref86) {
-            var errors = _ref86.errors;
+        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref88) {
+            var errors = _ref88.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref87) {
-            var sectionId = _ref87.sectionId,
-                task = _ref87.task;
+        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref89) {
+            var sectionId = _ref89.sectionId,
+                task = _ref89.task;
 
             /** clear any form errors **/
             state.formErrors = {};
             /** cast id to int **/
             var sId = parseInt(sectionId);
             var tId = parseInt(task.id);
-            var sIdx = state.project.sections.map(function (section) {
-                return section.id;
-            }).indexOf(sId);
-            var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
-                return task.id;
-            }).indexOf(tId);
-            /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
+            if (state.project) {
+                var sIdx = state.project.sections.map(function (section) {
+                    return section.id;
+                }).indexOf(sId);
+                if (sIdx >= 0) {
+                    var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
+                        return task.id;
+                    }).indexOf(tId);
+                    /** update task to data array **/
+                    state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
+                }
+            }
+
+            /** notify myTasks component of update **/
+            Event.$emit('myTasks.updated');
             /** notify section component of update **/
             Event.$emit('section.' + sId + '.updated');
         },
-        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref88) {
-            var errors = _ref88.errors;
+        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref90) {
+            var errors = _ref90.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref89) {
-            var section = _ref89.section,
-                tasks = _ref89.tasks;
+        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref91) {
+            var section = _ref91.section,
+                tasks = _ref91.tasks;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5920,35 +5942,66 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 return task.sort_order;
             });
         },
-        TASK_SET_TO_DONE_SUCCESS: function TASK_SET_TO_DONE_SUCCESS(state, _ref90) {
-            var sectionId = _ref90.sectionId,
-                task = _ref90.task;
+        TASK_SET_TO_DONE_SUCCESS: function TASK_SET_TO_DONE_SUCCESS(state, _ref92) {
+            var sectionId = _ref92.sectionId,
+                task = _ref92.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId);
-            var sIdx = state.project.sections.map(function (section) {
-                return section.id;
-            }).indexOf(sId);
-            var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
-                return task.id;
-            }).indexOf(task.id);
-            /** update task to data array **/
-            state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+            if (state.project) {
+                var sIdx = state.project.sections.map(function (section) {
+                    return section.id;
+                }).indexOf(sId);
+                if (sIdx >= 0) {
+                    var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
+                        return task.id;
+                    }).indexOf(task.id);
+                    /** update task to data array **/
+                    state.project.sections[sIdx].tasks[tIdx].status_id = 1;
+                }
+            }
+            /** notify myTasks component of update **/
+            Event.$emit('myTasks.updated');
             /** notify section component of update **/
             Event.$emit('section.' + sId + '.updated');
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'Task Completed');
         },
+        DELETE_TASK_SUCCESS: function DELETE_TASK_SUCCESS(state, _ref93) {
+            var projectId = _ref93.projectId,
+                sectionId = _ref93.sectionId,
+                id = _ref93.id,
+                message = _ref93.message;
+
+            /** cast id to int **/
+            var sId = parseInt(sectionId);
+            /** get index of section **/
+            var sectionIndex = state.project.sections.map(function (section) {
+                return section.id;
+            }).indexOf(sId);
+            /** remove deleted section from state.project.sections **/
+            state.project.sections[sectionIndex].tasks = _.reject(state.project.sections[sectionIndex].tasks, function (task) {
+                return task.id === id;
+            });
+            /** notify section of update **/
+            Event.$emit('section.' + sId + '.updated');
+            /** notify project component of update **/
+            Event.$emit('project.' + projectId + '.updated');
+            /** close are you sure modal **/
+            Event.$emit('hideAreYouSure');
+            /** notify user of section delete **/
+            Event.$emit('notify', 'success', 'Success', message);
+        },
         /***********************
          * Modal Mutations
          **********************/
-        ADD_MODAL: function ADD_MODAL(state, _ref91) {
-            var name = _ref91.name;
+        ADD_MODAL: function ADD_MODAL(state, _ref94) {
+            var name = _ref94.name;
 
             state.modals.push({ name: name, isVisible: false, isLoading: false });
         },
-        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref92) {
-            var name = _ref92.name;
+        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref95) {
+            var name = _ref95.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -5957,16 +6010,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear all form errors **/
             state.formErrors = {};
         },
-        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref93) {
-            var name = _ref93.name;
+        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref96) {
+            var name = _ref96.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isLoading = true;
         },
-        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref94) {
-            var name = _ref94.name;
+        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref97) {
+            var name = _ref97.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -6093,8 +6146,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             return false;
         },
         getSectionById: function getSectionById(state, getters) {
-            return function (_ref95) {
-                var sectionId = _ref95.sectionId;
+            return function (_ref98) {
+                var sectionId = _ref98.sectionId;
 
                 /** cast id to int **/
                 var sId = parseInt(sectionId);
@@ -6116,9 +6169,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         /** returns a task **/
         getTaskById: function getTaskById(state, getters) {
-            return function (_ref96) {
-                var sectionId = _ref96.sectionId,
-                    id = _ref96.id;
+            return function (_ref99) {
+                var sectionId = _ref99.sectionId,
+                    id = _ref99.id;
 
                 /** cast ids to int **/
                 var sId = parseInt(sectionId);
@@ -6996,7 +7049,7 @@ var index_esm = {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(142);
+var normalizeHeaderName = __webpack_require__(143);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -7087,7 +7140,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(141)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(142)))
 
 /***/ }),
 /* 6 */
@@ -7256,9 +7309,9 @@ var Section = function () {
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(202),
+  __webpack_require__(204),
   /* template */
-  __webpack_require__(203),
+  __webpack_require__(205),
   /* styles */
   null,
   /* scopeId */
@@ -7370,12 +7423,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(2);
-var settle = __webpack_require__(143);
-var buildURL = __webpack_require__(145);
-var parseHeaders = __webpack_require__(146);
-var isURLSameOrigin = __webpack_require__(147);
+var settle = __webpack_require__(144);
+var buildURL = __webpack_require__(146);
+var parseHeaders = __webpack_require__(147);
+var isURLSameOrigin = __webpack_require__(148);
 var createError = __webpack_require__(14);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(148);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(149);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -7471,7 +7524,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(149);
+      var cookies = __webpack_require__(150);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -7553,7 +7606,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(144);
+var enhanceError = __webpack_require__(145);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -31333,6 +31386,46 @@ var Team = function Team(data) {
 
 /***/ }),
 /* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(201),
+  /* template */
+  __webpack_require__(202),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/resources/assets/js/components/DropDownButton.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] DropDownButton.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-42fdf3ae", Component.options)
+  } else {
+    hotAPI.reload("data-v-42fdf3ae", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31341,16 +31434,16 @@ var Team = function Team(data) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_notification__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_notification__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_notification___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_notification__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_velocity_animate__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_velocity_animate__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_velocity_animate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_velocity_animate__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_laravel_echo__);
 
-window._ = __webpack_require__(137);
+window._ = __webpack_require__(138);
 
-window.axios = __webpack_require__(138);
+window.axios = __webpack_require__(139);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios = axios;
@@ -31386,7 +31479,7 @@ if (token) {
 
 
 
-window.Pusher = __webpack_require__(161);
+window.Pusher = __webpack_require__(162);
 
 window.Echo = new __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default.a({
     broadcaster: 'pusher',
@@ -31396,7 +31489,7 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default.a({
 });
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -48488,13 +48581,13 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default.a({
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(11)(module)))
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(139);
+module.exports = __webpack_require__(140);
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48502,7 +48595,7 @@ module.exports = __webpack_require__(139);
 
 var utils = __webpack_require__(2);
 var bind = __webpack_require__(12);
-var Axios = __webpack_require__(140);
+var Axios = __webpack_require__(141);
 var defaults = __webpack_require__(5);
 
 /**
@@ -48537,14 +48630,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(16);
-axios.CancelToken = __webpack_require__(155);
+axios.CancelToken = __webpack_require__(156);
 axios.isCancel = __webpack_require__(15);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(156);
+axios.spread = __webpack_require__(157);
 
 module.exports = axios;
 
@@ -48553,7 +48646,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48561,10 +48654,10 @@ module.exports.default = axios;
 
 var defaults = __webpack_require__(5);
 var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(150);
-var dispatchRequest = __webpack_require__(151);
-var isAbsoluteURL = __webpack_require__(153);
-var combineURLs = __webpack_require__(154);
+var InterceptorManager = __webpack_require__(151);
+var dispatchRequest = __webpack_require__(152);
+var isAbsoluteURL = __webpack_require__(154);
+var combineURLs = __webpack_require__(155);
 
 /**
  * Create a new instance of Axios
@@ -48645,7 +48738,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -48835,7 +48928,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48854,7 +48947,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48886,7 +48979,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48912,7 +49005,7 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48987,7 +49080,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49031,7 +49124,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49106,7 +49199,7 @@ module.exports = (
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49149,7 +49242,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49209,7 +49302,7 @@ module.exports = (
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49268,14 +49361,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(2);
-var transformData = __webpack_require__(152);
+var transformData = __webpack_require__(153);
 var isCancel = __webpack_require__(15);
 var defaults = __webpack_require__(5);
 
@@ -49354,7 +49447,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49381,7 +49474,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49402,7 +49495,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49421,7 +49514,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49485,7 +49578,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49519,7 +49612,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -49768,10 +49861,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 157;
+webpackContext.id = 158;
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -50784,7 +50877,7 @@ module.exports = function listToStyles (parentId, list) {
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS.org (1.5.0). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
@@ -55562,7 +55655,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports) {
 
 var asyncGenerator = function () {
@@ -56348,7 +56441,7 @@ var Echo = function () {
 module.exports = Echo;
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -60486,7 +60579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60506,7 +60599,7 @@ var User = function User() {
 /* harmony default export */ __webpack_exports__["a"] = (User);
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60547,7 +60640,7 @@ var Notification = function () {
 /* harmony default export */ __webpack_exports__["a"] = (Notification);
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -60587,7 +60680,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -60631,7 +60724,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60653,7 +60746,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -60661,7 +60754,7 @@ var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(200),
   /* template */
-  __webpack_require__(201),
+  __webpack_require__(203),
   /* styles */
   null,
   /* scopeId */
@@ -60693,15 +60786,15 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(204),
+  __webpack_require__(206),
   /* template */
-  __webpack_require__(205),
+  __webpack_require__(207),
   /* styles */
   null,
   /* scopeId */
@@ -60723,46 +60816,6 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-1c7753d1", Component.options)
   } else {
     hotAPI.reload("data-v-1c7753d1", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 169 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(222),
-  /* template */
-  __webpack_require__(223),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/resources/assets/js/components/DropDownButton.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] DropDownButton.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-42fdf3ae", Component.options)
-  } else {
-    hotAPI.reload("data-v-42fdf3ae", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -61158,7 +61211,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(210),
+  __webpack_require__(212),
   /* template */
   __webpack_require__(225),
   /* styles */
@@ -61206,7 +61259,7 @@ module.exports = __webpack_require__(253);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_routes__ = __webpack_require__(174);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_index__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_modals_AddProject_vue__ = __webpack_require__(232);
@@ -61217,7 +61270,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue__ = __webpack_require__(238);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_AreYouSureModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Task_vue__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Task_vue__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_Task_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Profile_vue__ = __webpack_require__(241);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_Profile_vue__);
@@ -61341,7 +61394,7 @@ var routes = [{
     component: __webpack_require__(181)
 }, {
     path: '/over-due/',
-    component: __webpack_require__(207)
+    component: __webpack_require__(209)
 }, { path: '/project/:id', component: __webpack_require__(171),
     children: [{
         path: '',
@@ -61789,7 +61842,7 @@ var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(182),
   /* template */
-  __webpack_require__(206),
+  __webpack_require__(208),
   /* styles */
   null,
   /* scopeId */
@@ -61829,16 +61882,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuedraggable__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuedraggable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Task_vue__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Task_vue__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Task_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue__ = __webpack_require__(168);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Modal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Notification_vue__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Notification_vue__ = __webpack_require__(169);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Notification_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Notification_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_multiselect__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vue_multiselect__);
+//
+//
 //
 //
 //
@@ -61950,20 +62005,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         /** trigger toggle modal event */
         triggerEvent: function triggerEvent(eventName, payload) {
             Event.$emit(eventName, payload);
-        }
-    },
-    watch: {
-        user: function user() {
-            /** wait for user data before fetching users tasks **/
-            if (this.user) {
-                this.$store.dispatch('GET_MY_TASKS');
-            }
         },
-
-        /** filter tasks */
-        filter: function filter() {
-            /** set my tasks page to loading state */
-            this.$store.commit('MY_TASKS_LOADING');
+        getTasks: function getTasks() {
             /** show ajax loader */
             switch (this.filter) {
                 case 'All':
@@ -61978,13 +62021,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 default:
                     __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_TASKS');
             }
+        },
+
+        /**
+         * use force update to re-render instance
+         * when section task object had been updated
+         * **/
+        forceUpdate: function forceUpdate() {
+            this.$forceUpdate();
+            this.getTasks();
+        }
+    },
+    watch: {
+        user: function user() {
+            /** wait for user data before fetching users tasks **/
+            if (this.user) {
+                this.$store.dispatch('GET_MY_TASKS');
+            }
+        },
+
+        /** filter tasks */
+        filter: function filter() {
+            /** set my tasks page to loading state */
+            this.$store.commit('MY_TASKS_LOADING');
+            /** get tasks */
+            this.getTasks();
         }
     },
     mounted: function mounted() {
+        var self = this;
         /** we have user data Call method to get users tasks */
         if (this.user) {
             this.$store.dispatch('GET_MY_TASKS');
         }
+        /** listen section updated */
+        Event.$on('myTasks.updated', function () {
+            self.forceUpdate();
+        });
     }
 });
 
@@ -63497,7 +63570,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**!
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_Task__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_multiselect__);
@@ -64014,7 +64087,7 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BasicInput__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BasicInput__ = __webpack_require__(167);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SingleInput__ = __webpack_require__(191);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SingleInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SingleInput__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__WrapperInput__ = __webpack_require__(194);
@@ -64161,7 +64234,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BasicInput__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BasicInput__ = __webpack_require__(167);
 //
 //
 //
@@ -64244,7 +64317,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BasicInput__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BasicInput__ = __webpack_require__(167);
 //
 //
 //
@@ -66883,6 +66956,8 @@ if (false) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue__);
 //
 //
 //
@@ -66902,9 +66977,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    components: { dropDownButton: __WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue___default.a },
     props: {
         project_id: {
             type: Number,
@@ -66938,6 +67018,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         placeHolder: {
             type: Boolean,
             default: false
+        },
+        page: {
+            type: String,
+            default: 'project'
         }
     },
     computed: {
@@ -66961,17 +67045,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         status: function status() {
             var now = moment();
             /** todo: clean this up **/
-            if (!this.status_id) {
-                return '';
-            }
             if (this.status_id === 1) {
                 return 'is-done';
             }
-            if (this.status_id === 2) {
-                return 'is-started';
-            }
             if (moment(this.due_date).isBefore(now)) {
                 return 'is-over-due';
+            }
+            if (!this.status_id) {
+                return '';
+            }
+            if (this.status_id === 2) {
+                return 'is-started';
             }
         }
     },
@@ -66984,12 +67068,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         done: function done() {
             /** if task is already completed display alert*/
             if (this.status_id === 1) {
-                Event.$emit('notify', 'information', 'Information', 'Task is already flagged as compelted');
+                Event.$emit('notify', 'information', 'Information', 'Task is already flagged as completed');
                 /** end process */
                 return false;
             }
             /** flag task as done **/
             this.$store.dispatch('TASK_SET_TO_DONE', { projectId: this.project_id, sectionId: this.section_id, id: this.id });
+        },
+        deleteTask: function deleteTask() {
+            this.$store.dispatch('DELETE_TASK', { projectId: this.project_id, sectionId: this.section_id, id: this.id });
         },
         forceUpdate: function forceUpdate() {
             this.$forceUpdate();
@@ -67001,11 +67088,134 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Event.$on('task.' + this.id + '.updated', function () {
             self.forceUpdate();
         });
+        /** listen for task delete event **/
+        Event.$on('task.' + this.id + '.delete', function () {
+            self.deleteTask();
+        });
     }
 });
 
 /***/ }),
 /* 201 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            isActive: false
+        };
+    },
+
+    props: {
+        boarder: {
+            type: Boolean,
+            default: true
+        },
+        dropdowns: {
+            type: Array,
+            required: true
+        }
+    },
+    methods: {
+        /** trigger event */
+        triggerEvent: function triggerEvent(object) {
+            if (object.areYouSure) {
+                Event.$emit('showAreYouSure', object.action, object.event);
+                return true;
+            }
+            Event.$emit(object.event);
+        },
+        showDropdown: function showDropdown() {
+            this.isActive = true;
+            this.$refs.dropdown.focus();
+        },
+        hideDropdown: function hideDropdown() {
+            this.isActive = false;
+        }
+    }
+});
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "dropdown is-hoverable"
+  }, [_c('div', {
+    staticClass: "dropdown-trigger"
+  }, [_c('button', {
+    staticClass: "button",
+    class: !_vm.boarder ? 'has-no-boarder' : '',
+    attrs: {
+      "aria-haspopup": "true",
+      "aria-controls": "dropdown-menu"
+    }
+  }, [_vm._m(0)])]), _vm._v(" "), _c('div', {
+    ref: "dropdown",
+    staticClass: "dropdown-menu",
+    attrs: {
+      "id": "dropdown-menu",
+      "role": "menu"
+    },
+    on: {
+      "blur": _vm.hideDropdown
+    }
+  }, [_c('div', {
+    staticClass: "dropdown-content"
+  }, _vm._l((_vm.dropdowns), function(dropdown) {
+    return _c('a', {
+      staticClass: "dropdown-item",
+      on: {
+        "click": function($event) {
+          _vm.triggerEvent(dropdown)
+        }
+      }
+    }, [_vm._v("\n                   " + _vm._s(dropdown.text) + "\n                ")])
+  }))])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-angle-down",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-42fdf3ae", module.exports)
+  }
+}
+
+/***/ }),
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -67054,7 +67264,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v(_vm._s(_vm.priority) + " ")]), _vm._v(" "), _c('td', {
     staticClass: "is-centered-text",
     class: _vm.placeHolder ? 'blokk' : ''
-  }, [_vm._v(_vm._s(_vm.dueDateFormatted))])])
+  }, [_vm._v(_vm._s(_vm.dueDateFormatted))]), _vm._v(" "), (!_vm.placeHolder && _vm.page == 'project') ? _c('td', {
+    staticClass: "is-centered-text"
+  }, [_c('drop-down-button', {
+    attrs: {
+      "boarder": false,
+      "dropdowns": [{
+        text: 'Delete Task',
+        event: 'task.' + _vm.id + '.delete',
+        action: 'delete this task',
+        areYouSure: true
+      }]
+    }
+  })], 1) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -67065,7 +67287,7 @@ if (false) {
 }
 
 /***/ }),
-/* 202 */
+/* 204 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67119,7 +67341,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 203 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -67165,7 +67387,7 @@ if (false) {
 }
 
 /***/ }),
-/* 204 */
+/* 206 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67186,12 +67408,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 205 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "notification",
+    staticClass: "lable",
     class: _vm.status
   }, [_c('p', [_vm._t("default")], 2)])
 },staticRenderFns: []}
@@ -67204,7 +67426,7 @@ if (false) {
 }
 
 /***/ }),
-/* 206 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -67263,12 +67485,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })])]), _vm._v(" "), _vm._l((project), function(section) {
       return _c('section', [_c('span', {
-        staticClass: "tag is-light",
+        staticClass: "tag is-light is-square",
         domProps: {
           "textContent": _vm._s(section[0].section.name)
         }
       }), _vm._v(" "), _c('table', {
-        staticClass: "table task-table"
+        staticClass: "table task-table is-fullwidth"
       }, [_c('tbody', _vm._l((section), function(task, key) {
         return _c('task-list', {
           key: key,
@@ -67279,7 +67501,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             "name": task.name,
             "status_id": task.status_id,
             "priority_id": task.priority_id,
-            "due_date": task.due_date
+            "due_date": task.due_date,
+            "page": 'myTasks'
           }
         })
       }))])])
@@ -67301,15 +67524,15 @@ if (false) {
 }
 
 /***/ }),
-/* 207 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(208),
+  __webpack_require__(210),
   /* template */
-  __webpack_require__(209),
+  __webpack_require__(211),
   /* styles */
   null,
   /* scopeId */
@@ -67341,7 +67564,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 208 */
+/* 210 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67349,13 +67572,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuedraggable__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuedraggable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Task_vue__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Task_vue__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Task_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Task_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue__ = __webpack_require__(168);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_TaskList_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Modal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Notification_vue__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Notification_vue__ = __webpack_require__(169);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Notification_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Notification_vue__);
 //
 //
@@ -67446,7 +67669,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 209 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -67533,24 +67756,34 @@ if (false) {
 }
 
 /***/ }),
-/* 210 */
+/* 212 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_modals_AddSection_vue__ = __webpack_require__(211);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_modals_AddSection_vue__ = __webpack_require__(213);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_modals_AddSection_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_modals_AddSection_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_modals_AddTask_vue__ = __webpack_require__(214);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_modals_AddTask_vue__ = __webpack_require__(216);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_modals_AddTask_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_modals_AddTask_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_modals_UpdateTask_vue__ = __webpack_require__(217);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_modals_UpdateTask_vue__ = __webpack_require__(219);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_modals_UpdateTask_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_modals_UpdateTask_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Section__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Section__ = __webpack_require__(222);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Section___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Section__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_DropDownButton_vue__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_DropDownButton_vue__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_DropDownButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_DropDownButton_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Modal_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_Modal_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -67626,6 +67859,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         TeamId: function TeamId() {
             return __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].getters.getActiveTeam.id;
+        },
+        sectionsColumnOne: function sectionsColumnOne() {
+            if (!this.project) {
+                return false;
+            }
+            var halfLength = Math.ceil(_.size(this.project.sections) / 2);
+            return _.slice(this.project.sections, 0, halfLength);
+        },
+        sectionsColumnTwo: function sectionsColumnTwo() {
+            if (!this.project) {
+                return false;
+            }
+            var halfLength = Math.ceil(_.size(this.project.sections) / 2);
+            return _.slice(this.project.sections, halfLength);
         }
     },
     methods: {
@@ -67638,6 +67885,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteProject: function deleteProject() {
             this.$store.dispatch('DELETE_PROJECT', { id: this.id });
+        },
+
+        /**
+         * use force update to re-render instance
+         * when section or task objects had been updated
+         * **/
+        forceUpdate: function forceUpdate() {
+            this.$forceUpdate();
+            this.$store.dispatch('GET_PROJECT', { id: this.id });
         }
     },
     watch: {
@@ -67673,6 +67929,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Event.$on('project.' + this.id + '.delete', function () {
             self.deleteProject();
         });
+        /** listen project updates */
+        Event.$on('project.' + this.id + '.updated', function () {
+            self.forceUpdate();
+        });
     },
     beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
         this.$store.commit('CLEAR_PROJECT');
@@ -67681,15 +67941,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 211 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(212),
+  __webpack_require__(214),
   /* template */
-  __webpack_require__(213),
+  __webpack_require__(215),
   /* styles */
   null,
   /* scopeId */
@@ -67721,7 +67981,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 212 */
+/* 214 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67785,7 +68045,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 213 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -67847,15 +68107,15 @@ if (false) {
 }
 
 /***/ }),
-/* 214 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(215),
+  __webpack_require__(217),
   /* template */
-  __webpack_require__(216),
+  __webpack_require__(218),
   /* styles */
   null,
   /* scopeId */
@@ -67887,14 +68147,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 215 */
+/* 217 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_Task__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_bulma_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_multiselect__);
@@ -68005,7 +68265,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 216 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -68198,15 +68458,15 @@ if (false) {
 }
 
 /***/ }),
-/* 217 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(218),
+  __webpack_require__(220),
   /* template */
-  __webpack_require__(219),
+  __webpack_require__(221),
   /* styles */
   null,
   /* scopeId */
@@ -68238,13 +68498,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 218 */
+/* 220 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_bulma_datepicker__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_bulma_datepicker__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_bulma_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_bulma_datepicker__);
 //
 //
@@ -68351,7 +68611,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 219 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -68537,13 +68797,13 @@ if (false) {
 }
 
 /***/ }),
-/* 220 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(221),
+  __webpack_require__(223),
   /* template */
   __webpack_require__(224),
   /* styles */
@@ -68577,19 +68837,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 221 */
+/* 223 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TaskList_vue__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TaskList_vue__ = __webpack_require__(168);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TaskList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__TaskList_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Notification_vue__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Notification_vue__ = __webpack_require__(169);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Notification_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Notification_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__DropDownButton_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(3);
-//
 //
 //
 //
@@ -68722,131 +68981,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 222 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            isActive: false
-        };
-    },
-
-    props: {
-        boarder: {
-            type: Boolean,
-            default: true
-        },
-        dropdowns: {
-            type: Array,
-            required: true
-        }
-    },
-    methods: {
-        /** trigger event */
-        triggerEvent: function triggerEvent(object) {
-            if (object.areYouSure) {
-                Event.$emit('showAreYouSure', object.action, object.event);
-                return true;
-            }
-            Event.$emit(object.event);
-        },
-        showDropdown: function showDropdown() {
-            this.isActive = true;
-            this.$refs.dropdown.focus();
-        },
-        hideDropdown: function hideDropdown() {
-            this.isActive = false;
-        }
-    }
-});
-
-/***/ }),
-/* 223 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "dropdown is-hoverable"
-  }, [_c('div', {
-    staticClass: "dropdown-trigger"
-  }, [_c('button', {
-    staticClass: "button",
-    class: !_vm.boarder ? 'has-no-boarder' : '',
-    attrs: {
-      "aria-haspopup": "true",
-      "aria-controls": "dropdown-menu"
-    }
-  }, [_vm._m(0)])]), _vm._v(" "), _c('div', {
-    ref: "dropdown",
-    staticClass: "dropdown-menu",
-    attrs: {
-      "id": "dropdown-menu",
-      "role": "menu"
-    },
-    on: {
-      "blur": _vm.hideDropdown
-    }
-  }, [_c('div', {
-    staticClass: "dropdown-content"
-  }, _vm._l((_vm.dropdowns), function(dropdown) {
-    return _c('a', {
-      staticClass: "dropdown-item",
-      on: {
-        "click": function($event) {
-          _vm.triggerEvent(dropdown)
-        }
-      }
-    }, [_vm._v("\n                   " + _vm._s(dropdown.text) + "\n                ")])
-  }))])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('span', {
-    staticClass: "icon is-small"
-  }, [_c('i', {
-    staticClass: "fa fa-angle-down",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-42fdf3ae", module.exports)
-  }
-}
-
-/***/ }),
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: " column is-half"
+    staticClass: "project-section"
   }, [_c('div', {
     staticClass: "box",
     class: _vm.placeHolder ? 'place-holder' : ''
@@ -68914,8 +69054,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "aria-hidden": "true"
     }
   })])]), _vm._v(" "), (_vm.tasks.length > 0) ? _c('table', {
-    staticClass: "table place-holder"
-  }, [_c('tbody', _vm._l((_vm.tasks), function(task, key) {
+    staticClass: "table is-fullwidth"
+  }, [_c('transition-group', {
+    attrs: {
+      "tag": 'tbody',
+      "name": "fade",
+      "mode": "out-in"
+    }
+  }, _vm._l((_vm.tasks), function(task, key) {
     return _c('task-list', {
       key: key,
       attrs: {
@@ -68928,7 +69074,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "due_date": task.due_date
       }
     })
-  }))]) : (!_vm.placeHolder) ? _c('notification', {
+  }))], 1) : (!_vm.placeHolder) ? _c('notification', {
     attrs: {
       "status": 'info'
     }
@@ -69011,9 +69157,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.triggerEvent('toggleModal', 'addSection')
       }
     }
-  }, [_vm._v("Add Section")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', [(_vm.project) ? _c('div', {
-    staticClass: "columns is-multiline"
-  }, [_vm._l((_vm.project.sections), function(section, key) {
+  }, [_vm._v("Add Section")])])])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', {
+    staticClass: "columns"
+  }, [_c('div', {
+    staticClass: "column is-half"
+  }, [(_vm.project) ? _c('div', [_vm._l((_vm.sectionsColumnOne), function(section, key) {
     return _c('project-section', {
       key: key,
       attrs: {
@@ -69026,7 +69174,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "placeHolder": true
     }
-  }) : _vm._e()], 2) : _vm._e()]), _vm._v(" "), _c('modal', {
+  }) : _vm._e()], 2) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "column is-half"
+  }, [(_vm.project) ? _c('div', _vm._l((_vm.sectionsColumnTwo), function(section, key) {
+    return _c('project-section', {
+      key: key,
+      attrs: {
+        "projectId": _vm.id,
+        "id": section.id,
+        "sectionName": section.name
+      }
+    })
+  })) : _vm._e()])]), _vm._v(" "), _c('modal', {
     attrs: {
       "modalName": "addSection",
       "title": "Add New Section"
@@ -69106,7 +69265,7 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_DropDownButton_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Modal_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Modal_vue__);
@@ -70675,20 +70834,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "textContent": _vm._s(_vm.getErrors('handle'))
     }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', {
-    staticClass: "label"
-  }, [_vm._v("Avatar")]), _vm._v(" "), _c('p', {
-    staticClass: "control"
-  }, [_c('a', {
-    staticClass: "button",
-    on: {
-      "click": function($event) {
-        _vm.triggerEvent('toggleModal', 'uploadAvatar')
-      }
-    }
-  }, [_vm._v("Set Avatar")])])])])]) : _vm._e()]), _vm._v(" "), _c('modal', {
+  })])])]) : _vm._e()]), _vm._v(" "), _c('modal', {
     attrs: {
       "modal-name": "uploadAvatar",
       "title": "Add Avatar"

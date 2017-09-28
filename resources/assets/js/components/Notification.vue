@@ -1,5 +1,5 @@
 <template>
-    <div class="notification" :class="status">
+    <div class="lable" :class="status">
         <p><slot></slot></p>
     </div>
 </template>

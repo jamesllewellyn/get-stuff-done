@@ -10814,6 +10814,12 @@ hr {
   cursor: -webkit-grab;
 }
 
+/** Section **/
+
+.project-section {
+  padding-bottom: 1.5rem;
+}
+
 /** Task **/
 
 .task {
@@ -10901,6 +10907,24 @@ hr {
 
 .notification .notification-circle.error {
   background-color: #E55934;
+}
+
+.lable {
+  border: 1px solid #dbdbdb;
+  padding: 1em;
+  margin-top: 0.5em;
+}
+
+.lable.warn {
+  border-left: 5px solid #ff7739;
+}
+
+.lable.info {
+  border-left: 5px solid #8eb4cb;
+}
+
+.lable.success {
+  border-left: 5px solid #009B72;
 }
 
 /** Image Cropper */
@@ -11133,6 +11157,10 @@ h4 {
   color: #ffffff;
 }
 
+.tag.is-square {
+  border-radius: 0 !important;
+}
+
 .has-no-boarders th,
 .has-no-boarders td {
   border: none !important;
@@ -11144,5 +11172,9 @@ h4 {
 
 #project-overview-table tr {
   cursor: pointer;
+}
+
+.table td .button {
+  font-size: 0.5em !important;
 }
 

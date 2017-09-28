@@ -14,12 +14,17 @@
         </td>
         <td class="is-centered-text" :class="placeHolder ? 'blokk' : ''">{{priority}} </td>
         <td class="is-centered-text" :class="placeHolder ? 'blokk' : ''">{{ dueDateFormatted }}</td>
+        <td v-if="!placeHolder && page == 'project'" class="is-centered-text">
+            <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Task', event: 'task.'+id+'.delete' , action: 'delete this task' , areYouSure : true}]"></drop-down-button>
+        </td>
     </tr>
 </template>
 
 <script>
     import store from '../store';
+    import dropDownButton from '../components/DropDownButton.vue';
     export default {
+        components:{dropDownButton},
         props:{
             project_id:{
                 type: Number,
@@ -53,6 +58,10 @@
             placeHolder:{
                 type: Boolean,
                 default: false
+            },
+            page:{
+                type: String,
+                default: 'project'
             }
         },
         computed:{
@@ -76,17 +85,17 @@
             status: function(){
                 let now = moment();
                 /** todo: clean this up **/
-                if(!this.status_id){
-                    return  '';
-                }
                 if(this.status_id === 1){
                     return  'is-done';
                 }
-                if(this.status_id === 2){
-                    return 'is-started';
-                }
                 if( moment(this.due_date).isBefore(now) ){
                     return 'is-over-due';
+                }
+                if(!this.status_id){
+                    return  '';
+                }
+                if(this.status_id === 2){
+                    return 'is-started';
                 }
             }
         },
@@ -99,12 +108,16 @@
             done: function () {
                 /** if task is already completed display alert*/
                 if(this.status_id === 1){
-                    Event.$emit('notify','information', 'Information', 'Task is already flagged as compelted');
+                    Event.$emit('notify','information', 'Information', 'Task is already flagged as completed');
                     /** end process */
                     return false;
                 }
                 /** flag task as done **/
                 this.$store.dispatch('TASK_SET_TO_DONE', {projectId: this.project_id, sectionId: this.section_id, id: this.id});
+            },
+            deleteTask(){
+                this.$store.dispatch('DELETE_TASK', {projectId: this.project_id, sectionId: this.section_id, id: this.id});
+
             },
             forceUpdate(){
                 this.$forceUpdate();
@@ -115,6 +128,10 @@
             /** listen task updated */
             Event.$on('task.'+this.id+'.updated', function() {
                 self.forceUpdate();
+            });
+            /** listen for task delete event **/
+            Event.$on('task.'+this.id+'.delete', function() {
+                self.deleteTask();
             });
         }
     }
