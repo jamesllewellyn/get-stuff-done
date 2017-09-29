@@ -13,36 +13,71 @@
         <hr />
         <transition  name="fade" mode="out-in" >
             <div class="my-tasks-projects" v-if="!areTasksLoading">
-                <div class="columns is-multiline" v-if="tasks">
-                    <div class="column is-half" v-for="project in tasks" >
-                        <div class="box">
-                            <div class="level">
-                                <div class="level-left">
-                                    <h3 v-text="project[0][0].section.project.team.name"></h3>
+                <div class="columns" v-if="tasks">
+                    <div class="column is-half">
+                        <div class="project-section" v-for="project in sectionsColumnOne">
+                            <div class="box">
+                                <div class="level">
+                                    <div class="level-left">
+                                        <h3 v-text="project[0][0].section.project.team.name"></h3>
+                                    </div>
+                                    <div class="level-right">
+                                        <span class="tag is-light is-pulled-right" v-text="project[0][0].section.project.name"></span>
+                                    </div>
                                 </div>
-                                <div class="level-right">
-                                    <span class="tag is-light is-pulled-right" v-text="project[0][0].section.project.name"></span>
-                                </div>
+                                <section v-for="section in project">
+                                    <span class="tag is-light is-square" v-text="section[0].section.name"></span>
+                                    <table class="table task-table is-fullwidth">
+                                        <tbody>
+                                        <task-list v-for="(task, key) in section"
+                                                   :key="key"
+                                                   :project_id="task.section.project.id"
+                                                   :section_id="task.section.id"
+                                                   :id="task.id"
+                                                   :name="task.name"
+                                                   :status_id="task.status_id"
+                                                   :priority_id="task.priority_id"
+                                                   :due_date="task.due_date"
+                                                   :page="'myTasks'"
+                                        >
+                                        </task-list>
+                                        </tbody>
+                                    </table>
+                                </section>
                             </div>
-                            <section v-for="section in project">
-                                <span class="tag is-light is-square" v-text="section[0].section.name"></span>
-                                <table class="table task-table is-fullwidth">
-                                    <tbody>
-                                    <task-list v-for="(task, key) in section"
-                                               :key="key"
-                                               :project_id="task.section.project.id"
-                                               :section_id="task.section.id"
-                                               :id="task.id"
-                                               :name="task.name"
-                                               :status_id="task.status_id"
-                                               :priority_id="task.priority_id"
-                                               :due_date="task.due_date"
-                                               :page="'myTasks'"
-                                    >
-                                    </task-list>
-                                    </tbody>
-                                </table>
-                            </section>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="project-section" v-for="project in sectionsColumnTwo">
+                            <div class="box">
+                                <div class="level">
+                                    <div class="level-left">
+                                        <h3 v-text="project[0][0].section.project.team.name"></h3>
+                                    </div>
+                                    <div class="level-right">
+                                        <span class="tag is-light is-pulled-right" v-text="project[0][0].section.project.name"></span>
+                                    </div>
+                                </div>
+                                <section v-for="section in project">
+                                    <span class="tag is-light is-square" v-text="section[0].section.name"></span>
+                                    <table class="table task-table is-fullwidth">
+                                        <tbody>
+                                        <task-list v-for="(task, key) in section"
+                                                   :key="key"
+                                                   :project_id="task.section.project.id"
+                                                   :section_id="task.section.id"
+                                                   :id="task.id"
+                                                   :name="task.name"
+                                                   :status_id="task.status_id"
+                                                   :priority_id="task.priority_id"
+                                                   :due_date="task.due_date"
+                                                   :page="'myTasks'"
+                                        >
+                                        </task-list>
+                                        </tbody>
+                                    </table>
+                                </section>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,7 +138,27 @@
                         tasks  = store.state.myTasks;
                 }
                 return tasks;
-            }
+            },
+            sectionsColumnOne (){
+                if(!this.tasks){
+                    return false;
+                }
+                let halfLength = Math.ceil(_.size(this.tasks) / 2);
+                let keys = Object.keys(this.tasks);
+                console.log(keys);
+                console.log(keys[0]);
+                console.log(keys[2]);
+                console.log(this.tasks);
+                console.log(_.slice(this.tasks,1, 2) );
+                return _.slice(this.tasks,0,halfLength);
+            },
+            sectionsColumnTwo (){
+                if(!this.tasks){
+                    return false;
+                }
+                let halfLength = Math.ceil(_.size(this.tasks) / 2);
+                return _.slice(this.tasks,halfLength);
+            },
         },
         methods: {
             /** trigger toggle modal event */
