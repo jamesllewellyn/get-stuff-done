@@ -45,7 +45,7 @@ const store = new Vuex.Store({
                 });
         },
         SIGN_UP_SUBMIT :function ({ commit, state }, team) {
-            axios.post('/api/user/'+state.user.id+'/team/' ,team )
+            axios.post('/api/user/'+state.user.id+'/team' ,team )
                 .then((response) => {
                     commit('SIGN_UP_SUCCESS', { user: response.data.user})
                 }, (error) => {
@@ -68,7 +68,7 @@ const store = new Vuex.Store({
             });
         },
         STORE_USER: function ({ commit }, user) {
-            axios.post('/api/user/', user)
+            axios.post('/api/user', user)
                 .then((response) => {
                     commit('STORE_USER_SUCCESS', { user: response.data.user})
                 }, (error) => {
@@ -305,7 +305,7 @@ const store = new Vuex.Store({
             })
         },
         ADD_NEW_PROJECT: function ({ commit ,getters} , project) {
-            axios.post('/api/team/'+getters.getActiveTeam.id+'/project/', project)
+            axios.post('/api/team/'+getters.getActiveTeam.id+'/project', project)
             .then(function (response) {
                 commit('ADD_PROJECT_SUCCESS', {project: response.data.project });
                 /** clear button loading state */
@@ -345,7 +345,7 @@ const store = new Vuex.Store({
          * Section Actions
          **********************/
         ADD_NEW_SECTION: function ({ commit, getters } ,{projectId, section}) {
-            axios.post('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section/', section)
+            axios.post('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section', section)
             .then(function (response) {
                 /**  **/
                 commit('ADD_SECTION_SUCCESS', {section: response.data.section });
