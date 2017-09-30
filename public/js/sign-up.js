@@ -31561,9 +31561,7 @@ var Team = function Team(data) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_laravel_echo__);
 
 window._ = __webpack_require__(138);
-
 window.axios = __webpack_require__(139);
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios = axios;
 
@@ -31576,6 +31574,7 @@ window.moment = __WEBPACK_IMPORTED_MODULE_2_moment___default.a;
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_notification___default.a, { velocity: __WEBPACK_IMPORTED_MODULE_4_velocity_animate___default.a });
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just

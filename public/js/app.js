@@ -31656,9 +31656,7 @@ module.exports = Component.exports
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_laravel_echo__);
 
 window._ = __webpack_require__(138);
-
 window.axios = __webpack_require__(139);
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios = axios;
 
@@ -31671,6 +31669,7 @@ window.moment = __WEBPACK_IMPORTED_MODULE_2_moment___default.a;
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_notification___default.a, { velocity: __WEBPACK_IMPORTED_MODULE_4_velocity_animate___default.a });
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -62423,43 +62422,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -62514,57 +62476,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     tasks = __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].state.myTasks;
             }
             return tasks;
-        },
-        sectionsColumnOne: function sectionsColumnOne() {
-            if (!this.tasks) {
-                return false;
-            }
-            var halfLength = Math.ceil(_.size(this.tasks) / 2);
-            var keys = Object.keys(this.tasks);
-            console.log(keys);
-            console.log(keys[0]);
-            console.log(keys[2]);
-            console.log(this.tasks);
-            console.log(_.slice(this.tasks, 1, 2));
-            return _.slice(this.tasks, 0, halfLength);
-        },
-        sectionsColumnTwo: function sectionsColumnTwo() {
-            if (!this.tasks) {
-                return false;
-            }
-            var halfLength = Math.ceil(_.size(this.tasks) / 2);
-            return _.slice(this.tasks, halfLength);
         }
     },
     methods: {
         /** trigger toggle modal event */
         triggerEvent: function triggerEvent(eventName, payload) {
             Event.$emit(eventName, payload);
-        },
-        getTasks: function getTasks() {
-            /** show ajax loader */
-            switch (this.filter) {
-                case 'All':
-                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_TASKS');
-                    break;
-                case 'Working On It':
-                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_WORKING_ON_IT');
-                    break;
-                case 'Over Due':
-                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_OVER_DUE');
-                    break;
-                default:
-                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_TASKS');
-            }
-        },
-
-        /**
-         * use force update to re-render instance
-         * when section task object had been updated
-         * **/
-        forceUpdate: function forceUpdate() {
-            this.$forceUpdate();
-            this.getTasks();
         }
     },
     watch: {
@@ -62579,20 +62496,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         filter: function filter() {
             /** set my tasks page to loading state */
             this.$store.commit('MY_TASKS_LOADING');
-            /** get tasks */
-            this.getTasks();
+            /** show ajax loader */
+            switch (this.filter) {
+                case 'All':
+                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_TASKS');
+                    break;
+                case 'Working On It':
+                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_WORKING_ON_IT');
+                    break;
+                case 'Over Due':
+                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_OVER_DUE');
+                    break;
+                default:
+                    __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */].dispatch('GET_MY_TASKS');
+            }
         }
     },
     mounted: function mounted() {
-        var self = this;
         /** we have user data Call method to get users tasks */
         if (this.user) {
             this.$store.dispatch('GET_MY_TASKS');
         }
-        /** listen section updated */
-        Event.$on('myTasks.updated', function () {
-            self.forceUpdate();
-        });
     }
 });
 
@@ -68259,167 +68183,78 @@ var render = function() {
         !_vm.areTasksLoading
           ? _c("div", { staticClass: "my-tasks-projects" }, [
               _vm.tasks
-                ? _c("div", { staticClass: "columns" }, [
-                    _c(
-                      "div",
-                      { staticClass: "column is-half" },
-                      _vm._l(_vm.sectionsColumnOne, function(project) {
-                        return _c("div", { staticClass: "project-section" }, [
-                          _c(
-                            "div",
-                            { staticClass: "box" },
-                            [
-                              _c("div", { staticClass: "level" }, [
-                                _c("div", { staticClass: "level-left" }, [
-                                  _c("h3", {
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        project[0][0].section.project.team.name
-                                      )
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "level-right" }, [
-                                  _c("span", {
-                                    staticClass: "tag is-light is-pulled-right",
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        project[0][0].section.project.name
-                                      )
-                                    }
-                                  })
-                                ])
+                ? _c(
+                    "div",
+                    { staticClass: "columns is-multiline" },
+                    _vm._l(_vm.tasks, function(project) {
+                      return _c("div", { staticClass: "column is-half" }, [
+                        _c(
+                          "div",
+                          { staticClass: "box" },
+                          [
+                            _c("div", { staticClass: "level" }, [
+                              _c("div", { staticClass: "level-left" }, [
+                                _c("h3", {
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      project[0][0].section.project.team.name
+                                    )
+                                  }
+                                })
                               ]),
                               _vm._v(" "),
-                              _vm._l(project, function(section) {
-                                return _c("section", [
-                                  _c("span", {
-                                    staticClass: "tag is-light is-square",
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        section[0].section.name
-                                      )
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "table",
-                                    {
-                                      staticClass:
-                                        "table task-table is-fullwidth"
-                                    },
-                                    [
-                                      _c(
-                                        "tbody",
-                                        _vm._l(section, function(task, key) {
-                                          return _c("task-list", {
-                                            key: key,
-                                            attrs: {
-                                              project_id:
-                                                task.section.project.id,
-                                              section_id: task.section.id,
-                                              id: task.id,
-                                              name: task.name,
-                                              status_id: task.status_id,
-                                              priority_id: task.priority_id,
-                                              due_date: task.due_date,
-                                              page: "myTasks"
-                                            }
-                                          })
-                                        })
-                                      )
-                                    ]
-                                  )
-                                ])
-                              })
-                            ],
-                            2
-                          )
-                        ])
-                      })
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "column is-half" },
-                      _vm._l(_vm.sectionsColumnTwo, function(project) {
-                        return _c("div", { staticClass: "project-section" }, [
-                          _c(
-                            "div",
-                            { staticClass: "box" },
-                            [
-                              _c("div", { staticClass: "level" }, [
-                                _c("div", { staticClass: "level-left" }, [
-                                  _c("h3", {
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        project[0][0].section.project.team.name
-                                      )
-                                    }
-                                  })
-                                ]),
+                              _c("div", { staticClass: "level-right" }, [
+                                _c("span", {
+                                  staticClass: "tag is-light is-pulled-right",
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      project[0][0].section.project.name
+                                    )
+                                  }
+                                })
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(project, function(section) {
+                              return _c("section", [
+                                _c("span", {
+                                  staticClass: "tag is-light",
+                                  domProps: {
+                                    textContent: _vm._s(section[0].section.name)
+                                  }
+                                }),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "level-right" }, [
-                                  _c("span", {
-                                    staticClass: "tag is-light is-pulled-right",
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        project[0][0].section.project.name
-                                      )
-                                    }
-                                  })
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _vm._l(project, function(section) {
-                                return _c("section", [
-                                  _c("span", {
-                                    staticClass: "tag is-light is-square",
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        section[0].section.name
-                                      )
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "table",
-                                    {
-                                      staticClass:
-                                        "table task-table is-fullwidth"
-                                    },
-                                    [
-                                      _c(
-                                        "tbody",
-                                        _vm._l(section, function(task, key) {
-                                          return _c("task-list", {
-                                            key: key,
-                                            attrs: {
-                                              project_id:
-                                                task.section.project.id,
-                                              section_id: task.section.id,
-                                              id: task.id,
-                                              name: task.name,
-                                              status_id: task.status_id,
-                                              priority_id: task.priority_id,
-                                              due_date: task.due_date,
-                                              page: "myTasks"
-                                            }
-                                          })
+                                _c(
+                                  "table",
+                                  { staticClass: "table task-table" },
+                                  [
+                                    _c(
+                                      "tbody",
+                                      _vm._l(section, function(task, key) {
+                                        return _c("task-list", {
+                                          key: key,
+                                          attrs: {
+                                            project_id: task.section.project.id,
+                                            section_id: task.section.id,
+                                            id: task.id,
+                                            name: task.name,
+                                            status_id: task.status_id,
+                                            priority_id: task.priority_id,
+                                            due_date: task.due_date
+                                          }
                                         })
-                                      )
-                                    ]
-                                  )
-                                ])
-                              })
-                            ],
-                            2
-                          )
-                        ])
-                      })
-                    )
-                  ])
+                                      })
+                                    )
+                                  ]
+                                )
+                              ])
+                            })
+                          ],
+                          2
+                        )
+                      ])
+                    })
+                  )
                 : _vm._e()
             ])
           : _vm._e()
