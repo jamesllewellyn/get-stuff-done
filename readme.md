@@ -57,6 +57,13 @@ Run migration to create database tables
 ```
 php artisan migrate
 ```
+
+Generate passport key
+
+```
+php artisan passport:install
+```
+
 if you use the local driver link storage to public
 
 ```
@@ -69,7 +76,7 @@ Install javascript dependencies
 npm install
 ```
 
-###Further configuration
+### Further configuration
 
 **Email**
 
