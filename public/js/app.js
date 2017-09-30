@@ -5060,7 +5060,7 @@ var store = new vuex_esm["a" /* default */].Store({
             var commit = _ref2.commit,
                 state = _ref2.state;
 
-            axios.post('/api/user/' + state.user.id + '/team/', team).then(function (response) {
+            axios.post('/api/user/' + state.user.id + '/team', team).then(function (response) {
                 commit('SIGN_UP_SUCCESS', { user: response.data.user });
             }, function (error) {
                 if (error.response.data) {
@@ -5085,7 +5085,7 @@ var store = new vuex_esm["a" /* default */].Store({
         STORE_USER: function STORE_USER(_ref4, user) {
             var commit = _ref4.commit;
 
-            axios.post('/api/user/', user).then(function (response) {
+            axios.post('/api/user', user).then(function (response) {
                 commit('STORE_USER_SUCCESS', { user: response.data.user });
             }, function (error) {
                 if (error.response.data) {
@@ -5358,7 +5358,7 @@ var store = new vuex_esm["a" /* default */].Store({
             var commit = _ref31.commit,
                 getters = _ref31.getters;
 
-            axios.post('/api/team/' + getters.getActiveTeam.id + '/project/', project).then(function (response) {
+            axios.post('/api/team/' + getters.getActiveTeam.id + '/project', project).then(function (response) {
                 commit('ADD_PROJECT_SUCCESS', { project: response.data.project });
                 /** clear button loading state */
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addProject' });
@@ -5406,7 +5406,7 @@ var store = new vuex_esm["a" /* default */].Store({
             var projectId = _ref37.projectId,
                 section = _ref37.section;
 
-            axios.post('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/', section).then(function (response) {
+            axios.post('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section', section).then(function (response) {
                 /**  **/
                 commit('ADD_SECTION_SUCCESS', { section: response.data.section });
                 /** clear button loading state*/
