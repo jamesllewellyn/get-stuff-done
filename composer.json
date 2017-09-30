@@ -41,8 +41,7 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize",
-            "sudo chgrp -R www-data storage bootstrap/cache",
-            "sudo chmod -R ug+rwx storage bootstrap/cache"
+            "chmod -R 777 app/storage"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
