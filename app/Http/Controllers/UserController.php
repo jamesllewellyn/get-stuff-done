@@ -127,7 +127,7 @@ class UserController extends Controller
      */
     public function index(Request $request) {
         /** return current logged in user */
-        return response()->json($request->user())
+        return response()->json($request->user());
     }
 
     /**
