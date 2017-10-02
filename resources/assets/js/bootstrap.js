@@ -44,3 +44,15 @@ window.Echo = new Echo({
     cluster: 'us2',
     encrypted: true
 });
+
+/**
+ * To use Raven.js and Raven.js Vue plugin to send application errors to Sentry
+ */
+
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
+
+Raven
+    .config('https://71413cb2c5ce45fb8cc9cd1d2cc8371d@sentry.io/224452')
+    .addPlugin(RavenVue, Vue)
+    .install();

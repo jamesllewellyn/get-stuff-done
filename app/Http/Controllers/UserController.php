@@ -137,11 +137,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user) {
-//        /** If project cant be found return error */
-//        if(!$project){
-//            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
-//        }
-//        /** validate the request data */
+       /** validate the request data */
         $this->validate(Request(),$user->updateValidation, $user->messages);
         /** update record */
         $user->first_name = $request->first_name;
