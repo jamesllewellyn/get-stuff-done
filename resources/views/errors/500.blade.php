@@ -52,8 +52,10 @@
     <div class="content">
         <div class="title">Something went wrong but we're on it.</div>
         <div class="title"><a href="/home" class="button">Go back to your to app</a></div>
-    @unless(empty($sentryID))
-        <!-- Sentry JS SDK 2.1.+ required -->
+        @if(app()->bound('sentry') && !empty(Sentry::getLastEventID()))
+            <div class="subtitle">Error ID: {{ Sentry::getLastEventID() }}</div>
+
+            <!-- Sentry JS SDK 2.1.+ required -->
             <script src="https://cdn.ravenjs.com/3.3.0/raven.min.js"></script>
 
             <script>
@@ -67,7 +69,7 @@
                     }
                 });
             </script>
-        @endunless
+        @endif
     </div>
 </div>
 </body>
