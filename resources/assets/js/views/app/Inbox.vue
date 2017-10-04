@@ -14,7 +14,7 @@
         </div>
         <hr />
         <transition-group name="fade" mode="out-in" >
-            <div class="columns" v-for="(day, key ) in notifications" :key="key" v-if="Object.keys(notifications).length != 0"v-cloak>
+            <div class="columns" v-for="(day, key ) in notifications" :key="key" v-cloak>
                 <h3 class="h3 column is-one-quarter" v-text="convertDate(key)" ></h3>
                 <div class="column is-half">
                     <transition-group name="fade">
@@ -22,14 +22,14 @@
                     </transition-group>
                 </div>
             </div>
-            <div class="columns is-mobile is-centered" key="1" v-cloak v-else >
+            <div class="columns is-mobile is-centered" key="1" v-cloak v-if="Object.keys(notifications).length == 0" >
                 <div class="column is-half">
                     <div class="box is-empty-inbox">
                         <div class="content has-text-centered">
                             <h3 class="bold">
                                 You're all up to date
                             </h3>
-                            <p>Your Inbox is currently empty</p>
+                            <p>We'll give you a heads up if anything crops up</p>
                         </div>
                     </div>
                 </div>
