@@ -16,17 +16,17 @@
                     <label for="name" class="label">First Name</label>
                     <p class="control">
                         <input id="name" type="text" class="input" name="first_name" value="{{ old('first_name') }}" required autofocus>
-                    @if ($errors->has('first_name'))
-                        <p class="help is-danger">{{ $errors->first('first_name') }}</p>
+                        @if ($errors->has('first_name'))
+                         <p class="help is-danger">{{ $errors->first('first_name') }}</p>
                         @endif
-                        </p>
+                    </p>
                 </div>
                 <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
                     <label for="name" class="label">Last Name</label>
                     <p class="control">
-                        <input id="name" type="text" class="input" name="last_name" value="{{ old('last_name') }}" >
-                    @if ($errors->has('last_name'))
-                        <p class="help is-danger">{{ $errors->first('last_name') }}</p>
+                        <input id="name" type="text" class="input" name="last_name" value="{{ old('last_name') }}" required>
+                        @if ($errors->has('last_name'))
+                            <p class="help is-danger">{{ $errors->first('last_name') }}</p>
                         @endif
                         </p>
                 </div>
@@ -45,8 +45,8 @@
                         <input id="handle" type="text" class="input" name="handle" value="{{ old('handle') }}" required>
                         @if ($errors->has('handle'))
                             <span class="help is-danger">
-                                        <strong>{{ $errors->first('handle') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('handle') }}</strong>
+                            </span>
                         @endif
                     </p>
                     <p><small>Your hand will be displayed along with your messages in Get Stuff Done.</small></p>
@@ -55,10 +55,10 @@
                     <label for="password" class="label">Password</label>
                     <p class="control">
                         <input id="password" type="password" class="input" name="password" required>
-                    @if ($errors->has('password'))
-                        <p class="help is-danger">{{ $errors->first('password') }}</p>
+                        @if ($errors->has('password'))
+                            <p class="help is-danger">{{ $errors->first('password') }}</p>
                         @endif
-                        </p>
+                    </p>
                 </div>
                 <div class="field">
                     <label for="password-confirm" class="label">Confirm Password</label>

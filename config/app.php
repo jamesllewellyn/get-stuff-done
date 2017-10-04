@@ -168,6 +168,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Felixkiss\UniqueWithValidator\ServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
