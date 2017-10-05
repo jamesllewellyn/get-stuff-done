@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
  * Team API
  **********************/
     /** Team API */
-    Route::resource('team', 'TeamController', ['only' => ['show','update', 'destroy']]);
+    Route::resource('team', 'TeamController', ['only' => ['update']]);
     /** Create new team */
     Route::post('/user/{user}/team', ['uses'=>'TeamController@store', 'as'=>'team.store'] );
     /** Get Teams Projects */

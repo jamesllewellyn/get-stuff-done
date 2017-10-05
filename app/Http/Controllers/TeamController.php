@@ -57,18 +57,6 @@ class TeamController extends Controller
         return response()->json($projects);
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
     /**
      * Get overview of projects data
      *
@@ -108,17 +96,6 @@ class TeamController extends Controller
         $team->save();
         /** return response */
         return response()->json(['success' => true, 'team' => $team]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\ProjectController;
+namespace Tests\Feaure\Project;
 
 use App\UserTeam;
 use Tests\TestCase;
