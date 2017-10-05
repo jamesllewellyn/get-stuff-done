@@ -16,6 +16,7 @@
         "sentry/sentry-laravel": "^0.8.0"
     },
     "require-dev": {
+        "codeclimate/php-test-reporter": "dev-master",
         "fzaninotto/faker": "~1.4",
         "laravel/dusk": "^1.0",
         "mockery/mockery": "0.9.*",

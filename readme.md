@@ -1,4 +1,7 @@
 # Get Stuff Done
+[![Code Climate](https://codeclimate.com/github/jamesllewellyn/get-stuff-done/badges/gpa.svg)](https://codeclimate.com/github/jamesllewellyn/get-stuff-done)
+[![Test Coverage](https://codeclimate.com/github/jamesllewellyn/get-stuff-done/badges/coverage.svg)](https://codeclimate.com/github/jamesllewellyn/get-stuff-done/coverage)
+[![Issue Count](https://codeclimate.com/github/jamesllewellyn/get-stuff-done/badges/issue_count.svg)](https://codeclimate.com/github/jamesllewellyn/get-stuff-done)
 
 Team based project To-Do List application. Allowing easy management of task across multiple teams and projects.
   
