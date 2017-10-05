@@ -20,13 +20,12 @@ class ProjectController extends Controller
     /**
      * Check user can access project
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Team $TEAM
+     * @param \App\Team $team
      * @param \App\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function canAccess(Request $request, Team $team, Project $project){
-        /** authorize user is can access project */
+    public function canAccess(Team $team, Project $project){
+        /** authorize user can access project */
         $this->authorize('access-project', [$team, $project]);
         /** return success */
         return response()->json(['success' => true, 'message' => 'user can access project', 'project' => $project]);

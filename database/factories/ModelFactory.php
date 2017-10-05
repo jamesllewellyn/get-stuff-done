@@ -11,14 +11,37 @@
 |
 */
 
+/**
+ * User Factories
+ */
+
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
-
     return [
-        'name' => $faker->name,
+        'first_name' => $faker->firstName(),
+        'last_name' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
+        'handle' =>  $faker->word,
+        'password' => $password ?: $password = bcrypt($faker->password(7)),
         'remember_token' => str_random(10),
     ];
 });
+
+/**
+ * Team Factories
+ */
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Team::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->words(2, true)
+    ];
+});
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\UserTeam::class, function () {
+    return [
+    ];
+});
+
