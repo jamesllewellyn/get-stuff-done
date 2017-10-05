@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\ProjectController;
+namespace Tests\Feaure\Project;
 
 use App\Section;
 use App\UserTeam;
@@ -13,7 +13,7 @@ use App\Project;
 use App\Task;
 use Auth;
 
-class ShowTest extends TestCase
+class GetTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
@@ -124,5 +124,4 @@ class ShowTest extends TestCase
             $this->assertEquals($this->tasks[$key]->toArray(), array_diff_key($task, ["deleted_at" => null, "assigned_users" => null, "due_time" => null]) );
         }
     }
-
 }

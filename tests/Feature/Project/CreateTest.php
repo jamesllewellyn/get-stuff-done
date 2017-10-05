@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\ProjectController;
+namespace Tests\Feaure\Project;
 
 use App\UserTeam;
 use Tests\TestCase;
@@ -13,7 +13,7 @@ use App\User;
 use Auth;
 use Faker\Factory as Faker;
 
-class StoreTest extends TestCase
+class CreateTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
