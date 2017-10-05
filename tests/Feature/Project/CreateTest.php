@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feaure\Project;
+namespace Tests\Unit\ProjectController;
 
 use App\UserTeam;
 use Tests\TestCase;
@@ -58,7 +58,8 @@ class CreateTest extends TestCase
         /** Assert project is correct in db */
         $this->assertDatabaseHas('projects', [
             'name' => $projectName,
-            'team_id' => $this->team->id
+            'team_id' => $this->team->id,
+            "deleted_at" => null
         ]);
     }
     /**
@@ -94,6 +95,12 @@ class CreateTest extends TestCase
         $response = $this->json('POST', "/api/team/".$this->team->id."/project", [
             "name" => $projectName
         ]);
+        /** Assert 403 status code */
         $response->assertStatus(403);
+        /** Assert project has not been created */
+        $this->assertDatabaseMissing('projects', [
+            'name' => $projectName,
+            'team_id' => $this->team->id
+        ]);
     }
 }
