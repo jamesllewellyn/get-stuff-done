@@ -18,6 +18,7 @@ class StoreTest extends TestCase
     use DatabaseTransactions;
     protected $team;
     protected $user;
+
     protected function setUp(){
         parent::setUp();
         /** create and act as user */

@@ -55,8 +55,6 @@ use Illuminate\Http\Request;
     Route::resource('/team/{team}/project', 'ProjectController', ['only' => ['store', 'show','update', 'destroy']]);
     /** get all project sections */
     Route::get('/team/{team}/project/{project}/sections', ['uses'=>'ProjectController@sections', 'as'=>'project.sections'] );
-    /** check user can access project */
-    Route::get('/team/{team}/project/{project}/can-access', ['uses'=>'ProjectController@canAccess', 'as'=>'project.canAccess'] );
 /***********************
  * Section API
  **********************/

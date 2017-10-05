@@ -45,3 +45,38 @@ $factory->define(App\UserTeam::class, function () {
     ];
 });
 
+/**
+ * Project Factories
+ */
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Project::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->words(2, true)
+    ];
+});
+
+/**
+ * Section Factories
+ */
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Section::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->words(2, true)
+    ];
+});
+
+/**
+ * Task Factories
+ */
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Task::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->words(4, true),
+        'note' => $faker->paragraph,
+        'due_date' => $faker->date('Y-m-d'),
+        'priority_id' => $faker->numberBetween(1,3),
+        'status_id' => $faker->numberBetween(1,2),
+        'created_by_id' => Auth::user()->id,
+    ];
+});
