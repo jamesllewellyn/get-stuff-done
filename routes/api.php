@@ -52,11 +52,10 @@ use Illuminate\Http\Request;
  * Project API
  **********************/
     /** Project store, show, destroy */
-    Route::resource('/team/{team}/project', 'ProjectController', ['only' => ['store', 'show','update', 'destroy']]);
-    /** get all project sections */
-    Route::get('/team/{team}/project/{project}/sections', ['uses'=>'ProjectController@sections', 'as'=>'project.sections'] );
-    /** check user can access project */
+    Route::resource('/team/{team}/project', 'ProjectController', ['only' => ['store', 'show', 'update', 'destroy']]);
+    /** check if user can access project */
     Route::get('/team/{team}/project/{project}/can-access', ['uses'=>'ProjectController@canAccess', 'as'=>'project.canAccess'] );
+
 /***********************
  * Section API
  **********************/
@@ -71,8 +70,8 @@ use Illuminate\Http\Request;
     Route::resource('team/{team}/project/{project}/section/{section}/task', 'TaskController', ['only' => [ 'store', 'show', 'destroy', 'update']]);
     /** flag task as done */
     Route::put('team/{team}/project/{project}/section/{section}/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );
-    /** check user can access project */
-    Route::get('/team/{team}/project/{project}/section/{section}/task/{task}/can-access', ['uses'=>'TaskController@canAccess', 'as'=>'project.canAccess'] );
+    /** check user can access task */
+    Route::get('/team/{team}/project/{project}/section/{section}/task/{task}/can-access', ['uses'=>'TaskController@canAccess', 'as'=>'task.canAccess'] );
 /***********************
  * Notifications API
  **********************/

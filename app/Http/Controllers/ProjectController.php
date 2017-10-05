@@ -20,12 +20,11 @@ class ProjectController extends Controller
     /**
      * Check user can access project
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Team $TEAM
+     * @param \App\Team $team
      * @param \App\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function canAccess(Request $request, Team $team, Project $project){
+    public function canAccess(Team $team, Project $project){
         /** authorize user is can access project */
         $this->authorize('access-project', [$team, $project]);
         /** return success */
@@ -42,6 +41,7 @@ class ProjectController extends Controller
     public function store(Request $request, Team $team) {
         /** authorize user is in team */
         $this->authorize('access-team', $team);
+        /** Create new project modal */
         $project = new Project();
         /** validate the request data */
         $this->validate(Request(),$project->validation, $project->messages);
@@ -70,22 +70,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * Get all project sections
-     *
-     * @param Project $project
-     * @return \Illuminate\Http\Response
-     */
-    public function sections(Team $team, Project $project) {
-        /** If project cant be found return error */
-        if(!$project){
-            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
-        }
-        $this->authorize('access-project', [$team, $project]);
-        /** return project sections */
-        return response()->json($project->sections()->get());
-    }
-
-    /**
      * Update project
      *
      * @param \Illuminate\Http\Request $request
@@ -94,10 +78,6 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Team $team, Project $project) {
-        /** If project cant be found return error */
-        if(!$project){
-            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
-        }
         /** authorize user has access to project */
         $this->authorize('access-project', [$team, $project]);
         /** validate the request data */
@@ -117,10 +97,6 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Team $team, Project $project) {
-        /** If project cant be found return error */
-        if(!$project){
-            return response()->json(['success' => false, 'message' => 'The requested project could not be found']);
-        }
         /** authorize user has access to project */
         $this->authorize('access-project', [$team, $project]);
         /** delete project */
