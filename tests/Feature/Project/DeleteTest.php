@@ -15,7 +15,6 @@ class DeleteTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
-    protected $user;
 
     protected function setUp(){
         parent::setUp();
@@ -23,13 +22,11 @@ class DeleteTest extends TestCase
         Passport::actingAs(
             factory(User::class)->create()
         );
-        /** add user to protected var */
-        $this->user = Auth::user();
         /** set up new team */
         $this->team = factory(Team::class)->create();
         /** add user to team */
         factory(UserTeam::class)->create([
-            'user_id' => $this->user->id,
+            'user_id' => Auth::user()->id,
             'team_id' => $this->team->id,
         ]);
     }

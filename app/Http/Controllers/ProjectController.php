@@ -18,6 +18,20 @@ class ProjectController extends Controller
     }
 
     /**
+     * Check user can access project
+     *
+     * @param \App\Team $team
+     * @param \App\Project $project
+     * @return \Illuminate\Http\Response
+     */
+    public function canAccess(Team $team, Project $project){
+        /** authorize user is can access project */
+        $this->authorize('access-project', [$team, $project]);
+        /** return success */
+        return response()->json(['success' => true, 'message' => 'user can access project', 'project' => $project]);
+    }
+
+    /**
      * Store new project
      *
      * @param \Illuminate\Http\Request $request
@@ -53,19 +67,6 @@ class ProjectController extends Controller
         $project = Project::where('id', $project->id)->with('sections', 'sections.tasks', 'sections.tasks.assignedUsers')->first();
         /** return success and requested project */
         return response()->json(['success' => true, 'message' => 'project has been found', 'project' => $project]);
-    }
-
-    /**
-     * Get all project sections
-     *
-     * @param Project $project
-     * @return \Illuminate\Http\Response
-     */
-    public function sections(Team $team, Project $project) {
-        /** authorize user has access to project */
-        $this->authorize('access-project', [$team, $project]);
-        /** return project sections */
-        return response()->json($project->sections()->get());
     }
 
     /**

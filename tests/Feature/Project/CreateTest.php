@@ -4,20 +4,17 @@ namespace Tests\Unit\ProjectController;
 
 use App\UserTeam;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use App\Team;
 use App\User;
-use Auth;
 use Faker\Factory as Faker;
+use Auth;
 
 class CreateTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
-    protected $user;
 
     protected function setUp(){
         parent::setUp();
@@ -25,13 +22,11 @@ class CreateTest extends TestCase
         Passport::actingAs(
             factory(User::class)->create()
         );
-        /** add user to protected var */
-        $this->user = Auth::user();
         /** set up new team */
         $this->team = factory(Team::class)->create();
         /** add user to team */
         factory(UserTeam::class)->create([
-            'user_id' => $this->user->id,
+            'user_id' => Auth::user()->id,
             'team_id' => $this->team->id,
         ]);
     }
