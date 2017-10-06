@@ -150,14 +150,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user) {
-        /** If user cant be found return error */
-        if(!$user){
-            return response()->json(['success' => false, 'message' => 'The requested user could not be found']);
-        }
         /** delete user */
         $user->delete();
         /** return success message */
-        return response()->json(['success' => true, 'message' => 'User '.$user->name.' has been successfully deleted']);
+        return response()->json(['success' => true, 'message' => 'User '.$user->getFullName().' has been successfully deleted']);
     }
 
     /**
