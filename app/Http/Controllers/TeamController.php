@@ -33,11 +33,8 @@ class TeamController extends Controller
         $team->name = $request->name;
         $team->save();
         /** add user to team */
-        $userTeam = UserTeam::create(['user_id' => $user->id, 'team_id' => $team->id]);
-        /** check team has been created */
-        if(!$userTeam){
-            return response()->json(['success' => false, 'message' => 'User could not be added to team']);
-        }
+        UserTeam::create(['user_id' => $user->id, 'team_id' => $team->id]);
+        /** return response */
         return response()->json(['success' => true, 'team' => $team]);
     }
 
