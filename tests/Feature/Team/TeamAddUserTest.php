@@ -15,7 +15,7 @@ use App\UserTeam;
 use App\Notifications\InviteUser;
 use Faker\Factory as Faker;
 
-class AddUserTest extends TestCase
+class TeamAddUserTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

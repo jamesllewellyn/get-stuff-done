@@ -13,7 +13,7 @@ use App\Project;
 use App\Task;
 use Auth;
 
-class GetTest extends TestCase
+class ProjectGetTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

@@ -18,29 +18,7 @@ class UserController extends Controller
 {
     public function __construct() {
         /** define controller middleware */
-        $this->middleware('auth:api', ['except' => ['store', 'invite']]);
-    }
-
-    /**
-     * Store new user
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request) {
-        $user =  new User();
-        /** validate the request data */
-        $this->validate(Request(),$user->validation, $user->messages);
-        /** create new user */
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->handle = $request->handle;
-        $user->password = Hash::make($request->password);
-        $user->save();
-        /** login user */
-        Auth::login($user);
-        /** return new user */
-        return response()->json(['success' => true, 'user' => $user]);
+        $this->middleware('auth:api', ['except' => ['invite']]);
     }
 
     /**
@@ -59,14 +37,12 @@ class UserController extends Controller
         ],$user->messages);
         /** if validation errors return customer to login page with error */
         if($validator->fails()) {
-            return redirect()->back()->withErrors($validator)
-                ->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
         /** get pending user session data */
         $pending = $request->session()->get('pending');
         /** delete session */
         $request->session()->forget('pending');
-
         if(!$pending){
             return redirect()->route('home')->with('inviteError','Sorry we couldn\'t find your invitation');
         }
@@ -118,16 +94,6 @@ class UserController extends Controller
         /** re-save image */
         Storage::put($path.'/avatar.png', $image);
         return response()->json(['success' => true, 'message' => 'The avatar has been uploaded']);
-    }
-
-    /**
-     * get logged in user data
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request) {
-        /** return current logged in user */
-        return response()->json($request->user());
     }
 
     /**

@@ -9,7 +9,7 @@ use App\User;
 use Faker\Factory as Faker;
 use Auth;
 
-class CreateTest extends TestCase
+class TeamCreateTest extends TestCase
 {
     use DatabaseTransactions;
 

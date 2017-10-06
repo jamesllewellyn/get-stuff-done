@@ -14,7 +14,7 @@ use App\Section;
 use Auth;
 use Carbon\Carbon;
 
-class GetOverviewTest extends TestCase
+class TeamGetOverviewTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
