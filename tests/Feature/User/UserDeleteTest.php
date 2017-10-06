@@ -32,7 +32,7 @@ class UserDeleteTest extends TestCase
             'team_id' => $this->team->id,
         ]);
     }
-    
+
     /**
      * Tests Route user.update
      *
