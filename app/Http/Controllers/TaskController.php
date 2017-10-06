@@ -25,14 +25,13 @@ class TaskController extends Controller
     /**
      * Check user can access task
      *
-     * @param \Illuminate\Http\Request $request
      * @param \App\Team $team
      * @param \App\Project $project
      * @param \App\Section $section
      * @param \App\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function canAccess(Request $request, Team $team, Project $project, Section $section, Task $task){
+    public function canAccess(Team $team, Project $project, Section $section, Task $task){
         /** authorize user has access to task */
         $this->authorize('access-task', [$team, $project, $section, $task]);
         /** return success */
