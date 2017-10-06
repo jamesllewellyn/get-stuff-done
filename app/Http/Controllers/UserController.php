@@ -97,6 +97,16 @@ class UserController extends Controller
     }
 
     /**
+     * get logged in user data
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request) {
+        /** return current logged in user */
+        return response()->json($request->user());
+    }
+
+    /**
      * Update project
      * @param \Illuminate\Http\Request $request
      * @param User $user
@@ -111,7 +121,7 @@ class UserController extends Controller
         $user->handle = $request->handle;
         $user->save();
         /** return success and updated project */
-        return response()->json(['success' => true, 'message' => 'project has been updated', 'user' => $user]);
+        return response()->json(['success' => true, 'message' => 'user has been updated', 'user' => $user]);
     }
     /**
      * Update current team
