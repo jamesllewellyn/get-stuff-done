@@ -38,7 +38,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * Tests ProjectController::destroy
+     * Tests Route section.delete
      *
      * @test
      */
@@ -64,7 +64,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * Tests ProjectController::destroy
+     * Tests Route section.delete
      *
      * @test
      */
