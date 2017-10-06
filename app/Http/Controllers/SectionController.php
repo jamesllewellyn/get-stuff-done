@@ -57,7 +57,7 @@ class SectionController extends Controller
         /** return success and updated project */
         return response()->json(['success' => true, 'message' => 'section has been updated', 'section' => $section]);
     }
-    
+
     /**
      * Delete project section
      *
