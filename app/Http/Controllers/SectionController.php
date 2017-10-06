@@ -38,21 +38,6 @@ class SectionController extends Controller
     }
 
     /**
-     * get section data
-     *
-     * @param Team $team
-     * @param Project $project
-     * @param Section $section
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Team $team, Project $project, Section $section) {
-        /** authorize user has access to section */
-        $this->authorize('access-section', [$team, $project, $section]);
-        /** return success and requested section */
-        return response()->json(['success' => true, 'message' => 'section has been found', 'section' => $section]);
-    }
-
-    /**
      * update section data
      *
      * @param \Illuminate\Http\Request $request
