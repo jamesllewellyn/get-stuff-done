@@ -164,33 +164,33 @@ class UserUpdateTest extends TestCase
             'handle' => $this->user->handle,
         ]);
     }
-//
-//    /**
-//     * Tests TeamController::update
-//     *
-//     * @test
-//     */
-//    public function cannot_update_team_user_is_not_a_member_of()
-//    {
-//        /** Arrange */
-//        $faker = Faker::create();
-//        $teamName = $faker->words(4,true);
-//        /** create new user and don't add to team */
-//        Passport::actingAs(
-//            factory(User::class)->create()
-//        );
-//        /** Act */
-//        $response = $this->json('PUT', "/api/team/".$this->team->id, [
-//            "name" => $teamName
-//        ]);
-//        /** Assert response is correct */
-//        $response->assertStatus(403);
-//        /** Assert team has not been updated in db */
-//        $this->assertDatabaseHas('teams', [
-//            'id' => $this->team->id,
-//            'name' => $this->team->name,
-//            'updated_at' => $this->team->updated_at->format('Y-m-d H:i:s')
-//        ]);
-//    }
+
+    /**
+     * Tests Route user.update
+     *
+     * @test
+     */
+    public function cannot_update_another_user()
+    {
+        /** Arrange */
+        $faker = Faker::create();
+        $teamName = $faker->words(4,true);
+        /** create new user and don't add to team */
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+        /** Act */
+        $response = $this->json('PUT', "/api/team/".$this->team->id, [
+            "name" => $teamName
+        ]);
+        /** Assert response is correct */
+        $response->assertStatus(403);
+        /** Assert team has not been updated in db */
+        $this->assertDatabaseHas('teams', [
+            'id' => $this->team->id,
+            'name' => $this->team->name,
+            'updated_at' => $this->team->updated_at->format('Y-m-d H:i:s')
+        ]);
+    }
 
 }

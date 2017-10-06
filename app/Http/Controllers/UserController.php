@@ -113,6 +113,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user) {
+        /** todo: only allow user to update themselves */
        /** validate the request data */
         $this->validate(Request(),$user->updateValidation, $user->messages);
         /** update record */
