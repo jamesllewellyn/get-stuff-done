@@ -80,3 +80,7 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
         'created_by_id' => Auth::user()->id,
     ];
 });
+$factory->define(App\UserTask::class, function () {
+    return [
+    ];
+});
