@@ -64,7 +64,7 @@ use Illuminate\Http\Request;
 /***********************
  * Task API
  **********************/
-    /** Section store, show, destroy, update */
+    /** Task store, show, destroy, update */
     Route::resource('team/{team}/project/{project}/section/{section}/task', 'TaskController', ['only' => [ 'store', 'show', 'destroy', 'update']]);
     /** flag task as done */
     Route::put('team/{team}/project/{project}/section/{section}/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );

@@ -62,7 +62,6 @@ class AuthServiceProvider extends ServiceProvider
         });
         /** tasks gate */
         Gate::define('access-task', function ($user, $team, $project, $section, $task) {
-            return true;
             /** get user team ids **/
             $userTeams = $user->teams()->pluck('teams.id')->toArray();
             /** check user is in current team */
