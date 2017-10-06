@@ -57,37 +57,7 @@ class SectionController extends Controller
         /** return success and updated project */
         return response()->json(['success' => true, 'message' => 'section has been updated', 'section' => $section]);
     }
-    /**
-     * Reorder section tasks
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param Team $team
-     * @param Project $project
-     * @param Section $section
-     * @return \Illuminate\Http\Response
-     */
-    public function reorderTasks(Request $request,Team $team, Project $project, Section $section) {
-        /** authorize user has access to section */
-        $this->authorize('access-section', [$team, $project, $section]);
-        /** Get tasks from request */
-        $tasks = $request->get('tasks');
-        if(!$tasks){
-            return response()->json(['success' => false, 'message' => 'Request did not contain tasks']);
-        }
-        /** check that user can access task **/
-        foreach ($tasks as $task){
-            $this->authorize('access-task', [$team, $project, $section, Task::find($task['id'])]);
-        }
-        /** update task sort order **/
-        foreach ($tasks as $t) {
-            $task = Task::find($t['id']);
-            $task->sort_order = $t['sort_order'];
-            $task->save();
-        }
-        /** return success and updated project */
-        return response()->json(['success' => true, 'message' => 'section task have been updated']);
-    }
-
+    
     /**
      * Delete project section
      *
