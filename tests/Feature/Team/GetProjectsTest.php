@@ -45,7 +45,7 @@ class GetProjectsTest extends TestCase
     public function can_get_team_project()
     {
         /** Act */
-        $response = $this->json('GET', "/api/team/".$this->team->id."/projects");
+        $response = $this->json('GET', "/api/team/".$this->team->id."/projects/");
         /** Assert response is correct */
         $response->assertStatus(200)
                 ->assertJson([

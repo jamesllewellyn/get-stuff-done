@@ -60,9 +60,7 @@ use Illuminate\Http\Request;
  * Section API
  **********************/
     /** Section store, show, update, destroy */
-    Route::resource('/team/{team}/project/{project}/section', 'SectionController', ['only' => ['store' ,'show', 'update','destroy']]);
-    /** reorder section tasks */
-    Route::put('/team/{team}/project/{project}/section/{section}/tasks/reorder', ['uses'=>'SectionController@reorderTasks', 'as'=>'section.reorderTasks'] );
+    Route::resource('/team/{team}/project/{project}/section', 'SectionController', ['only' => ['store' , 'update', 'destroy']]);
 /***********************
  * Task API
  **********************/
