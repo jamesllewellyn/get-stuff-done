@@ -40,6 +40,43 @@ class AddUserTest extends TestCase
      *
      * @test
      */
+    public function cannot_add_user_to_team_without_email_address()
+    {
+        /** Act */
+        $response = $this->json('POST', "/api/team/".$this->team->id."/user",[]);
+        /** Assert response is correct*/
+        $response->assertStatus(422)
+            ->assertJson([
+                'email' => ["The email field is required."]
+            ]);
+    }
+
+    /**
+     * Tests Route team.user
+     *
+     * @test
+     */
+    public function cannot_add_user_to_team_with_invalid_email_address()
+    {
+        /** Arrange */
+        $faker = Faker::create();
+        $email = $faker->words(2);
+        /** Act */
+        $response = $this->json('POST', "/api/team/".$this->team->id."/user",[
+            'email' => $email
+        ]);
+        /** Assert response is correct*/
+        $response->assertStatus(422)
+            ->assertJson([
+                'email' => ["That email address doesn't look quiet right"]
+            ]);
+    }
+
+    /**
+     * Tests Route team.user
+     *
+     * @test
+     */
     public function can_add_existing_app_user_to_team()
     {
         /** Arrange */
