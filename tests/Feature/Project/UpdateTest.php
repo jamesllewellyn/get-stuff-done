@@ -63,7 +63,6 @@ class UpdateTest extends TestCase
                     "team_id" => $this->project->team_id,
                     "name" => $projectName,
                     "created_at" => $this->project->created_at->format('Y-m-d H:i:s'),
-                    "updated_at" => $this->project->updated_at->format('Y-m-d H:i:s'),
                     "deleted_at" => null
                 ],
             ]);
