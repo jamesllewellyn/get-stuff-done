@@ -190,6 +190,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function workingOnIt(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** get tasks flagged as working on it */
         $tasks = $user->workingOnIt()->with('section', 'section.project', 'section.project.team')->get();
         /** return success message */
