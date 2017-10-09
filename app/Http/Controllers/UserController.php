@@ -162,6 +162,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function teams(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** return success message */
         return response()->json($user->teams()->with(['projects','users'])->get());
     }

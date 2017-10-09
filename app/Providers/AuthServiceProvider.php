@@ -27,6 +27,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Passport::routes();
+        /** user gate */
+        Gate::define('access-user', function ($user, $userRecord) {
+            /** check user record is logged in user */
+            return $user->id == $userRecord->id;
+        });
         /** team gate */
         Gate::define('access-team', function ($user, $team) {
             /** get user team ids **/
