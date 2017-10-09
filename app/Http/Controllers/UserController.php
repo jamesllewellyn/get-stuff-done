@@ -18,29 +18,7 @@ class UserController extends Controller
 {
     public function __construct() {
         /** define controller middleware */
-        $this->middleware('auth:api', ['except' => ['store', 'invite']]);
-    }
-
-    /**
-     * Store new user
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request) {
-        $user =  new User();
-        /** validate the request data */
-        $this->validate(Request(),$user->validation, $user->messages);
-        /** create new user */
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->handle = $request->handle;
-        $user->password = Hash::make($request->password);
-        $user->save();
-        /** login user */
-        Auth::login($user);
-        /** return new user */
-        return response()->json(['success' => true, 'user' => $user]);
+        $this->middleware('auth:api', ['except' => ['invite']]);
     }
 
     /**
@@ -59,14 +37,12 @@ class UserController extends Controller
         ],$user->messages);
         /** if validation errors return customer to login page with error */
         if($validator->fails()) {
-            return redirect()->back()->withErrors($validator)
-                ->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
         /** get pending user session data */
         $pending = $request->session()->get('pending');
         /** delete session */
         $request->session()->forget('pending');
-
         if(!$pending){
             return redirect()->route('home')->with('inviteError','Sorry we couldn\'t find your invitation');
         }
@@ -137,6 +113,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user) {
+        /** todo: only allow user to update themselves */
        /** validate the request data */
         $this->validate(Request(),$user->updateValidation, $user->messages);
         /** update record */
@@ -145,7 +122,7 @@ class UserController extends Controller
         $user->handle = $request->handle;
         $user->save();
         /** return success and updated project */
-        return response()->json(['success' => true, 'message' => 'project has been updated', 'user' => $user]);
+        return response()->json(['success' => true, 'message' => 'user has been updated', 'user' => $user]);
     }
     /**
      * Update current team
@@ -154,11 +131,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateTeam(Request $request, User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** validate the request data */
         $this->validate(Request(),['teamId' => 'required']);
         /** get team */
         $team = Team::find($request->teamId);
-        /** get users teams */
+        /** authorize user belongs to team */
         $this->authorize('access-team',$team);
         /** update record */
         $user->current_team_id = $team->id;
@@ -173,14 +152,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user) {
-        /** If user cant be found return error */
-        if(!$user){
-            return response()->json(['success' => false, 'message' => 'The requested user could not be found']);
-        }
         /** delete user */
         $user->delete();
         /** return success message */
-        return response()->json(['success' => true, 'message' => 'User '.$user->name.' has been successfully deleted']);
+        return response()->json(['success' => true, 'message' => 'User '.$user->getFullName().' has been successfully deleted']);
     }
 
     /**
@@ -189,6 +164,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function teams(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** return success message */
         return response()->json($user->teams()->with(['projects','users'])->get());
     }
@@ -199,6 +176,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function tasks(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** get tasks user is currently working on */
         $tasks = $user->tasks()->with('section', 'section.project', 'section.project.team')->get();
         /** return success message */
@@ -211,6 +190,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function workingOnIt(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** get tasks flagged as working on it */
         $tasks = $user->workingOnIt()->with('section', 'section.project', 'section.project.team')->get();
         /** return success message */
@@ -223,6 +204,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function overDue(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** get users over due tasks */
         $tasks = $user->overDue()->with('section', 'section.project', 'section.project.team')->get();
         /** return over due tasks */

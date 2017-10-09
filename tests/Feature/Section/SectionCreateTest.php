@@ -12,7 +12,7 @@ use App\Project;
 use Faker\Factory as Faker;
 use Auth;
 
-class CreateTest extends TestCase
+class SectionCreateTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

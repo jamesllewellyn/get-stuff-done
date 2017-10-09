@@ -30,7 +30,7 @@ use Illuminate\Http\Request;
  * User API
  **********************/
     /** Project store, show, destroy */
-    Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show','update', 'destroy']]);
+    Route::resource('user', 'UserController', ['only' => ['index', 'store', 'update', 'destroy']]);
     /** get users teams */
     Route::get('/user/{user}/teams', ['uses'=>'UserController@teams', 'as'=>'user.teams'] );
     /** set users avatar */

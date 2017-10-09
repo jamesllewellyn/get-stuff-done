@@ -13,7 +13,7 @@ use App\Section;
 use App\Task;
 use Auth;
 
-class CanAccessTest extends TestCase
+class TaskCanAccessTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

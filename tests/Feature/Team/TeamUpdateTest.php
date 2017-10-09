@@ -11,7 +11,7 @@ use App\User;
 use Auth;
 use Faker\Factory as Faker;
 
-class UpdateTest extends TestCase
+class TeamUpdateTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feaure\Section;
+namespace Tests\Feaure\Project;
 
 use App\UserTeam;
 use Tests\TestCase;
@@ -9,10 +9,9 @@ use Laravel\Passport\Passport;
 use App\Team;
 use App\User;
 use App\Project;
-use App\Section;
 use Auth;
 
-class DeleteTest extends TestCase
+class ProjectCanAccessTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
@@ -38,55 +37,46 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * Tests Route section.delete
+     * Tests ProjectController::canAccess
      *
      * @test
      */
-    public function can_delete_project_section()
+    public function can_access_project_returns_true_for_project_in_team_user_is_a_member_of()
     {
-        /** Arrange */
-        /** create new project section*/
-        $section = factory(Section::class)->create([
-            'project_id' => $this->project->id
-        ]);
         /** Act */
-        $response = $this->json('DELETE', "/api/team/".$this->team->id."/project/".$this->project->id."/section/".$section->id);
+        $response = $this->json('GET', "/api/team/".$this->team->id."/project/".$this->project->id."/can-access");
         /** Assert response is correct */
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Section '.$section->name.' has been successfully deleted'
+                'message' => 'user can access project',
+                "project" => [
+                    "id" => $this->project->id,
+                    "team_id" => $this->project->team_id,
+                    "name" => $this->project->name,
+                    "created_at" => $this->project->created_at->format('Y-m-d H:i:s'),
+                    "updated_at" => $this->project->updated_at->format('Y-m-d H:i:s'),
+                    "deleted_at" => null
+                ]
             ]);
-        /** assert project is soft deleted */
-        $this->assertSoftDeleted('sections', [
-            'id' => $section->id
-        ]);
     }
 
     /**
-     * Tests Route section.delete
+     * Tests ProjectController::canAccess
      *
      * @test
      */
-    public function cannot_delete_project_section_in_team_user_is_not_a_member_of()
+    public function can_access_project_returns_false_for_project_in_team_user_is_not_a_member_of()
     {
         /** Arrange */
-        /** create new project section*/
-        $section = factory(Section::class)->create([
-            'project_id' => $this->project->id
-        ]);
-        /** create new user and don't add to team*/
+        /** create and act as new user not a member of $this->team */
         Passport::actingAs(
             factory(User::class)->create()
         );
         /** Act */
-        $response = $this->json('DELETE', "/api/team/".$this->team->id."/project/".$this->project->id."/section/".$section->id);
+        $response = $this->json('GET', "/api/team/".$this->team->id."/project/".$this->project->id."/can-access");
         /** Assert response is correct */
         $response->assertStatus(403);
-        /** assert section is not deleted */
-        $this->assertDatabaseHas('sections', [
-            'id' => $section->id
-        ]);
     }
 
 }

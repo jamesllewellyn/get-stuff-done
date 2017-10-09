@@ -13,7 +13,7 @@ use App\Task;
 use App\Section;
 use Auth;
 
-class DeleteTest extends TestCase
+class TaskDeleteTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

@@ -17,7 +17,7 @@ use App\Task;
 use Faker\Factory as Faker;
 use Auth;
 
-class GetTest extends TestCase
+class TaskGetTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

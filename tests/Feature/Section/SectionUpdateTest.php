@@ -13,7 +13,7 @@ use App\Section;
 use Faker\Factory as Faker;
 use Auth;
 
-class UpdateTest extends TestCase
+class SectionUpdateTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;

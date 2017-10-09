@@ -15,8 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 /** create new team */
 Route::get('/create', function () {
     return view('auth.create-team');
