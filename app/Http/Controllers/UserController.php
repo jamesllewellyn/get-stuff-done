@@ -131,11 +131,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateTeam(Request $request, User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** validate the request data */
         $this->validate(Request(),['teamId' => 'required']);
         /** get team */
         $team = Team::find($request->teamId);
-        /** get users teams */
+        /** authorize user belongs to team */
         $this->authorize('access-team',$team);
         /** update record */
         $user->current_team_id = $team->id;
