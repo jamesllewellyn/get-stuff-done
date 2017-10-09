@@ -33,8 +33,6 @@ use Illuminate\Http\Request;
     Route::resource('user', 'UserController', ['only' => ['index', 'store', 'update', 'destroy']]);
     /** get users teams */
     Route::get('/user/{user}/teams', ['uses'=>'UserController@teams', 'as'=>'user.teams'] );
-    /** set users avatar */
-    Route::post('/user/{user}/avatar', ['uses'=>'UserController@avatar', 'as'=>'user.store.avatar'] );
     /** update users current team */
     Route::put('/user/{user}/team', ['uses'=>'UserController@updateTeam', 'as'=>'user.current_team'] );
     /** get users current tasks */

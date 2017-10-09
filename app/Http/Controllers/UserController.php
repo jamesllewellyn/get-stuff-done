@@ -64,37 +64,6 @@ class UserController extends Controller
         /** redirect to app home page */
         return redirect()->route('home');
     }
-    /**
-     * Set users avatar
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function avatar(Request $request) {
-        /*** Validate request */
-        $this->validate(Request(),['base64' => 'required'], ['base64.required' => 'Avatar image not found']);
-        $path = 'public/users/'.Auth::User()->id;
-        /** get image */
-        $base64 = $request->get('base64');
-        /** convert to file */
-        $base64 = explode( ',', $base64 );
-        $file = base64_decode($base64[1]);
-        /** create directory if is does'nt exist */
-        if(!Storage::exists($path) ){
-            Storage::makeDirectory($path);
-        }
-        /** delete current avatar */
-        if(Storage::exists($path.'/avatar.png') ){
-            Storage::delete($path.'/avatar.png');
-        }
-        /** store image */
-        Storage::put($path.'/avatar.png', $file);
-        /** get $image and resize */
-        $image = Storage::get($path.'/avatar.png');
-        $image = Image::make($image)->resize(100,100)->encode('png');
-        /** re-save image */
-        Storage::put($path.'/avatar.png', $image);
-        return response()->json(['success' => true, 'message' => 'The avatar has been uploaded']);
-    }
 
     /**
      * get logged in user data
