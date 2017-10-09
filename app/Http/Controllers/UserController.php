@@ -176,6 +176,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function tasks(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** get tasks user is currently working on */
         $tasks = $user->tasks()->with('section', 'section.project', 'section.project.team')->get();
         /** return success message */
