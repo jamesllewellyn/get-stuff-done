@@ -110,6 +110,11 @@ class User extends Authenticatable
      */
     public function overDue(){
         $now = Carbon::now()->format('Y-m-d');
-        return $this->belongsToMany(Task::class, 'user_tasks')->where('tasks.status_id', '!=' ,1)->where('tasks.due_date', '<', $now);
+        return $this->belongsToMany(Task::class, 'user_tasks')
+                    ->where('tasks.due_date', '<', $now)
+                    ->where(function($q) {
+                        $q->where('tasks.status_id', '!=' ,1)
+                            ->orWhereNull('tasks.status_id');
+                    });
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feaure\User;
 
 use App\UserTask;
 use App\UserTeam;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
@@ -14,12 +15,13 @@ use App\Task;
 use App\Section;
 use Auth;
 
-class UserGetTasksTest extends TestCase
+class UserGetOverDueTasksTest extends TestCase
 {
     use DatabaseTransactions;
     protected $team;
     protected $project;
     protected $user;
+    protected $tasks;
 
     protected function setUp()
     {
@@ -40,22 +42,22 @@ class UserGetTasksTest extends TestCase
         $this->project = factory(Project::class)->create([
             'team_id' => $this->team->id
         ]);
-        /** create new project sections for project */
+        /** create new section for project */
         $this->project->section = factory(Section::class)->create([
             'project_id' => $this->project->id
         ]);
-        /**  add tasks to section */
-        $this->project->section->tasks = factory(Task::class, 3)->create([
+        /** add 3 tasks with due_date in the future */
+        $tasks = factory(Task::class, 3)->create([
             'section_id' => $this->project->section->id,
-            /** todo: increment sort order */
-            'sort_order' => 1
+            'sort_order' => 1,
+            'due_date' => Carbon::tomorrow('America/Chicago')->format('Y-m-d')
         ]);
-        /** assign tasks in project to logged in user */
-        foreach ($this->project->section->tasks->toArray() as $task){
-            factory(UserTask::class)->create([
-                'task_id' => $task['id'],
-                'user_id' => $this->user->id
-            ]);
+        /** assign tasks to user */
+        foreach ($tasks as $task){
+          factory(UserTask::class)->create([
+              'task_id' => $task->id,
+              'user_id' => $this->user->id
+          ]);
         }
     }
 
@@ -64,24 +66,41 @@ class UserGetTasksTest extends TestCase
      *
      * @test
      */
-    public function can_get_users_tasks()
+    public function can_get_users_over_due_tasks()
     {
+        /** Arrange **/
+        /** create 3 tasks with due_date in the past **/
+         $overDateTasks= factory(Task::class, 3)->create([
+            'section_id' => $this->project->section->id,
+            'sort_order' => 1,
+            'status_id' => null,
+            'due_date' => Carbon::yesterday('America/Chicago')->format('Y-m-d')
+        ]);
+        /** assign tasks to logged in user */
+        foreach ($overDateTasks as $task){
+            factory(UserTask::class)->create([
+                'task_id' => $task->id,
+                'user_id' => $this->user->id
+            ]);
+        }
         /** Act */
-        $response = $this->json('GET', "/api/user/".$this->user->id."/tasks");
+        $response = $this->json('GET', "/api/user/".$this->user->id."/over-due");
         /** Assert response is correct */
         $response->assertStatus(200);
         /** decode returned tasks */
         $tasks = $response->decodeResponseJson();
-        /** loop each task and assert they match added tasks */
+        /** assert tasks were returned */
+        $this->assertNotEmpty($tasks);
+        /** loop each task and assert they match added over due tasks */
         foreach ($tasks as $key => $task){
             $this->assertEquals($this->project->section->id, $task['section']['id']);
             $this->assertEquals($this->project->id, $task['section']['project']['id']);
-            $this->assertEquals($this->project->section->tasks[$key]->name, $task['name']);
-            $this->assertEquals($this->project->section->tasks[$key]->note, $task['note']);
-            $this->assertEquals($this->project->section->tasks[$key]->due_date, $task['due_date']);
-            $this->assertEquals($this->project->section->tasks[$key]->priority_id, $task['priority_id']);
-            $this->assertEquals($this->project->section->tasks[$key]->status_id, $task['status_id']);
-            $this->assertEquals($this->project->section->tasks[$key]->created_by_id, $task['created_by_id']);
+            $this->assertEquals($overDateTasks[$key]->name, $task['name']);
+            $this->assertEquals($overDateTasks[$key]->note, $task['note']);
+            $this->assertEquals($overDateTasks[$key]->due_date, $task['due_date']);
+            $this->assertEquals($overDateTasks[$key]->priority_id, $task['priority_id']);
+            $this->assertEquals($overDateTasks[$key]->status_id, $task['status_id']);
+            $this->assertEquals($overDateTasks[$key]->created_by_id, $task['created_by_id']);
         }
     }
 
@@ -99,7 +118,7 @@ class UserGetTasksTest extends TestCase
         );
         /** Act */
         /** Attempt to get first users tasks*/
-        $response = $this->json('GET', "/api/user/".$this->user->id."/tasks");
+        $response = $this->json('GET', "/api/user/".$this->user->id."/over-due");
         /** Assert response is Forbidden */
         $response->assertStatus(403);
     }

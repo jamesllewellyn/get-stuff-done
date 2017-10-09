@@ -202,6 +202,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function overDue(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** get users over due tasks */
         $tasks = $user->overDue()->with('section', 'section.project', 'section.project.team')->get();
         /** return over due tasks */
