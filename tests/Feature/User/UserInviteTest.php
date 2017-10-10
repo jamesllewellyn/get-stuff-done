@@ -139,7 +139,7 @@ class UserInviteTest extends TestCase
      *
      * @test
      */
-    public function invalid_invite_tokens_redirected_to_welcome_page()
+    public function invalid_tokens_with_unknown_email_redirected_to_welcome_page()
     {
         /** Arrange */
         /** create new pending user */
@@ -159,6 +159,21 @@ class UserInviteTest extends TestCase
         $response->assertSessionMissing('pending');
     }
 
+    /**
+     * Tests Route user.invite
+     *
+     * @test
+     */
+    public function invalid_tokens_redirected_to_welcome_page()
+    {
+        /** Act */
+        /** got to invite link with token not containing email or token of pending user */
+        $response = $this->json('GET', "/invite?token=".urlencode(base64_encode(str_random(24))));
+        /** assert user to taken to home page */
+        $response->assertRedirect('/');
+        /** assert session is missing pending user data */
+        $response->assertSessionMissing('pending');
+    }
     /**
      * Tests Route user.invite
      *
