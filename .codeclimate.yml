@@ -7,10 +7,10 @@ engines:
       languages:
        ruby:
        javascript:
-          mass_threshold: 140
+          mass_threshold: 100
        python:
        php:
-          mass_threshold: 140
+          mass_threshold: 100
   eslint:
     enabled: true
   fixme:
