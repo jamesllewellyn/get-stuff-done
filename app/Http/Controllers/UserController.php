@@ -7,13 +7,11 @@ use App\PendingUser;
 use App\Team;
 use App\UserTeam;
 use Illuminate\Http\Request;
-use App\Project;
 use App\User;
 use Hash;
-use Illuminate\Support\Facades\Storage;
 use Auth;
-use Intervention\Image\Facades\Image;
 use App\Notifications\welcome;
+
 class UserController extends Controller
 {
     public function __construct() {
@@ -53,14 +51,14 @@ class UserController extends Controller
         $user->handle = $request->handle;
         $user->password = Hash::make($request->password);
         $user->save();
-        /** log user in */
-        Auth::login($user, true);
         /** add user to team */
         UserTeam::create(['user_id' => $user->id, 'team_id' => $pending['team_id']]);
         /** remove pending user record */
         PendingUser::where('id', $pending['id'])->delete();
         /** send user welcome email**/
         $user->notify(new welcome());
+        /** log user in */
+        Auth::login($user, true);
         /** redirect to app home page */
         return redirect()->route('home');
     }

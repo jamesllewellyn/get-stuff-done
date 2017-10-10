@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1507579913">
-  <project timestamp="1507579913">
+<coverage generated="1507580306">
+  <project timestamp="1507580306">
     <package name="App\Console">
       <file name="/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/app/Console/Kernel.php">
         <class name="Kernel" namespace="App\Console">
@@ -410,7 +410,7 @@
       </file>
       <file name="/Users/jamesllewellyn/PhpstormProjects/get-stuff-done/app/Http/Controllers/UserController.php">
         <class name="UserController" namespace="App\Http\Controllers">
-          <metrics complexity="17" methods="13" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="67" coveredstatements="29" elements="80" coveredelements="38"/>
+          <metrics complexity="14" methods="12" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="53" coveredstatements="29" elements="65" coveredelements="38"/>
         </class>
         <line num="19" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="20"/>
         <line num="21" type="stmt" count="20"/>
@@ -437,62 +437,47 @@
         <line num="61" type="stmt" count="0"/>
         <line num="63" type="stmt" count="0"/>
         <line num="65" type="stmt" count="0"/>
-        <line num="72" type="method" name="avatar" visibility="public" complexity="3" crap="12" count="0"/>
-        <line num="74" type="stmt" count="0"/>
-        <line num="75" type="stmt" count="0"/>
-        <line num="77" type="stmt" count="0"/>
-        <line num="79" type="stmt" count="0"/>
-        <line num="80" type="stmt" count="0"/>
-        <line num="82" type="stmt" count="0"/>
-        <line num="83" type="stmt" count="0"/>
-        <line num="86" type="stmt" count="0"/>
-        <line num="87" type="stmt" count="0"/>
-        <line num="90" type="stmt" count="0"/>
-        <line num="92" type="stmt" count="0"/>
-        <line num="93" type="stmt" count="0"/>
-        <line num="95" type="stmt" count="0"/>
-        <line num="96" type="stmt" count="0"/>
-        <line num="104" type="method" name="index" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="106" type="stmt" count="1"/>
-        <line num="115" type="method" name="update" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="118" type="stmt" count="4"/>
-        <line num="120" type="stmt" count="1"/>
-        <line num="121" type="stmt" count="1"/>
-        <line num="122" type="stmt" count="1"/>
-        <line num="123" type="stmt" count="1"/>
+        <line num="73" type="method" name="index" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="75" type="stmt" count="1"/>
+        <line num="84" type="method" name="update" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="87" type="stmt" count="4"/>
+        <line num="89" type="stmt" count="1"/>
+        <line num="90" type="stmt" count="1"/>
+        <line num="91" type="stmt" count="1"/>
+        <line num="92" type="stmt" count="1"/>
+        <line num="94" type="stmt" count="1"/>
+        <line num="102" type="method" name="updateTeam" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="104" type="stmt" count="4"/>
+        <line num="106" type="stmt" count="3"/>
+        <line num="108" type="stmt" count="2"/>
+        <line num="110" type="stmt" count="2"/>
+        <line num="112" type="stmt" count="1"/>
+        <line num="113" type="stmt" count="1"/>
+        <line num="115" type="stmt" count="1"/>
+        <line num="123" type="method" name="destroy" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="125" type="stmt" count="1"/>
-        <line num="133" type="method" name="updateTeam" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="135" type="stmt" count="4"/>
-        <line num="137" type="stmt" count="3"/>
-        <line num="139" type="stmt" count="2"/>
-        <line num="141" type="stmt" count="2"/>
-        <line num="143" type="stmt" count="1"/>
-        <line num="144" type="stmt" count="1"/>
-        <line num="146" type="stmt" count="1"/>
-        <line num="154" type="method" name="destroy" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="156" type="stmt" count="1"/>
-        <line num="158" type="stmt" count="1"/>
-        <line num="166" type="method" name="teams" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="168" type="stmt" count="4"/>
-        <line num="170" type="stmt" count="3"/>
-        <line num="178" type="method" name="tasks" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="180" type="stmt" count="2"/>
-        <line num="182" type="stmt" count="1"/>
-        <line num="184" type="stmt" count="1"/>
-        <line num="192" type="method" name="workingOnIt" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="194" type="stmt" count="2"/>
-        <line num="196" type="stmt" count="1"/>
-        <line num="198" type="stmt" count="1"/>
-        <line num="206" type="method" name="overDue" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="208" type="stmt" count="2"/>
-        <line num="210" type="stmt" count="1"/>
-        <line num="212" type="stmt" count="1"/>
-        <line num="220" type="method" name="notifications" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="222" type="stmt" count="0"/>
-        <line num="230" type="method" name="clearNotifications" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="232" type="stmt" count="0"/>
-        <line num="234" type="stmt" count="0"/>
-        <metrics loc="237" ncloc="129" classes="1" methods="13" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="67" coveredstatements="29" elements="80" coveredelements="38"/>
+        <line num="127" type="stmt" count="1"/>
+        <line num="135" type="method" name="teams" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="137" type="stmt" count="4"/>
+        <line num="139" type="stmt" count="3"/>
+        <line num="147" type="method" name="tasks" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="149" type="stmt" count="2"/>
+        <line num="151" type="stmt" count="1"/>
+        <line num="153" type="stmt" count="1"/>
+        <line num="161" type="method" name="workingOnIt" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="163" type="stmt" count="2"/>
+        <line num="165" type="stmt" count="1"/>
+        <line num="167" type="stmt" count="1"/>
+        <line num="175" type="method" name="overDue" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="177" type="stmt" count="2"/>
+        <line num="179" type="stmt" count="1"/>
+        <line num="181" type="stmt" count="1"/>
+        <line num="189" type="method" name="notifications" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="191" type="stmt" count="0"/>
+        <line num="199" type="method" name="clearNotifications" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="201" type="stmt" count="0"/>
+        <line num="203" type="stmt" count="0"/>
+        <metrics loc="206" ncloc="111" classes="1" methods="12" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="53" coveredstatements="29" elements="65" coveredelements="38"/>
       </file>
     </package>
     <package name="App\Http">
@@ -1006,6 +991,6 @@
         <metrics loc="91" ncloc="48" classes="1" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="9" elements="23" coveredelements="9"/>
       </file>
     </package>
-    <metrics files="49" loc="3137" ncloc="1823" classes="37" methods="146" coveredmethods="69" conditionals="0" coveredconditionals="0" statements="543" coveredstatements="272" elements="689" coveredelements="341"/>
+    <metrics files="49" loc="3106" ncloc="1805" classes="37" methods="145" coveredmethods="69" conditionals="0" coveredconditionals="0" statements="529" coveredstatements="272" elements="674" coveredelements="341"/>
   </project>
 </coverage>

@@ -52,14 +52,25 @@ class HomeController extends Controller
         ]);
         /** if validation errors return customer to login page with error */
         if($validator->fails()) {
-            return redirect()->route('home')->with('inviteError','Sorry we couldn\'t find your invitation');
+            return redirect()->route('welcome')->with('inviteError','Sorry we couldn\'t find your invitation');
         }
         $params = [];
         $token = $request->get('token');
+        /** decode token into $params var */
         parse_str(base64_decode($token), $params);
+        /** if token did not contain email and pending user token return user to welcome page */
+        if(!isset($params['email']) || !isset($params['token'])){
+            return redirect()->route('welcome')->with('inviteError','Sorry we couldn\'t find your invitation');
+        }
+        /** get pending user using email address and token */
         $pending = PendingUser::where(['email' => $params['email'], 'token' => $params['token']])->first();
-        /**  set a session variable with the pending data */
+        /** if no pending user found redirect user to welcome page */
+        if(!$pending){
+            return redirect()->route('welcome')->with('inviteError','Sorry we couldn\'t find your invitation');
+        }
+        /** set a session variable with the pending data */
         $request->session()->put('pending',$pending->toArray());
+        /** take use to invited user form */
         return view('auth.invite');
     }
 

@@ -28,6 +28,14 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\PendingUser::class, function (Faker\Generator $faker) {
+    return [
+        'token' => str_random(24),
+        'created_by_id' => Auth::user()->id,
+        'email' => $faker->unique()->safeEmail,
+    ];
+});
+
 /**
  * Team Factories
  */
