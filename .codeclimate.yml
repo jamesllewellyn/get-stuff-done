@@ -7,12 +7,15 @@ engines:
       languages:
        ruby:
        javascript:
-          mass_threshold: 100
+          mass_threshold: 115
        python:
        php:
-          mass_threshold: 100
+          mass_threshold: 140
   eslint:
     enabled: true
+        checks:
+          no-irregular-whitespace:
+            enabled: false
   fixme:
     enabled: true
   phpmd:

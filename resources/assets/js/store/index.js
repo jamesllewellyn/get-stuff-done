@@ -63,7 +63,7 @@ const store = new Vuex.Store({
             axios.get('/api/user')
             .then((response) => {
                 commit('SET_USER', { user: response.data })
-            }, (err) => {
+            }, () => {
                 commit('SERVER_ERROR');
             });
         },
@@ -241,7 +241,7 @@ const store = new Vuex.Store({
                     commit('SET_TEAM_LIST', { teams: response.data });
                     /** clear ajax loader **/
                     commit('CLEAR_IS_LOADING');
-                }, (err) => {
+                }, () => {
                     commit('SERVER_ERROR');
                 })
         },
@@ -454,7 +454,7 @@ const store = new Vuex.Store({
                 .catch(function () {
                     commit('SERVER_ERROR');
                 });
-        },
+        }
     },
     mutations: {
         /***********************
@@ -550,7 +550,7 @@ const store = new Vuex.Store({
         },
         TAKE_USER_TO_PROJECT:(state, {teamId, projectId}) => {
             /** parse id to int */
-            let tId = parseInt(teamId);
+            let tId = parseInt(teamId,10);
             /** update users current_team_id */
             state.user.current_team_id = tId;
             /** take user to project page */
@@ -558,7 +558,7 @@ const store = new Vuex.Store({
         },
         TAKE_USER_TO_TASK:(state, {teamId, projectId, sectionId, task}) => {
             /** parse id to int */
-            let tId = parseInt(teamId);
+            let tId = parseInt(teamId,10);
             /** update users current_team_id */
             state.user.current_team_id = tId;
             /** take user to project page */
@@ -623,7 +623,7 @@ const store = new Vuex.Store({
         },
         SWITCH_TEAM_SUCCESS: (state, {teamId}) => {
             /** parse id to int */
-            let tId = parseInt(teamId);
+            let tId = parseInt(teamId, 10);
             /** update users current_team_id */
             state.user.current_team_id = tId;
             /** get current team */
@@ -691,7 +691,7 @@ const store = new Vuex.Store({
         },
         DELETE_PROJECT_SUCCESS:(state, {teamId, id, message}) => {
             /** cast id to int **/
-            let pId = parseInt(id);
+            let pId = parseInt(id, 10);
             /** get team index **/
             let tIdx = state.teams.map(team => team.id).indexOf(teamId);
             /** remove deleted project from state.projects object**/
@@ -729,7 +729,7 @@ const store = new Vuex.Store({
         },
         DELETE_SECTION_SUCCESS:(state, {id, message}) => {
             /** cast id to int **/
-            let sId = parseInt(id);
+            let sId = parseInt(id, 10);
             /** remove deleted section from state.project.sections **/
             state.project.sections = _.reject(state.project.sections, function(section) { return section.id === sId; });
             /** close are you sure modal **/
@@ -751,7 +751,7 @@ const store = new Vuex.Store({
         },
         ADD_TASK_SUCCESS: (state, {sectionId, task }) => {
             /** cast id to int **/
-            let sId = parseInt(sectionId);
+            let sId = parseInt(sectionId ,10);
             /** get project index **/
             let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
             /** add new task to data array **/
@@ -769,8 +769,8 @@ const store = new Vuex.Store({
             /** clear any form errors **/
             state.formErrors = {};
             /** cast id to int **/
-            let sId = parseInt(sectionId);
-            let tId = parseInt(task.id);
+            let sId = parseInt(sectionId ,10);
+            let tId = parseInt(task.id, 10);
             if(state.project){
                 let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
                 if(sIdx >= 0) {
@@ -797,7 +797,7 @@ const store = new Vuex.Store({
         },
         TASK_SET_TO_DONE_SUCCESS: (state, { sectionId, task }) => {
             /** cast id to int **/
-            let sId = parseInt(sectionId);
+            let sId = parseInt(sectionId, 10);
             if(state.project){
                 let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
                 if(sIdx >= 0){
@@ -815,7 +815,7 @@ const store = new Vuex.Store({
         },
         DELETE_TASK_SUCCESS:(state, {projectId, sectionId, id, message}) => {
             /** cast id to int **/
-            let sId = parseInt(sectionId);
+            let sId = parseInt(sectionId, 10);
             /** get index of section **/
             let sectionIndex = state.project.sections.map(section => section.id).indexOf(sId);
             /** remove deleted section from state.project.sections **/
@@ -881,7 +881,7 @@ const store = new Vuex.Store({
         },
         CLEAR_IS_LOADING:(state)=>{
             state.isLoading = false;
-        },
+        }
     },
     getters: {
         /***********************
@@ -927,12 +927,12 @@ const store = new Vuex.Store({
         },
         getProjectById: (state, getters) => (projectId) => {
             /** cast id to int **/
-            let id = parseInt(projectId);
+            let id = parseInt(projectId, 10);
             return state.projects.find(project => project.id === id)
         },
         getProjectOverviewById: (state, getters) => (projectId) => {
             /** cast id to int **/
-            let id = parseInt(projectId);
+            let id = parseInt(projectId, 10);
             /** if teamOverview not set return blank overview */
             if(!state.teamOverview){
                 return {complete:0, not_started:0, over_due:0, working_on:0};
@@ -958,7 +958,7 @@ const store = new Vuex.Store({
         },
         getSectionById: (state, getters) => ({sectionId}) => {
             /** cast id to int **/
-            let sId = parseInt(sectionId);
+            let sId = parseInt(sectionId, 10);
             /** find and return section **/
             return state.project.sections.find(section => section.id === sId);
         },
@@ -975,8 +975,8 @@ const store = new Vuex.Store({
         /** returns a task **/
         getTaskById: (state, getters) => ({ sectionId, id}) => {
             /** cast ids to int **/
-            let sId = parseInt(sectionId);
-            let tId = parseInt(id);
+            let sId = parseInt(sectionId, 10);
+            let tId = parseInt(id, 10);
             /** find object index of section **/
             let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
             /** find and return task **/

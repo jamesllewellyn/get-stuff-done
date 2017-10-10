@@ -49,6 +49,7 @@ class UserAssignedToTask extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
+            ->greeting('Hi '.$notifiable->first_name)
             ->subject($this->user->getFullName().' has assigned you to a new task in team '.$this->team->name)
             ->line($this->user->getFullName().' ('.$this->user->email.') has assigned you to task '.$this->task->name.' in team '.$this->team->name)
             ->action('Log in', url('/login'));
