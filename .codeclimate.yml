@@ -13,9 +13,9 @@ engines:
           mass_threshold: 140
   eslint:
     enabled: true
-        checks:
-          no-irregular-whitespace:
-            enabled: false
+    checks:
+      no-irregular-whitespace:
+        enabled: false
   fixme:
     enabled: true
   phpmd:
