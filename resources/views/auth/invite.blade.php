@@ -49,6 +49,3 @@
         </div>
     </div>
 @endsection
-@section('scripts')
-    {{--<script src="{{ asset('js/sign-up.js') }}"></script>--}}
-@endsection

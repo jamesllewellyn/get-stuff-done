@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div class="columns is-vcentered">
-        <div class="column is-4 is-offset-4">
+    <div class="columns is-centered">
+        <div class="column is-4">
             <h1 class="title">
                 Login
             </h1>
