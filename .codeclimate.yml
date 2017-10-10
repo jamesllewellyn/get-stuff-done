@@ -5,10 +5,12 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
-      - javascript
-      - python
-      - php
+       ruby:
+       javascript:
+          mass_threshold: 140
+       python:
+       php:
+          mass_threshold: 140
   eslint:
     enabled: true
   fixme:
