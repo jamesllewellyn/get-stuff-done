@@ -44,10 +44,10 @@ class InviteUser extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject($this->user->getFullName().' has invited you to join a Get Stuff Done team')
+            ->subject("{$this->user->getFullName()} has invited you to join a Get Stuff Done team")
             ->line('Join '.$this->team->name.' on Get Stuff Done')
-            ->line($this->user->getFullName().' ('.$this->user->email.') has invited you to join their team')
-            ->action('Join '.$this->team->name, url('/invite?token='.urlencode(base64_encode('email='.$notifiable->email.'&token='.$notifiable->token))));
+            ->line("{$this->user->getFullName()} ({$this->user->email}) has invited you to join their team")
+            ->action("Join {$this->team->name}", url('/invitation?invitation_code='.urlencode(base64_encode('email='.$notifiable->email.'&token='.$notifiable->token))));
     }
 
     /**

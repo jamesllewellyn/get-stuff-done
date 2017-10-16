@@ -16,33 +16,31 @@ use Illuminate\Http\Request;
  * Team API
  **********************/
     /** Team API */
-    Route::resource('team', 'TeamController', ['only' => ['update']]);
-    /** Create new team */
-    Route::post('/user/{user}/team', ['uses'=>'TeamController@store', 'as'=>'team.store'] );
+    Route::apiResource('team', 'TeamController', ['only' => ['update', 'store']]);
     /** Get Teams Projects */
-    Route::get('/team/{team}/projects', ['uses'=>'TeamController@projects', 'as'=>'team.projects'] );
-    /** add user to team */
-    Route::post('/team/{team}/user/', ['uses'=>'TeamController@user', 'as'=>'team.user'] );
+    Route::get('/team/{team}/projects', ['uses'=>'TeamController@getProjects', 'as'=>'team.projects'] );
+    /** invite user to team */
+    Route::post('/team/{team}/user', ['uses'=>'InvitationController@store', 'as'=>'team.invitation.store'] );
     /** get team overview */
-    Route::get('/team/{team}/overview/', ['uses'=>'TeamController@overview', 'as'=>'team.overview'] );
+    Route::get('/team/{team}/overview', ['uses'=>'TeamController@getOverview', 'as'=>'team.overview'] );
 
 /***********************
  * User API
  **********************/
     /** Project store, show, destroy */
-    Route::resource('user', 'UserController', ['only' => ['index', 'store', 'update', 'destroy']]);
+    Route::apiResource('user', 'UserController', ['only' => ['index', 'store', 'update', 'destroy']]);
     /** get users teams */
-    Route::get('/user/{user}/teams', ['uses'=>'UserController@teams', 'as'=>'user.teams'] );
+    Route::get('/user/{user}/teams', ['uses'=>'UserController@getTeams', 'as'=>'user.teams'] );
     /** update users current team */
     Route::put('/user/{user}/team', ['uses'=>'UserController@updateTeam', 'as'=>'user.current_team'] );
     /** get users current tasks */
-    Route::get('/user/{user}/tasks', ['uses'=>'UserController@tasks', 'as'=>'user.tasks'] );
+    Route::get('/user/{user}/tasks', ['uses'=>'UserController@getTasks', 'as'=>'user.tasks'] );
     /** get users over due tasks */
-    Route::get('/user/{user}/over-due', ['uses'=>'UserController@overDue', 'as'=>'user.overDue'] );
+    Route::get('/user/{user}/over-due', ['uses'=>'UserController@getOverDue', 'as'=>'user.overDue'] );
     /** get tasks user is working on */
-    Route::get('/user/{user}/working-on-it', ['uses'=>'UserController@workingOnIt', 'as'=>'user.workingOnIt'] );
+    Route::get('/user/{user}/working-on-it', ['uses'=>'UserController@getWorkingOnIt', 'as'=>'user.workingOnIt'] );
     /** get users unread notifications */
-    Route::get('/user/{user}/notifications', ['uses'=>'UserController@notifications', 'as'=>'user.notifications'] );
+    Route::get('/user/{user}/notifications', ['uses'=>'UserController@getNotifications', 'as'=>'user.notifications'] );
     /** mark all users notifications as read */
     Route::put('/user/{user}/clear-notifications', ['uses'=>'UserController@clearNotifications', 'as'=>'user.notifications.clear'] );
 
@@ -50,7 +48,7 @@ use Illuminate\Http\Request;
  * Project API
  **********************/
     /** Project store, show, destroy */
-    Route::resource('/team/{team}/project', 'ProjectController', ['only' => ['store', 'show', 'update', 'destroy']]);
+    Route::apiResource('/team/{team}/project', 'ProjectController', ['only' => ['store', 'show', 'update', 'destroy']]);
     /** check if user can access project */
     Route::get('/team/{team}/project/{project}/can-access', ['uses'=>'ProjectController@canAccess', 'as'=>'project.canAccess'] );
 
@@ -58,12 +56,12 @@ use Illuminate\Http\Request;
  * Section API
  **********************/
     /** Section store, show, update, destroy */
-    Route::resource('/team/{team}/project/{project}/section', 'SectionController', ['only' => ['store' , 'update', 'destroy']]);
+    Route::apiResource('/team/{team}/project/{project}/section', 'SectionController', ['only' => ['store' , 'update', 'destroy']]);
 /***********************
  * Task API
  **********************/
     /** Task store, show, destroy, update */
-    Route::resource('team/{team}/project/{project}/section/{section}/task', 'TaskController', ['only' => [ 'store', 'show', 'destroy', 'update']]);
+    Route::apiResource('team/{team}/project/{project}/section/{section}/task', 'TaskController', ['only' => [ 'store', 'show', 'destroy', 'update']]);
     /** flag task as done */
     Route::put('team/{team}/project/{project}/section/{section}/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );
     /** check user can access task */

@@ -31,7 +31,7 @@ class TeamCreateTest extends TestCase
         $faker = Faker::create();
         $teamName = $faker->words(4,true);
         /** Act */
-        $response = $this->json('POST', "/api/user/".Auth::user()->id."/team", [
+        $response = $this->json('POST', "/api/team", [
             "name" => $teamName
         ]);
         /** Assert response is correct */
@@ -64,7 +64,7 @@ class TeamCreateTest extends TestCase
     public function cannot_create_team_without_team_name()
     {
         /** Act */
-        $response = $this->json('POST', "/api/user/".Auth::user()->id."/team",[]);
+        $response = $this->json('POST', "/api/team",[]);
         /** Assert */
         $response->assertStatus(422)
             ->assertJson([

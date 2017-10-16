@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
 use Auth;
 
 class NotificationController extends Controller
@@ -20,13 +18,12 @@ class NotificationController extends Controller
      */
     public function markAsRead($id){
         /** get notification from id */
-        $user = Auth::user();
-        $notification = $user->notifications()->where('id',$id)->first();
+        $notification = auth()->user()->notifications()->findOrFail($id);
         /** authorize user can access notification */
         $this->authorize('access-notification', [ $notification]);
         /** mark notification as read*/
         $notification->markAsRead();
         /** return success and remaining unread notifications */
-        return response()->json(['success' => true, 'message' => 'notification marked as read', 'notifications' => $user->unreadNotifications]);
+        return response()->json(['success' => true, 'message' => 'notification marked as read', 'notifications' => auth()->user()->unreadNotifications]);
     }
 }

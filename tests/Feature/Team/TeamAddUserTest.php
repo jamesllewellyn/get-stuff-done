@@ -2,7 +2,7 @@
 
 namespace Tests\Feaure\Team;
 
-use App\PendingUser;
+use App\Invitation;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
@@ -91,17 +91,17 @@ class TeamAddUserTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => $newUser->full_name.' has been added to team '.$this->team->name,
-                'user' => $newUser->toArray()
+                'message' => $newUser->email.' has been invited to team '.$this->team->name
             ]);
         /** assert user has been added to team */
-        $this->assertDatabaseHas('user_teams', [
+        $this->assertDatabaseHas('invitations', [
             'user_id' => $newUser->id,
             "team_id" => $this->team->id
         ]);
+        $invitation = Invitation::where(['user_id' => $newUser->id, "team_id" => $this->team->id])->first();
         /** assert user has been sent notification */
         Notification::assertSentTo(
-            [$newUser], AddedToTeam::class
+            [$invitation], InviteUser::class
         );
     }
 
@@ -128,7 +128,7 @@ class TeamAddUserTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => false,
-                'message' => $newUser->full_name.' is already a member of team '.$this->team->name
+                'message' => $newUser->email.' is already a member of team '.$this->team->name
             ]);
         /** assert user is in team */
         $this->assertDatabaseHas('user_teams', [
@@ -160,18 +160,18 @@ class TeamAddUserTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => $email.' has been invited to team'
+                'message' => "{$email} has been invited to team {$this->team->name}"
             ]);
         /** assert user is in team */
-        $this->assertDatabaseHas('users_pending', [
+        $this->assertDatabaseHas('invitations', [
             'email' => $email,
             "team_id" => $this->team->id
         ]);
         /** get pending user */
-        $pendingUser = PendingUser::where('email',$email)->first();
+        $invitation = Invitation::where('email',$email)->first();
         /** assert user has  been sent notification */
         Notification::assertSentTo(
-            [$pendingUser], InviteUser::class
+            [$invitation], InviteUser::class
         );
     }
 }

@@ -5017,7 +5017,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
 
             axios.get('/api/user').then(function (response) {
                 commit('SET_USER', { user: response.data });
-            }, function (err) {
+            }, function () {
                 commit('SERVER_ERROR');
             });
         },
@@ -5216,7 +5216,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SET_TEAM_LIST', { teams: response.data });
                 /** clear ajax loader **/
                 commit('CLEAR_IS_LOADING');
-            }, function (err) {
+            }, function () {
                 commit('SERVER_ERROR');
             });
         },
@@ -5225,7 +5225,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 state = _ref22.state;
             var team = _ref23.team;
 
-            axios.post('/api/user/' + state.user.id + '/team/', team).then(function (response) {
+            axios.post('/api/team/', team).then(function (response) {
                 commit('ADD_NEW_TEAM_SUCCESS', { team: response.data.team });
                 /** clear button loading state*/
                 commit('REMOVE_BUTTON_LOADING_STATE', { name: 'addTeam' });
@@ -5603,7 +5603,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 projectId = _ref64.projectId;
 
             /** parse id to int */
-            var tId = parseInt(teamId);
+            var tId = parseInt(teamId, 10);
             /** update users current_team_id */
             state.user.current_team_id = tId;
             /** take user to project page */
@@ -5616,7 +5616,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 task = _ref65.task;
 
             /** parse id to int */
-            var tId = parseInt(teamId);
+            var tId = parseInt(teamId, 10);
             /** update users current_team_id */
             state.user.current_team_id = tId;
             /** take user to project page */
@@ -5702,7 +5702,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var teamId = _ref74.teamId;
 
             /** parse id to int */
-            var tId = parseInt(teamId);
+            var tId = parseInt(teamId, 10);
             /** update users current_team_id */
             state.user.current_team_id = tId;
             /** get current team */
@@ -5796,7 +5796,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 message = _ref81.message;
 
             /** cast id to int **/
-            var pId = parseInt(id);
+            var pId = parseInt(id, 10);
             /** get team index **/
             var tIdx = state.teams.map(function (team) {
                 return team.id;
@@ -5849,7 +5849,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 message = _ref85.message;
 
             /** cast id to int **/
-            var sId = parseInt(id);
+            var sId = parseInt(id, 10);
             /** remove deleted section from state.project.sections **/
             state.project.sections = _.reject(state.project.sections, function (section) {
                 return section.id === sId;
@@ -5878,7 +5878,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 task = _ref87.task;
 
             /** cast id to int **/
-            var sId = parseInt(sectionId);
+            var sId = parseInt(sectionId, 10);
             /** get project index **/
             var sIdx = state.project.sections.map(function (section) {
                 return section.id;
@@ -5903,8 +5903,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear any form errors **/
             state.formErrors = {};
             /** cast id to int **/
-            var sId = parseInt(sectionId);
-            var tId = parseInt(task.id);
+            var sId = parseInt(sectionId, 10);
+            var tId = parseInt(task.id, 10);
             if (state.project) {
                 var sIdx = state.project.sections.map(function (section) {
                     return section.id;
@@ -5947,7 +5947,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 task = _ref92.task;
 
             /** cast id to int **/
-            var sId = parseInt(sectionId);
+            var sId = parseInt(sectionId, 10);
             if (state.project) {
                 var sIdx = state.project.sections.map(function (section) {
                     return section.id;
@@ -5974,7 +5974,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 message = _ref93.message;
 
             /** cast id to int **/
-            var sId = parseInt(sectionId);
+            var sId = parseInt(sectionId, 10);
             /** get index of section **/
             var sectionIndex = state.project.sections.map(function (section) {
                 return section.id;
@@ -6109,7 +6109,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         getProjectById: function getProjectById(state, getters) {
             return function (projectId) {
                 /** cast id to int **/
-                var id = parseInt(projectId);
+                var id = parseInt(projectId, 10);
                 return state.projects.find(function (project) {
                     return project.id === id;
                 });
@@ -6118,7 +6118,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         getProjectOverviewById: function getProjectOverviewById(state, getters) {
             return function (projectId) {
                 /** cast id to int **/
-                var id = parseInt(projectId);
+                var id = parseInt(projectId, 10);
                 /** if teamOverview not set return blank overview */
                 if (!state.teamOverview) {
                     return { complete: 0, not_started: 0, over_due: 0, working_on: 0 };
@@ -6150,7 +6150,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 var sectionId = _ref98.sectionId;
 
                 /** cast id to int **/
-                var sId = parseInt(sectionId);
+                var sId = parseInt(sectionId, 10);
                 /** find and return section **/
                 return state.project.sections.find(function (section) {
                     return section.id === sId;
@@ -6174,8 +6174,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                     id = _ref99.id;
 
                 /** cast ids to int **/
-                var sId = parseInt(sectionId);
-                var tId = parseInt(id);
+                var sId = parseInt(sectionId, 10);
+                var tId = parseInt(id, 10);
                 /** find object index of section **/
                 var sIdx = state.project.sections.map(function (section) {
                     return section.id;
@@ -64207,30 +64207,7 @@ var app = new Vue({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(18);
 
 
-var routes = [
-// {
-//     path: '',
-//     redirect: '/team/'
-// },
-// {
-//     path: '/team/',
-//     component: require('./views/auth/CreateAccount.vue'),
-//     children: [
-//         {
-//             path: '',
-//             redirect: 'user'
-//         },
-//         {
-//             path: 'user',
-//             component: require('./views/auth/account-steps/MakeUser.vue')
-//         },
-//         {
-//             path: 'set-up-team',
-//             component: require('./views/auth/account-steps/SetUpTeam.vue')
-//         }
-//     ]
-// }
-{
+var routes = [{
     path: '',
     redirect: '/user/'
 }, {
