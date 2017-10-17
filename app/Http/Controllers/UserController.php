@@ -2,65 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
-use App\PendingUser;
 use App\Team;
-use App\UserTeam;
 use Illuminate\Http\Request;
 use App\User;
 use Hash;
 use Auth;
-use App\Notifications\welcome;
 
 class UserController extends Controller
 {
     public function __construct() {
         /** define controller middleware */
         $this->middleware('auth:api', ['except' => ['invite']]);
-    }
-
-    /**
-     * Store user from email invite
-     * @param \Illuminate\Http\Request $request
-     * @return mixed
-     */
-    public function invite(Request $request){
-        $user = new User();
-        /** validate the request data */
-        $validator = Validator::make($request->all(),[
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'handle' => 'required',
-            'password' => 'required|min:7'
-        ],$user->messages);
-        /** if validation errors return customer to login page with error */
-        if($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        /** get pending user session data */
-        $pending = $request->session()->get('pending');
-        /** delete session */
-        $request->session()->forget('pending');
-        if(!$pending){
-            return redirect()->route('home')->with('inviteError','Sorry we couldn\'t find your invitation');
-        }
-        /** create new user */
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $pending['email'];
-        $user->handle = $request->handle;
-        $user->password = Hash::make($request->password);
-        $user->save();
-        /** add user to team */
-        UserTeam::create(['user_id' => $user->id, 'team_id' => $pending['team_id']]);
-        /** remove pending user record */
-        PendingUser::where('id', $pending['id'])->delete();
-        /** send user welcome email**/
-        $user->notify(new welcome());
-        /** log user in */
-        Auth::login($user, true);
-        /** redirect to app home page */
-        return redirect()->route('home');
     }
 
     /**
@@ -80,7 +32,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user) {
-        /** todo: only allow user to update themselves */
+        /** authorize user */
+        $this->authorize('access-user', $user);
        /** validate the request data */
         $this->validate(Request(),$user->updateValidation, $user->messages);
         /** update record */
@@ -119,6 +72,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** delete user */
         $user->delete();
         /** return success message */
@@ -130,7 +85,7 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function teams(User $user) {
+    public function getTeams(User $user) {
         /** authorize user */
         $this->authorize('access-user', $user);
         /** return success message */
@@ -142,7 +97,7 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function tasks(User $user) {
+    public function getTasks(User $user) {
         /** authorize user */
         $this->authorize('access-user', $user);
         /** get tasks user is currently working on */
@@ -156,7 +111,7 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function workingOnIt(User $user) {
+    public function getWorkingOnIt(User $user) {
         /** authorize user */
         $this->authorize('access-user', $user);
         /** get tasks flagged as working on it */
@@ -170,7 +125,7 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function overDue(User $user) {
+    public function getOverDue(User $user) {
         /** authorize user */
         $this->authorize('access-user', $user);
         /** get users over due tasks */
@@ -184,7 +139,9 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function notifications(User $user) {
+    public function getNotifications(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** return unread notifications */
         return response()->json($user->unreadNotifications);
     }
@@ -195,6 +152,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function clearNotifications(User $user) {
+        /** authorize user */
+        $this->authorize('access-user', $user);
         /** mark all user notifications as read **/
         $user->unreadNotifications->markAsRead();
         /** return success */

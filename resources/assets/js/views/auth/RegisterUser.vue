@@ -29,7 +29,7 @@
                         <input id="handle" type="text" class="input" name="handle" value="" v-model="user.handle">
                     </p>
                     <p class="help is-danger" v-text="getErrors('handle')"></p>
-                    <p><small>Your hand will be displayed along with your messages in Get Stuff Done.</small></p>
+                    <p><small>Your handle will be displayed along with your messages in Get Stuff Done.</small></p>
                     <label for="password" class="label">Password</label>
                     <p class="control">
                         <input id="password" type="password" class="input" name="password" value="" v-model="user.password" >

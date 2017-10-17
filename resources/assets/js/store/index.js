@@ -246,7 +246,7 @@ const store = new Vuex.Store({
                 })
         },
         ADD_NEW_TEAM: function ({ commit, state }, {team}) {
-            axios.post('/api/user/'+state.user.id+'/team/' ,team )
+            axios.post('/api/team/' ,team )
                 .then((response) => {
                     commit('ADD_NEW_TEAM_SUCCESS', { team: response.data.team});
                     /** clear button loading state*/

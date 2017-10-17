@@ -20,9 +20,9 @@ Route::get('/create', function () {
     return view('auth.create-team');
 });
 
-/** user invite */
-Route::get('/invite', 'HomeController@invite')->name('user.invite');
-Route::post('/invite', 'UserController@invite')->name('user.invite');
+/** user invitation */
+Route::get('invitation', 'InvitationController@show')->name('team.invitation.show');
+Route::post('invitation', 'InvitationController@createUserFromInvitation')->name('team.invitation.createUser');
 
 Auth::routes();
 

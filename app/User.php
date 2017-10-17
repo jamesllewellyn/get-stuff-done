@@ -7,6 +7,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\Welcome;
+use phpDocumentor\Reflection\Types\Integer;
 
 class User extends Authenticatable
 {
@@ -66,18 +68,60 @@ class User extends Authenticatable
         'password.confirmed' => 'The passwords you entered don\'t appear to match',
     ];
 
+
+    /**
+     * Get user using email
+     * @var string $email
+     * @return \App\User
+     */
+    public static function findByEmail($email)
+    {
+        return static::where(['email' => $email])->first();
+    }
+
+    /**
+     * Make user from pending user
+     * @var Invitation $pendingUser
+     * @var array $userDetails
+     * @return \App\User
+     */
+    public static function createFromInvitation(Invitation $invitation, $userDetails)
+    {
+        /** create new user */
+        $user = self::create([
+            'first_name' => $userDetails['first_name'],
+            'last_name' => $userDetails['last_name'],
+            'email' =>  $invitation->email,
+            'handle' => $userDetails['handle'],
+            'password' => bcrypt($userDetails['password']),
+        ]);
+        /** add user to team */
+        $user->teams()->attach($invitation->team_id);
+        /** delete invitation */
+        $invitation->delete();
+        /** send user welcome email**/
+        $user->notify(new Welcome());
+        /** return user */
+        return $user;
+    }
+
+    public function addToTeam(Integer $team_id){
+       return  $this->teams()->attach($team_id);
+    }
     /**
      * Get users full name.
      */
     public function getFullName(){
         return $this->first_name .' '.$this->last_name;
     }
+
     /**
-     * Get users avatar url.
+     * Get users full name.
      */
     public function getFullNameAttribute() {
         return $this->first_name .' '.$this->last_name;
     }
+
     /**
      * Get users avatar url.
      */
@@ -87,24 +131,28 @@ class User extends Authenticatable
         }
         return asset('https://api.adorable.io/avatars/100/'.$this->handle.'@laravel-tasks.png');
     }
+
     /**
      * Get all user teams.
      */
     public function teams(){
         return $this->belongsToMany(Team::class, 'user_teams');
     }
+
     /**
      * Get all user tasks.
      */
     public function tasks(){
         return $this->belongsToMany(Task::class,'user_tasks');
     }
+
     /**
      * Get tasks currently working on.
      */
     public function workingOnIt(){
         return $this->belongsToMany(Task::class,'user_tasks')->where('tasks.status_id', 2);
     }
+
     /**
      * Get over due tasks.
      */
@@ -114,7 +162,8 @@ class User extends Authenticatable
                     ->where('tasks.due_date', '<', $now)
                     ->where(function($q) {
                         $q->where('tasks.status_id', '!=' ,1)
-                            ->orWhereNull('tasks.status_id');
-                    });
+                          ->orWhereNull('tasks.status_id');
+                    }
+        );
     }
 }
