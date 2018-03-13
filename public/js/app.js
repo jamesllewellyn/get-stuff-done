@@ -5212,7 +5212,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var commit = _ref21.commit,
                 state = _ref21.state;
 
-            axios.get('/api/user/' + state.user.id + '/teams').then(function (response) {
+            axios.get('/api/user/' + state.user.id + '/team').then(function (response) {
                 commit('SET_TEAM_LIST', { teams: response.data });
                 /** clear ajax loader **/
                 commit('CLEAR_IS_LOADING');

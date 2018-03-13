@@ -236,7 +236,7 @@ const store = new Vuex.Store({
          * Team Actions
          **********************/
         LOAD_TEAMS: function({commit ,state}){
-            axios.get('/api/user/' + state.user.id + '/teams')
+            axios.get('/api/user/' + state.user.id + '/team')
                 .then((response) => {
                     commit('SET_TEAM_LIST', { teams: response.data });
                     /** clear ajax loader **/

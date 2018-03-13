@@ -44,27 +44,6 @@ class UserController extends Controller
         /** return success and updated project */
         return response()->json(['success' => true, 'message' => 'user has been updated', 'user' => $user]);
     }
-    /**
-     * Update current team
-     * @param \Illuminate\Http\Request $request
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function updateTeam(Request $request, User $user) {
-        /** authorize user */
-        $this->authorize('access-user', $user);
-        /** validate the request data */
-        $this->validate(Request(),['teamId' => 'required']);
-        /** get team */
-        $team = Team::find($request->teamId);
-        /** authorize user belongs to team */
-        $this->authorize('access-team',$team);
-        /** update record */
-        $user->current_team_id = $team->id;
-        $user->save();
-        /** return success and updated project */
-        return response()->json(['success' => true, 'message' => 'Team has been switched', 'user' => $user]);
-    }
 
     /**
      * Delete user
@@ -78,18 +57,6 @@ class UserController extends Controller
         $user->delete();
         /** return success message */
         return response()->json(['success' => true, 'message' => 'User '.$user->getFullName().' has been successfully deleted']);
-    }
-
-    /**
-     * Get users teams
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function getTeams(User $user) {
-        /** authorize user */
-        $this->authorize('access-user', $user);
-        /** return success message */
-        return response()->json($user->teams()->with(['projects','users'])->get());
     }
 
     /**

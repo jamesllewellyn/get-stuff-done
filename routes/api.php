@@ -30,9 +30,9 @@ use Illuminate\Http\Request;
     /** Project store, show, destroy */
     Route::apiResource('user', 'UserController', ['only' => ['index', 'store', 'update', 'destroy']]);
     /** get users teams */
-    Route::get('/user/{user}/teams', ['uses'=>'UserController@getTeams', 'as'=>'user.teams'] );
+//    Route::get('/user/{user}/teams', ['uses'=>'UserController@getTeams', 'as'=>'user.teams'] );
     /** update users current team */
-    Route::put('/user/{user}/team', ['uses'=>'UserController@updateTeam', 'as'=>'user.current_team'] );
+//    Route::put('/user/{user}/team', ['uses'=>'UserController@updateTeam', 'as'=>'user.current_team'] );
     /** get users current tasks */
     Route::get('/user/{user}/tasks', ['uses'=>'UserController@getTasks', 'as'=>'user.tasks'] );
     /** get users over due tasks */
@@ -43,6 +43,14 @@ use Illuminate\Http\Request;
     Route::get('/user/{user}/notifications', ['uses'=>'UserController@getNotifications', 'as'=>'user.notifications'] );
     /** mark all users notifications as read */
     Route::put('/user/{user}/clear-notifications', ['uses'=>'UserController@clearNotifications', 'as'=>'user.notifications.clear'] );
+
+/***********************
+ * User Team API
+ **********************/
+    /** UserTeam store, show, destroy */
+    Route::apiResource('/user/{user}/team', 'UserTeamController', ['only' => ['index']]);
+    /** update users current team */
+    Route::put('/user/{user}/team', ['uses'=>'UserTeamController@update', 'as'=>'user.current_team'] );
 
 /***********************
  * Project API
