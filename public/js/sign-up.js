@@ -4999,7 +4999,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var commit = _ref2.commit,
                 state = _ref2.state;
 
-            axios.post('/api/user/' + state.user.id + '/team', team).then(function (response) {
+            axios.post('/api/team', team).then(function (response) {
                 commit('SIGN_UP_SUCCESS', { user: response.data.user });
             }, function (error) {
                 if (error.response.data) {
@@ -64598,7 +64598,7 @@ var staticRenderFns = [
     return _c("p", [
       _c("small", [
         _vm._v(
-          "Your hand will be displayed along with your messages in Get Stuff Done."
+          "Your handle will be displayed along with your messages in Get Stuff Done."
         )
       ])
     ])

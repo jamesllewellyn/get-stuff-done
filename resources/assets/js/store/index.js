@@ -45,7 +45,7 @@ const store = new Vuex.Store({
                 });
         },
         SIGN_UP_SUBMIT :function ({ commit, state }, team) {
-            axios.post('/api/user/'+state.user.id+'/team' ,team )
+            axios.post('/api/team' , team)
                 .then((response) => {
                     commit('SIGN_UP_SUCCESS', { user: response.data.user})
                 }, (error) => {
