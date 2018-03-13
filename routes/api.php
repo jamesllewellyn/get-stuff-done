@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 /***********************
  * Team API
  **********************/
@@ -29,10 +30,6 @@ use Illuminate\Http\Request;
  **********************/
     /** Project store, show, destroy */
     Route::apiResource('user', 'UserController', ['only' => ['index', 'store', 'update', 'destroy']]);
-    /** get users unread notifications */
-    Route::get('/user/{user}/notifications', ['uses'=>'UserController@getNotifications', 'as'=>'user.notifications'] );
-    /** mark all users notifications as read */
-    Route::put('/user/{user}/clear-notifications', ['uses'=>'UserController@clearNotifications', 'as'=>'user.notifications.clear'] );
 
 /***********************
  * User Team API
@@ -45,7 +42,7 @@ use Illuminate\Http\Request;
 /***********************
  * User Tasks API
  **********************/
-    /** get users current tasks */
+    /** get users tasks */
     Route::get('/user/{user}/tasks', ['uses'=>'UserTaskController@index', 'as'=>'user.tasks'] );
 
 /***********************
@@ -61,6 +58,7 @@ use Illuminate\Http\Request;
  **********************/
     /** Section store, show, update, destroy */
     Route::apiResource('/team/{team}/project/{project}/section', 'SectionController', ['only' => ['store' , 'update', 'destroy']]);
+
 /***********************
  * Task API
  **********************/
@@ -70,8 +68,13 @@ use Illuminate\Http\Request;
     Route::put('team/{team}/project/{project}/section/{section}/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );
     /** check user can access task */
     Route::get('/team/{team}/project/{project}/section/{section}/task/{task}/can-access', ['uses'=>'TaskController@canAccess', 'as'=>'task.canAccess'] );
+
 /***********************
  * Notifications API
  **********************/
+    /** get users notifications */
+    Route::get('/user/{user}/notifications', 'UserNotificationController@index');
+    /** clear all users notifications */
+    Route::delete('/user/{user}/clear-notifications', ['uses'=>'UserNotificationController@destroy', 'as'=>'user.notifications.clear'] );
     /** Mark notification as read */
-    Route::put('/notification/{notification}', ['uses'=>'NotificationController@markAsRead', 'as'=>'notification.read'] );
+    Route::put('/notification/{notification}', ['uses'=>'NotificationController@destroy', 'as'=>'notification.read'] );

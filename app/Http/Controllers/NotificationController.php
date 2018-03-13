@@ -16,7 +16,7 @@ class NotificationController extends Controller
      * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function markAsRead($id){
+    public function destroy($id){
         /** get notification from id */
         $notification = auth()->user()->notifications()->findOrFail($id);
         /** authorize user can access notification */
