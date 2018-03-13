@@ -34,7 +34,7 @@ class UserTaskController extends Controller
         /** return success message */
         return response()->json($tasks->get());
     }
-    
+
     /**
      * Filter users tasks
      *
