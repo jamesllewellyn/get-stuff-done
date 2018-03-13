@@ -147,7 +147,7 @@ const store = new Vuex.Store({
                 });
         },
         GET_MY_OVER_DUE:function({commit, state} ){
-            axios.get('/api/user/'+state.user.id+'/over-due')
+            axios.get('/api/user/'+state.user.id+'/tasks?filter=over-due')
                 .then(function (response) {
                     /** call success */
                     commit('GET_OVER_DUE_SUCCESS', {tasks : response.data});
@@ -157,7 +157,7 @@ const store = new Vuex.Store({
                 });
         },
         GET_MY_WORKING_ON_IT:function({commit, state} ){
-            axios.get('/api/user/'+state.user.id+'/working-on-it')
+            axios.get('/api/user/'+state.user.id+'/tasks?filter=working-on-it')
                 .then(function (response) {
                     /** call success */
                     commit('GET_WORKING_ON_IT_SUCCESS', {tasks : response.data});

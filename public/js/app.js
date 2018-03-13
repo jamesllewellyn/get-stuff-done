@@ -5111,7 +5111,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var commit = _ref9.commit,
                 state = _ref9.state;
 
-            axios.get('/api/user/' + state.user.id + '/over-due').then(function (response) {
+            axios.get('/api/user/' + state.user.id + '/tasks?filter=over-due').then(function (response) {
                 /** call success */
                 commit('GET_OVER_DUE_SUCCESS', { tasks: response.data });
             }).catch(function (error) {
@@ -5122,7 +5122,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             var commit = _ref10.commit,
                 state = _ref10.state;
 
-            axios.get('/api/user/' + state.user.id + '/working-on-it').then(function (response) {
+            axios.get('/api/user/' + state.user.id + '/tasks?filter=working-on-it').then(function (response) {
                 /** call success */
                 commit('GET_WORKING_ON_IT_SUCCESS', { tasks: response.data });
             }).catch(function (error) {

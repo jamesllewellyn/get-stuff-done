@@ -10,7 +10,7 @@ class UserTeamController extends Controller
 {
     public function __construct() {
         /** define controller middleware */
-        $this->middleware('auth:api', ['except' => ['invite']]);
+        $this->middleware('auth:api');
     }
 
     /**

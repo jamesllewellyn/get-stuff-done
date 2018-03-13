@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function __construct() {
         /** define controller middleware */
-        $this->middleware('auth:api', ['except' => ['invite']]);
+        $this->middleware('auth:api');
     }
 
     /**
@@ -57,48 +57,6 @@ class UserController extends Controller
         $user->delete();
         /** return success message */
         return response()->json(['success' => true, 'message' => 'User '.$user->getFullName().' has been successfully deleted']);
-    }
-
-    /**
-     * all users tasks
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function getTasks(User $user) {
-        /** authorize user */
-        $this->authorize('access-user', $user);
-        /** get tasks user is currently working on */
-        $tasks = $user->tasks()->with('section', 'section.project', 'section.project.team')->get();
-        /** return success message */
-        return response()->json($tasks);
-    }
-
-    /**
-     * Get tasks user is currently working on
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function getWorkingOnIt(User $user) {
-        /** authorize user */
-        $this->authorize('access-user', $user);
-        /** get tasks flagged as working on it */
-        $tasks = $user->workingOnIt()->with('section', 'section.project', 'section.project.team')->get();
-        /** return success message */
-        return response()->json($tasks);
-    }
-
-    /**
-     * Get tasks that are over due
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function getOverDue(User $user) {
-        /** authorize user */
-        $this->authorize('access-user', $user);
-        /** get users over due tasks */
-        $tasks = $user->overDue()->with('section', 'section.project', 'section.project.team')->get();
-        /** return over due tasks */
-        return response()->json($tasks);
     }
 
     /**
