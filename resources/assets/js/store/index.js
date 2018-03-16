@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         projects: [],/** all current teams projects */
         project: null,/** all current projects sections and tasks */
         task: null,/** Current task being displayed */
+        taskIsLoading: false,/** loading state of task */
         notifications: [], /** Users notifications */
         myTasks: {},/** all tasks assigned to user */
         myTasksLoading: true, /** loading state for MyTask page, used when changing task filter to fade content in/out */
@@ -399,6 +400,9 @@ const store = new Vuex.Store({
                 .then(function (response) {
                     /** call success mutation **/
                     commit('GET_TASK_SUCCESS', {task: response.data.task });
+                    /** clear task loading state*/
+                    commit('CLEAR_TASK_IS_LOADING');
+
                 })
                 .catch(function () {
                     commit('SERVER_ERROR');
@@ -881,7 +885,13 @@ const store = new Vuex.Store({
         },
         CLEAR_IS_LOADING:(state)=>{
             state.isLoading = false;
-        }
+        },
+        SET_TASK_IS_LOADING:(state)=>{
+            state.taskIsLoading = true;
+        },
+        CLEAR_TASK_IS_LOADING:(state)=>{
+            state.taskIsLoading = false;
+        },
     },
     getters: {
         /***********************

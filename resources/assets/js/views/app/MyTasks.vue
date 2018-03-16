@@ -1,6 +1,6 @@
 <template>
     <div id="my-tasks">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <div class="level-item">
                     <h1 class="title">My Tasks</h1>
@@ -10,7 +10,6 @@
                 </div>
             </div>
         </div>
-        <hr />
         <transition  name="fade" mode="out-in" >
             <div class="my-tasks-projects" v-if="!areTasksLoading">
                 <div class="columns is-multiline" v-if="tasks">

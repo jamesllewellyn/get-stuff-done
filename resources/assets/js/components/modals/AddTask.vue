@@ -28,7 +28,7 @@
                     <label class="label">Assign members</label>
                     <p class="control">
                         <multi-select v-model="task.users" placeholder="Assign to one or more members" label="handle" track-by="full_name" :options="users"  :show-labels="false" :multiple="true" :close-on-select="false">
-                            <template slot="option" scope="props">
+                            <template slot="option" slot-scope="props">
                                 <div class="level">
                                     <div class="level-item">
                                         <img class="circle small-avatar" :src="props.option.avatar_url" >

@@ -8,7 +8,7 @@
                 </div>
                 <div class="is-centered">
                     <figure class="has-text-centered">
-                        <img class="logo is-centered" src="/images/logo.png" alt="">
+                        <img class="logo is-centered circle" :src="user.avatar_url" alt="">
                     </figure>
                 </div>
                 <div class="has-text-centered">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <hr/>
+                <!--<hr/>-->
                 <p class="menu-label">
                     General
                 </p>
@@ -47,7 +47,7 @@
                         </router-link>
                     </li>
                 </ul>
-                <hr/>
+                <!--<hr/>-->
                 <p class="menu-label">
                     Team <a class="is-pulled-right align-vertical tooltip is-tooltip-right" data-tooltip="Add Team" @click.prevent.stop="triggerEvent('toggleModal', 'addTeam')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>
@@ -62,7 +62,7 @@
                         </router-link>
                     </li>
                 </ul>
-                <hr/>
+                <!--<hr/>-->
                 <p class="menu-label">
                     Projects <a class="is-pulled-right align-vertical tooltip is-tooltip-right" data-tooltip="Add Project" @click.prevent.stop="triggerEvent('toggleModal', 'addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>

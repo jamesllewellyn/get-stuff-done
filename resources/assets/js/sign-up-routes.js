@@ -7,11 +7,11 @@ let routes = [
     },
     {
         path: '/user/',
-        component: require('./views/auth/RegisterUser.vue'),
+        component: require('./views/auth/RegisterUser.vue').default,
     },
     {
         path: '/team/',
-        component: require('./views/auth/CreateTeam.vue'),
+        component: require('./views/auth/CreateTeam.vue').default,
     }
 ];
 

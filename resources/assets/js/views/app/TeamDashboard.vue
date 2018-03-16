@@ -1,6 +1,6 @@
 <template>
     <div class="team-dashboard">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Team', event: 'team.'+team.id+'.delete', action: 'delete this team', areYouSure : true}]"></drop-down-button>
                 <input v-if="team.name != ''" class="title clear-background h1" type="text" name="name" @change="updateTeam" v-model="team.name" v-cloak>
@@ -14,7 +14,6 @@
                 </div>
             </div>
         </div>
-        <hr>
         <div class="columns">
             <div class="column is-one-third">
                 <div class="box">

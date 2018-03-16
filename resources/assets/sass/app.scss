@@ -7,7 +7,7 @@
 
 /** Bulma */
 @import "node_modules/bulma/bulma";
-@import "node_modules/bulma-tooltip/tooltip";
+@import '~bulma-tooltip';
 
 /** vue-multiselect */
 @import "node_modules/vue-multiselect/dist/vue-multiselect.min";

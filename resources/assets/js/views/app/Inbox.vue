@@ -1,6 +1,6 @@
 <template>
     <div id="my-tasks">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <h1 class="title">Inbox</h1>
             </div>
@@ -12,7 +12,6 @@
                 </div>
             </div>
         </div>
-        <hr />
         <transition-group name="fade" mode="out-in" >
             <div class="columns" v-for="(day, key ) in notifications" :key="key" v-cloak>
                 <h3 class="h3 column is-one-quarter" v-text="convertDate(key)" ></h3>

@@ -1,6 +1,6 @@
 <template>
     <div class="project">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Project', event: 'project.'+id+'.delete', action: 'delete this project', areYouSure : true}]"></drop-down-button>
                 <input class="title clear-background h1" type="text" name="name" @change="updateProject" v-model="project.name" v-if="project.name != ''" v-cloak>
@@ -14,7 +14,6 @@
                 </div>
             </div>
         </div>
-        <hr>
         <div class="columns">
             <div class="column is-half">
                 <div v-if="project">
