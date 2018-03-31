@@ -65,6 +65,13 @@ class Task extends Model
     public function priority(){
         return $this->hasOne(Priority::class);
     }
+
+    /**
+     * Get task priority.
+     */
+    public function comments(){
+        return $this->hasMany(Comment::class, 'task_id', 'id');
+    }
     /** Todo: fix this relationship */
 //    public function project(){
 //        return $this->section->first()->belongsTo(Project::class, 'project_id','id');

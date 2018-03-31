@@ -11779,6 +11779,7 @@ aside {
 
 aside .side-menu {
   margin-top: 1em;
+  padding: 0.75rem;
 }
 
 aside .side-menu button {
@@ -11817,6 +11818,14 @@ aside .side-menu .menu-list a:hover {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #42415c !important;
+}
+
+.sidebar-logo {
+  background-color: #42415c !important;
+}
+
+.sidebar-logo .logo {
+  padding: 1.75em 0.5em;
 }
 
 .mobile-side-nav {
@@ -11868,8 +11877,11 @@ hr {
 /** page */
 
 .header {
-  margin-top: 1em;
   padding: 1rem !important;
+}
+
+.header .logo {
+  max-width: 200px;
 }
 
 .box {
@@ -11926,11 +11938,11 @@ hr {
 /** Task **/
 
 .task .task-header {
-  background-color: white;
-  padding-bottom: 1em;
-  margin-bottom: 1em;
+  background-color: whitesmoke;
   border-bottom: 1px solid #dbdbdb;
-  position: relative;
+  padding: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .task .task-header .status i {
@@ -11948,8 +11960,14 @@ hr {
   font-size: 1.25em;
 }
 
-.task .body .task-updates textarea {
+.task textarea {
   width: 100%;
+  min-height: 0.5em !important;
+  margin-right: 0.5em;
+}
+
+.task textarea.is-danger {
+  border-color: #ff3860;
 }
 
 .task-background {
@@ -11965,6 +11983,14 @@ hr {
   -o-filter: blur(5px);
   -ms-filter: blur(5px);
   filter: blur(5px);
+}
+
+.task-comment {
+  margin-bottom: 1em;
+}
+
+.task-comment .message {
+  width: 100%;
 }
 
 /** forms **/
@@ -12022,9 +12048,8 @@ hr {
   border-radius: 50%;
 }
 
-.logo {
+.avatar {
   width: 100px;
-  margin-top: 0.5em;
 }
 
 .small-avatar {
@@ -12033,6 +12058,7 @@ hr {
 
 .x-small-avatar {
   width: 40px;
+  margin: 0.25em;
 }
 
 .message-avatar {
@@ -12043,6 +12069,10 @@ hr {
 
 .main-content {
   position: relative;
+}
+
+.main-content.columns {
+  margin-top: 0 !important;
 }
 
 .vue-simple-spinner-wrap {

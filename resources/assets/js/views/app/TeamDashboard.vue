@@ -6,13 +6,7 @@
                 <input v-if="team.name != ''" class="title clear-background h1" type="text" name="name" @change="updateTeam" v-model="team.name" v-cloak>
                 <h1 v-else class="blokk title" >Project Title</h1>
             </div>
-            <div class="level-right">
-                <div class="has-text-right">
-                    <span class="button is-orange">
-                        <a  @click.prevent.stop="triggerEvent('toggleModal','addUser')" class="orange">Add Team Member</a>
-                    </span>
-                </div>
-            </div>
+            <logo></logo>
         </div>
         <div class="columns">
             <div class="column is-one-third">
@@ -93,13 +87,14 @@
     import dropDownButton from '../../components/DropDownButton.vue';
     import Modal from '../../components/Modal.vue';
     import addUser from '../../components/modals/AddUser.vue';
+    import logo from '../../components/logo.vue';
     export default {
         data() {
             return{
 
             }
         },
-        components:{dropDownButton, Modal, addUser},
+        components:{dropDownButton, Modal, addUser, logo},
         computed: {
             team: function(){
                 return store.getters.getActiveTeam;

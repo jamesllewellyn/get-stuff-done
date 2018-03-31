@@ -66,7 +66,7 @@
     export default {
         data() {
             return{
-                task: new Task({id:'', name:'', users: ''}),
+                task: new Task(),
                 modalName: 'addTask'
             }
         },

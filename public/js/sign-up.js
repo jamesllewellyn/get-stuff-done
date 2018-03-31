@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 274);
+/******/ 	return __webpack_require__(__webpack_require__.s = 279);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1902,7 +1902,7 @@ function loadLocale(name) {
         try {
             oldLocale = globalLocale._abbr;
             var aliasedRequire = require;
-            __webpack_require__(169)("./" + name);
+            __webpack_require__(171)("./" + name);
             getSetGlobalLocale(oldLocale);
         } catch (e) {}
     }
@@ -4687,322 +4687,16 @@ function normalizeComponent (
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var bind = __webpack_require__(15);
-
-/*global toString:true*/
-
-// utils is a library of generic helper functions non-specific to axios
-
-var toString = Object.prototype.toString;
-
-/**
- * Determine if a value is an Array
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an Array, otherwise false
- */
-function isArray(val) {
-  return toString.call(val) === '[object Array]';
-}
-
-/**
- * Determine if a value is an ArrayBuffer
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an ArrayBuffer, otherwise false
- */
-function isArrayBuffer(val) {
-  return toString.call(val) === '[object ArrayBuffer]';
-}
-
-/**
- * Determine if a value is a FormData
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an FormData, otherwise false
- */
-function isFormData(val) {
-  return (typeof FormData !== 'undefined') && (val instanceof FormData);
-}
-
-/**
- * Determine if a value is a view on an ArrayBuffer
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
- */
-function isArrayBufferView(val) {
-  var result;
-  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
-    result = ArrayBuffer.isView(val);
-  } else {
-    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
-  }
-  return result;
-}
-
-/**
- * Determine if a value is a String
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a String, otherwise false
- */
-function isString(val) {
-  return typeof val === 'string';
-}
-
-/**
- * Determine if a value is a Number
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Number, otherwise false
- */
-function isNumber(val) {
-  return typeof val === 'number';
-}
-
-/**
- * Determine if a value is undefined
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if the value is undefined, otherwise false
- */
-function isUndefined(val) {
-  return typeof val === 'undefined';
-}
-
-/**
- * Determine if a value is an Object
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an Object, otherwise false
- */
-function isObject(val) {
-  return val !== null && typeof val === 'object';
-}
-
-/**
- * Determine if a value is a Date
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Date, otherwise false
- */
-function isDate(val) {
-  return toString.call(val) === '[object Date]';
-}
-
-/**
- * Determine if a value is a File
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a File, otherwise false
- */
-function isFile(val) {
-  return toString.call(val) === '[object File]';
-}
-
-/**
- * Determine if a value is a Blob
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Blob, otherwise false
- */
-function isBlob(val) {
-  return toString.call(val) === '[object Blob]';
-}
-
-/**
- * Determine if a value is a Function
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Function, otherwise false
- */
-function isFunction(val) {
-  return toString.call(val) === '[object Function]';
-}
-
-/**
- * Determine if a value is a Stream
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Stream, otherwise false
- */
-function isStream(val) {
-  return isObject(val) && isFunction(val.pipe);
-}
-
-/**
- * Determine if a value is a URLSearchParams object
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a URLSearchParams object, otherwise false
- */
-function isURLSearchParams(val) {
-  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
-}
-
-/**
- * Trim excess whitespace off the beginning and end of a string
- *
- * @param {String} str The String to trim
- * @returns {String} The String freed of excess whitespace
- */
-function trim(str) {
-  return str.replace(/^\s*/, '').replace(/\s*$/, '');
-}
-
-/**
- * Determine if we're running in a standard browser environment
- *
- * This allows axios to run in a web worker, and react-native.
- * Both environments support XMLHttpRequest, but not fully standard globals.
- *
- * web workers:
- *  typeof window -> undefined
- *  typeof document -> undefined
- *
- * react-native:
- *  typeof document.createElement -> undefined
- */
-function isStandardBrowserEnv() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof document !== 'undefined' &&
-    typeof document.createElement === 'function'
-  );
-}
-
-/**
- * Iterate over an Array or an Object invoking a function for each item.
- *
- * If `obj` is an Array callback will be called passing
- * the value, index, and complete array for each item.
- *
- * If 'obj' is an Object callback will be called passing
- * the value, key, and complete object for each property.
- *
- * @param {Object|Array} obj The object to iterate
- * @param {Function} fn The callback to invoke for each item
- */
-function forEach(obj, fn) {
-  // Don't bother if no value provided
-  if (obj === null || typeof obj === 'undefined') {
-    return;
-  }
-
-  // Force an array if not already something iterable
-  if (typeof obj !== 'object' && !isArray(obj)) {
-    /*eslint no-param-reassign:0*/
-    obj = [obj];
-  }
-
-  if (isArray(obj)) {
-    // Iterate over array values
-    for (var i = 0, l = obj.length; i < l; i++) {
-      fn.call(null, obj[i], i, obj);
-    }
-  } else {
-    // Iterate over object keys
-    for (var key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        fn.call(null, obj[key], key, obj);
-      }
-    }
-  }
-}
-
-/**
- * Accepts varargs expecting each argument to be an object, then
- * immutably merges the properties of each object and returns result.
- *
- * When multiple objects contain the same key the later object in
- * the arguments list will take precedence.
- *
- * Example:
- *
- * ```js
- * var result = merge({foo: 123}, {foo: 456});
- * console.log(result.foo); // outputs 456
- * ```
- *
- * @param {Object} obj1 Object to merge
- * @returns {Object} Result of all merge properties
- */
-function merge(/* obj1, obj2, obj3, ... */) {
-  var result = {};
-  function assignValue(val, key) {
-    if (typeof result[key] === 'object' && typeof val === 'object') {
-      result[key] = merge(result[key], val);
-    } else {
-      result[key] = val;
-    }
-  }
-
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    forEach(arguments[i], assignValue);
-  }
-  return result;
-}
-
-/**
- * Extends object a by mutably adding to it the properties of object b.
- *
- * @param {Object} a The object to be extended
- * @param {Object} b The object to copy properties from
- * @param {Object} thisArg The object to bind function to
- * @return {Object} The resulting value of object a
- */
-function extend(a, b, thisArg) {
-  forEach(b, function assignValue(val, key) {
-    if (thisArg && typeof val === 'function') {
-      a[key] = bind(val, thisArg);
-    } else {
-      a[key] = val;
-    }
-  });
-  return a;
-}
-
-module.exports = {
-  isArray: isArray,
-  isArrayBuffer: isArrayBuffer,
-  isFormData: isFormData,
-  isArrayBufferView: isArrayBufferView,
-  isString: isString,
-  isNumber: isNumber,
-  isObject: isObject,
-  isUndefined: isUndefined,
-  isDate: isDate,
-  isFile: isFile,
-  isBlob: isBlob,
-  isFunction: isFunction,
-  isStream: isStream,
-  isURLSearchParams: isURLSearchParams,
-  isStandardBrowserEnv: isStandardBrowserEnv,
-  forEach: forEach,
-  merge: merge,
-  extend: extend,
-  trim: trim
-};
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_Project__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_Project__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_Section__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_Task__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_Task__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_Team__ = __webpack_require__(146);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_User__ = __webpack_require__(181);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_User__ = __webpack_require__(183);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_Notification__ = __webpack_require__(184);
 
 
 
@@ -5499,6 +5193,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         UPDATE_TASK: function UPDATE_TASK(_ref48, _ref49) {
             var commit = _ref48.commit,
+                state = _ref48.state,
                 getters = _ref48.getters;
             var projectId = _ref49.projectId,
                 sectionId = _ref49.sectionId,
@@ -5507,19 +5202,41 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id, task).then(function (response) {
                 /** call success mutation **/
-                commit('UPDATE_TASK_SUCCESS', { sectionId: sectionId, task: response.data.task });
+                commit('UPDATE_TASK_SUCCESS', { sectionId: response.data.section_id, task: response.data.task });
+                /** clear button loading state*/
+                commit('REMOVE_BUTTON_LOADING_STATE', { name: 'editTask' });
+                /** close modal */
+                commit('TOGGLE_MODAL_IS_VISIBLE', { name: 'editTask' });
             }).catch(function (error) {
+                console.log(error);
                 if (error.response.data) {
                     commit('UPDATE_TASK_FAILURE', { errors: error.response.data });
                 }
             });
         },
-        TASK_SET_TO_DONE: function TASK_SET_TO_DONE(_ref50, _ref51) {
+        ADD_COMMENT: function ADD_COMMENT(_ref50, _ref51) {
             var commit = _ref50.commit,
                 getters = _ref50.getters;
             var projectId = _ref51.projectId,
                 sectionId = _ref51.sectionId,
-                id = _ref51.id;
+                id = _ref51.id,
+                comment = _ref51.comment;
+
+            axios.post('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id + '/comment', { comment: comment }).then(function (response) {
+                /** call success mutation **/
+                commit('ADD_COMMENT_SUCCESS', { comment: response.data.comment });
+            }).catch(function (error) {
+                if (error.response.data) {
+                    commit('ADD_COMMENT_FAILURE', { errors: error.response.data });
+                }
+            });
+        },
+        TASK_SET_TO_DONE: function TASK_SET_TO_DONE(_ref52, _ref53) {
+            var commit = _ref52.commit,
+                getters = _ref52.getters;
+            var projectId = _ref53.projectId,
+                sectionId = _ref53.sectionId,
+                id = _ref53.id;
 
             axios.put('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id + '/done').then(function (response) {
                 /** all success mutation **/
@@ -5528,12 +5245,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 commit('SERVER_ERROR');
             });
         },
-        DELETE_TASK: function DELETE_TASK(_ref52, _ref53) {
-            var commit = _ref52.commit,
-                getters = _ref52.getters;
-            var projectId = _ref53.projectId,
-                sectionId = _ref53.sectionId,
-                id = _ref53.id;
+        DELETE_TASK: function DELETE_TASK(_ref54, _ref55) {
+            var commit = _ref54.commit,
+                getters = _ref54.getters;
+            var projectId = _ref55.projectId,
+                sectionId = _ref55.sectionId,
+                id = _ref55.id;
 
             axios.delete('/api/team/' + getters.getActiveTeam.id + '/project/' + projectId + '/section/' + sectionId + '/task/' + id).then(function (response) {
                 console.log(response);
@@ -5548,8 +5265,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Sign up Mutations
          **********************/
-        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref54) {
-            var user = _ref54.user;
+        REGISTER_USER_PASS: function REGISTER_USER_PASS(state, _ref56) {
+            var user = _ref56.user;
 
             /** add user */
             state.user = user;
@@ -5557,8 +5274,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             window.location = '/home';
             // Event.$emit('create-team-page','set-up-team');
         },
-        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref55) {
-            var errors = _ref55.errors;
+        REGISTER_USER_FAIL: function REGISTER_USER_FAIL(state, _ref57) {
+            var errors = _ref57.errors;
 
             /** add form errors */
             state.formErrors = errors;
@@ -5574,27 +5291,27 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * User Mutations
          **********************/
-        SET_USER: function SET_USER(state, _ref56) {
-            var user = _ref56.user;
+        SET_USER: function SET_USER(state, _ref58) {
+            var user = _ref58.user;
 
             state.user = user;
         },
         ADD_USER_AVATAR_SUCCESS: function ADD_USER_AVATAR_SUCCESS(state) {
             Event.$emit('notify', 'success', 'Success', 'Your avatar has been updated');
         },
-        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref57) {
-            var user = _ref57.user;
+        UPDATE_USER_SUCCESS: function UPDATE_USER_SUCCESS(state, _ref59) {
+            var user = _ref59.user;
 
             state.user = user;
         },
-        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref58) {
-            var errors = _ref58.errors;
+        UPDATE_USER_ERROR: function UPDATE_USER_ERROR(state, _ref60) {
+            var errors = _ref60.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref59) {
-            var tasks = _ref59.tasks;
+        GET_MY_TASKS_SUCCESS: function GET_MY_TASKS_SUCCESS(state, _ref61) {
+            var tasks = _ref61.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5607,8 +5324,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear loading state on myTasks page */
             state.myTasksLoading = false;
         },
-        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref60) {
-            var tasks = _ref60.tasks;
+        GET_OVER_DUE_SUCCESS: function GET_OVER_DUE_SUCCESS(state, _ref62) {
+            var tasks = _ref62.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5621,8 +5338,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear loading state on myTasks page */
             state.myTasksLoading = false;
         },
-        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref61) {
-            var tasks = _ref61.tasks;
+        GET_WORKING_ON_IT_SUCCESS: function GET_WORKING_ON_IT_SUCCESS(state, _ref63) {
+            var tasks = _ref63.tasks;
 
             /** group tasks into projects */
             var groupedProjects = _.groupBy(tasks, 'section.project_id');
@@ -5641,13 +5358,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         MY_TASKS_LOADING_CLEAR: function MY_TASKS_LOADING_CLEAR(state) {
             state.myTasksLoading = false;
         },
-        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref62) {
-            var notifications = _ref62.notifications;
+        GET_NOTIFICATIONS_SUCCESS: function GET_NOTIFICATIONS_SUCCESS(state, _ref64) {
+            var notifications = _ref64.notifications;
 
             state.notifications = notifications;
         },
-        NOTIFICATION_ADD: function NOTIFICATION_ADD(state, _ref63) {
-            var notification = _ref63.notification;
+        NOTIFICATION_ADD: function NOTIFICATION_ADD(state, _ref65) {
+            var notification = _ref65.notification;
 
             notification = new __WEBPACK_IMPORTED_MODULE_6__core_Notification__["a" /* default */](notification);
             state.notifications.unshift(notification);
@@ -5656,9 +5373,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         USER_CLEAR_INBOX_SUCCESS: function USER_CLEAR_INBOX_SUCCESS(state) {
             state.notifications = {};
         },
-        TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref64) {
-            var teamId = _ref64.teamId,
-                projectId = _ref64.projectId;
+        TAKE_USER_TO_PROJECT: function TAKE_USER_TO_PROJECT(state, _ref66) {
+            var teamId = _ref66.teamId,
+                projectId = _ref66.projectId;
 
             /** parse id to int */
             var tId = parseInt(teamId, 10);
@@ -5667,11 +5384,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** take user to project page */
             Event.$emit('changePage', '/project/' + projectId);
         },
-        TAKE_USER_TO_TASK: function TAKE_USER_TO_TASK(state, _ref65) {
-            var teamId = _ref65.teamId,
-                projectId = _ref65.projectId,
-                sectionId = _ref65.sectionId,
-                task = _ref65.task;
+        TAKE_USER_TO_TASK: function TAKE_USER_TO_TASK(state, _ref67) {
+            var teamId = _ref67.teamId,
+                projectId = _ref67.projectId,
+                sectionId = _ref67.sectionId,
+                task = _ref67.task;
 
             /** parse id to int */
             var tId = parseInt(teamId, 10);
@@ -5687,8 +5404,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Team Mutations
          **********************/
-        SET_TEAM_LIST: function SET_TEAM_LIST(state, _ref66) {
-            var teams = _ref66.teams;
+        SET_TEAM_LIST: function SET_TEAM_LIST(state, _ref68) {
+            var teams = _ref68.teams;
 
             /** clear current teams **/
             state.teams = [];
@@ -5697,13 +5414,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 state.teams.push(new __WEBPACK_IMPORTED_MODULE_4__core_Team__["a" /* default */](team));
             });
         },
-        SET_ACTIVE_TEAM: function SET_ACTIVE_TEAM(state, _ref67) {
-            var team = _ref67.team;
+        SET_ACTIVE_TEAM: function SET_ACTIVE_TEAM(state, _ref69) {
+            var team = _ref69.team;
 
             state.user.current_team_id = team.id;
         },
-        ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref68) {
-            var team = _ref68.team;
+        ADD_NEW_TEAM_SUCCESS: function ADD_NEW_TEAM_SUCCESS(state, _ref70) {
+            var team = _ref70.team;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5719,15 +5436,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 }
             });
         },
-        ADD_NEW_TEAM_FAILURE: function ADD_NEW_TEAM_FAILURE(state, _ref69) {
-            var errors = _ref69.errors;
+        ADD_NEW_TEAM_FAILURE: function ADD_NEW_TEAM_FAILURE(state, _ref71) {
+            var errors = _ref71.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        ADD_TEAM_MEMBER_SUCCESS: function ADD_TEAM_MEMBER_SUCCESS(state, _ref70) {
-            var message = _ref70.message,
-                user = _ref70.user;
+        ADD_TEAM_MEMBER_SUCCESS: function ADD_TEAM_MEMBER_SUCCESS(state, _ref72) {
+            var message = _ref72.message,
+                user = _ref72.user;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5738,26 +5455,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** send user success message */
             Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_PENDING_MEMBER_SUCCESS: function ADD_TEAM_PENDING_MEMBER_SUCCESS(state, _ref71) {
-            var message = _ref71.message;
+        ADD_TEAM_PENDING_MEMBER_SUCCESS: function ADD_TEAM_PENDING_MEMBER_SUCCESS(state, _ref73) {
+            var message = _ref73.message;
 
             /** send user success message */
             Event.$emit('notify', 'success', 'Success', message);
         },
-        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref72) {
-            var message = _ref72.message;
+        ADD_TEAM_MEMBER_ERROR: function ADD_TEAM_MEMBER_ERROR(state, _ref74) {
+            var message = _ref74.message;
 
             /** send user error message */
             Event.$emit('notify', 'error', 'Whoops', message);
         },
-        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref73) {
-            var errors = _ref73.errors;
+        ADD_TEAM_MEMBER_FAILURE: function ADD_TEAM_MEMBER_FAILURE(state, _ref75) {
+            var errors = _ref75.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref74) {
-            var teamId = _ref74.teamId;
+        SWITCH_TEAM_SUCCESS: function SWITCH_TEAM_SUCCESS(state, _ref76) {
+            var teamId = _ref76.teamId;
 
             /** parse id to int */
             var tId = parseInt(teamId, 10);
@@ -5772,8 +5489,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** display notification to user */
             Event.$emit('notify', 'success', 'Team has been switched', team.name);
         },
-        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref75) {
-            var team = _ref75.team;
+        UPDATE_TEAM_SUCCESS: function UPDATE_TEAM_SUCCESS(state, _ref77) {
+            var team = _ref77.team;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5787,8 +5504,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_TEAM_FAILURE: function UPDATE_TEAM_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Team name couldn\'t be updated');
         },
-        GET_TEAM_OVERVIEW_SUCCESS: function GET_TEAM_OVERVIEW_SUCCESS(state, _ref76) {
-            var overview = _ref76.overview;
+        GET_TEAM_OVERVIEW_SUCCESS: function GET_TEAM_OVERVIEW_SUCCESS(state, _ref78) {
+            var overview = _ref78.overview;
 
             /** set team overview */
             state.teamOverview = overview;
@@ -5796,8 +5513,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Project Mutations
          **********************/
-        SET_PROJECT: function SET_PROJECT(state, _ref77) {
-            var project = _ref77.project;
+        SET_PROJECT: function SET_PROJECT(state, _ref79) {
+            var project = _ref79.project;
 
             state.project = project;
             var idx = 0;
@@ -5809,8 +5526,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         CLEAR_PROJECT: function CLEAR_PROJECT(state) {
             state.project = null;
         },
-        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref78) {
-            var project = _ref78.project;
+        ADD_PROJECT_SUCCESS: function ADD_PROJECT_SUCCESS(state, _ref80) {
+            var project = _ref80.project;
 
             /** clear form errors */
             state.formErrors = {};
@@ -5823,14 +5540,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New project has been created');
         },
-        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref79) {
-            var errors = _ref79.errors;
+        ADD_PROJECT_FAILURE: function ADD_PROJECT_FAILURE(state, _ref81) {
+            var errors = _ref81.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref80) {
-            var project = _ref80.project;
+        UPDATE_PROJECT_SUCCESS: function UPDATE_PROJECT_SUCCESS(state, _ref82) {
+            var project = _ref82.project;
 
             /** get current team index **/
             var tIdx = state.teams.map(function (team) {
@@ -5848,10 +5565,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_PROJECT_FAILURE: function UPDATE_PROJECT_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Project name couldn\'t be updated');
         },
-        DELETE_PROJECT_SUCCESS: function DELETE_PROJECT_SUCCESS(state, _ref81) {
-            var teamId = _ref81.teamId,
-                id = _ref81.id,
-                message = _ref81.message;
+        DELETE_PROJECT_SUCCESS: function DELETE_PROJECT_SUCCESS(state, _ref83) {
+            var teamId = _ref83.teamId,
+                id = _ref83.id,
+                message = _ref83.message;
 
             /** cast id to int **/
             var pId = parseInt(id, 10);
@@ -5873,22 +5590,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Section Mutations
          **********************/
-        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref82) {
-            var section = _ref82.section;
+        ADD_SECTION_SUCCESS: function ADD_SECTION_SUCCESS(state, _ref84) {
+            var section = _ref84.section;
 
             /** add section to currently loaded project **/
             state.project.sections.push(new __WEBPACK_IMPORTED_MODULE_2__core_Section__["a" /* default */](section));
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New section has been created');
         },
-        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref83) {
-            var errors = _ref83.errors;
+        ADD_SECTION_FAILURE: function ADD_SECTION_FAILURE(state, _ref85) {
+            var errors = _ref85.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref84) {
-            var section = _ref84.section;
+        UPDATE_SECTION_SUCCESS: function UPDATE_SECTION_SUCCESS(state, _ref86) {
+            var section = _ref86.section;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -5902,9 +5619,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         UPDATE_SECTION_FAILURE: function UPDATE_SECTION_FAILURE(state) {
             Event.$emit('notify', 'error', 'Whoops', 'Section name couldn\'t be updated');
         },
-        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref85) {
-            var id = _ref85.id,
-                message = _ref85.message;
+        DELETE_SECTION_SUCCESS: function DELETE_SECTION_SUCCESS(state, _ref87) {
+            var id = _ref87.id,
+                message = _ref87.message;
 
             /** cast id to int **/
             var sId = parseInt(id, 10);
@@ -5925,15 +5642,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear any form errors **/
             state.formErrors = {};
         },
-        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref86) {
-            var task = _ref86.task;
+        GET_TASK_SUCCESS: function GET_TASK_SUCCESS(state, _ref88) {
+            var task = _ref88.task;
 
             /** add task to active task state **/
+            console.log(task);
             state.task = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
         },
-        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref87) {
-            var sectionId = _ref87.sectionId,
-                task = _ref87.task;
+        ADD_TASK_SUCCESS: function ADD_TASK_SUCCESS(state, _ref89) {
+            var sectionId = _ref89.sectionId,
+                task = _ref89.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId, 10);
@@ -5948,48 +5666,54 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'New task has been added');
         },
-        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref88) {
-            var errors = _ref88.errors;
+        ADD_TASK_FAILURE: function ADD_TASK_FAILURE(state, _ref90) {
+            var errors = _ref90.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref89) {
-            var sectionId = _ref89.sectionId,
-                task = _ref89.task;
+        UPDATE_TASK_SUCCESS: function UPDATE_TASK_SUCCESS(state, _ref91) {
+            var sectionId = _ref91.sectionId,
+                task = _ref91.task;
 
             /** clear any form errors **/
             state.formErrors = {};
             /** cast id to int **/
             var sId = parseInt(sectionId, 10);
             var tId = parseInt(task.id, 10);
-            if (state.project) {
-                var sIdx = state.project.sections.map(function (section) {
-                    return section.id;
-                }).indexOf(sId);
-                if (sIdx >= 0) {
-                    var tIdx = state.project.sections[sIdx].tasks.map(function (task) {
-                        return task.id;
-                    }).indexOf(tId);
-                    /** update task to data array **/
-                    state.project.sections[sIdx].tasks[tIdx] = new __WEBPACK_IMPORTED_MODULE_3__core_Task__["a" /* default */](task);
-                }
-            }
-
             /** notify myTasks component of update **/
             Event.$emit('myTasks.updated');
             /** notify section component of update **/
             Event.$emit('section.' + sId + '.updated');
+            Event.$emit('project.' + state.task.project.id + '.updated');
+            /** go back to task **/
+            Event.$emit('showTask', state.task.project.id, sId, tId);
         },
-        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref90) {
-            var errors = _ref90.errors;
+        UPDATE_TASK_FAILURE: function UPDATE_TASK_FAILURE(state, _ref92) {
+            var errors = _ref92.errors;
 
             /** add form errors */
             state.formErrors = errors;
         },
-        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref91) {
-            var section = _ref91.section,
-                tasks = _ref91.tasks;
+        ADD_COMMENT_SUCCESS: function ADD_COMMENT_SUCCESS(state, _ref93) {
+            var comment = _ref93.comment;
+
+            /** add new comment */
+            state.task.comments.push(comment);
+            /** Clear form errors */
+            state.formErrors = {};
+            /** notify section component of update **/
+            Event.$emit('comment.success');
+        },
+        ADD_COMMENT_FAILURE: function ADD_COMMENT_FAILURE(state, _ref94) {
+            var errors = _ref94.errors;
+
+            /** add form errors */
+            state.formErrors = errors;
+        },
+        UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS: function UPDATE_SECTION_TASKS_SORT_ORDER_SUCCESS(state, _ref95) {
+            var section = _ref95.section,
+                tasks = _ref95.tasks;
 
             /** get section index **/
             var sIdx = state.project.sections.map(function (section) {
@@ -6000,9 +5724,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
                 return task.sort_order;
             });
         },
-        TASK_SET_TO_DONE_SUCCESS: function TASK_SET_TO_DONE_SUCCESS(state, _ref92) {
-            var sectionId = _ref92.sectionId,
-                task = _ref92.task;
+        TASK_SET_TO_DONE_SUCCESS: function TASK_SET_TO_DONE_SUCCESS(state, _ref96) {
+            var sectionId = _ref96.sectionId,
+                task = _ref96.task;
 
             /** cast id to int **/
             var sId = parseInt(sectionId, 10);
@@ -6025,11 +5749,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** notify user of success **/
             Event.$emit('notify', 'success', 'Success', 'Task Completed');
         },
-        DELETE_TASK_SUCCESS: function DELETE_TASK_SUCCESS(state, _ref93) {
-            var projectId = _ref93.projectId,
-                sectionId = _ref93.sectionId,
-                id = _ref93.id,
-                message = _ref93.message;
+        DELETE_TASK_SUCCESS: function DELETE_TASK_SUCCESS(state, _ref97) {
+            var projectId = _ref97.projectId,
+                sectionId = _ref97.sectionId,
+                id = _ref97.id,
+                message = _ref97.message;
 
             /** cast id to int **/
             var sId = parseInt(sectionId, 10);
@@ -6053,13 +5777,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         /***********************
          * Modal Mutations
          **********************/
-        ADD_MODAL: function ADD_MODAL(state, _ref94) {
-            var name = _ref94.name;
+        ADD_MODAL: function ADD_MODAL(state, _ref98) {
+            var name = _ref98.name;
 
             state.modals.push({ name: name, isVisible: false, isLoading: false });
         },
-        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref95) {
-            var name = _ref95.name;
+        TOGGLE_MODAL_IS_VISIBLE: function TOGGLE_MODAL_IS_VISIBLE(state, _ref99) {
+            var name = _ref99.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -6068,16 +5792,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             /** clear all form errors **/
             state.formErrors = {};
         },
-        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref96) {
-            var name = _ref96.name;
+        SET_BUTTON_TO_LOADING: function SET_BUTTON_TO_LOADING(state, _ref100) {
+            var name = _ref100.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
             }).indexOf(name);
             state.modals[idx].isLoading = true;
         },
-        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref97) {
-            var name = _ref97.name;
+        REMOVE_BUTTON_LOADING_STATE: function REMOVE_BUTTON_LOADING_STATE(state, _ref101) {
+            var name = _ref101.name;
 
             var idx = state.modals.map(function (modal) {
                 return modal.name;
@@ -6210,8 +5934,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
             return false;
         },
         getSectionById: function getSectionById(state, getters) {
-            return function (_ref98) {
-                var sectionId = _ref98.sectionId;
+            return function (_ref102) {
+                var sectionId = _ref102.sectionId;
 
                 /** cast id to int **/
                 var sId = parseInt(sectionId, 10);
@@ -6233,9 +5957,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         /** returns a task **/
         getTaskById: function getTaskById(state, getters) {
-            return function (_ref99) {
-                var sectionId = _ref99.sectionId,
-                    id = _ref99.id;
+            return function (_ref103) {
+                var sectionId = _ref103.sectionId,
+                    id = _ref103.id;
 
                 /** cast ids to int **/
                 var sId = parseInt(sectionId, 10);
@@ -6291,6 +6015,312 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
     }
 });
 /* harmony default export */ __webpack_exports__["a"] = (store);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bind = __webpack_require__(15);
+
+/*global toString:true*/
+
+// utils is a library of generic helper functions non-specific to axios
+
+var toString = Object.prototype.toString;
+
+/**
+ * Determine if a value is an Array
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
+ */
+function isArray(val) {
+  return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */
+function isArrayBuffer(val) {
+  return toString.call(val) === '[object ArrayBuffer]';
+}
+
+/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */
+function isFormData(val) {
+  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+}
+
+/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */
+function isArrayBufferView(val) {
+  var result;
+  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+    result = ArrayBuffer.isView(val);
+  } else {
+    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+  }
+  return result;
+}
+
+/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */
+function isString(val) {
+  return typeof val === 'string';
+}
+
+/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */
+function isNumber(val) {
+  return typeof val === 'number';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */
+function isDate(val) {
+  return toString.call(val) === '[object Date]';
+}
+
+/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */
+function isFile(val) {
+  return toString.call(val) === '[object File]';
+}
+
+/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */
+function isBlob(val) {
+  return toString.call(val) === '[object Blob]';
+}
+
+/**
+ * Determine if a value is a Function
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Function, otherwise false
+ */
+function isFunction(val) {
+  return toString.call(val) === '[object Function]';
+}
+
+/**
+ * Determine if a value is a Stream
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Stream, otherwise false
+ */
+function isStream(val) {
+  return isObject(val) && isFunction(val.pipe);
+}
+
+/**
+ * Determine if a value is a URLSearchParams object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+ */
+function isURLSearchParams(val) {
+  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+}
+
+/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */
+function trim(str) {
+  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+}
+
+/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -> undefined
+ *  typeof document -> undefined
+ *
+ * react-native:
+ *  typeof document.createElement -> undefined
+ */
+function isStandardBrowserEnv() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined' &&
+    typeof document.createElement === 'function'
+  );
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object' && !isArray(obj)) {
+    /*eslint no-param-reassign:0*/
+    obj = [obj];
+  }
+
+  if (isArray(obj)) {
+    // Iterate over array values
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  } else {
+    // Iterate over object keys
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function merge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = merge(result[key], val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Extends object a by mutably adding to it the properties of object b.
+ *
+ * @param {Object} a The object to be extended
+ * @param {Object} b The object to copy properties from
+ * @param {Object} thisArg The object to bind function to
+ * @return {Object} The resulting value of object a
+ */
+function extend(a, b, thisArg) {
+  forEach(b, function assignValue(val, key) {
+    if (thisArg && typeof val === 'function') {
+      a[key] = bind(val, thisArg);
+    } else {
+      a[key] = val;
+    }
+  });
+  return a;
+}
+
+module.exports = {
+  isArray: isArray,
+  isArrayBuffer: isArrayBuffer,
+  isFormData: isFormData,
+  isArrayBufferView: isArrayBufferView,
+  isString: isString,
+  isNumber: isNumber,
+  isObject: isObject,
+  isUndefined: isUndefined,
+  isDate: isDate,
+  isFile: isFile,
+  isBlob: isBlob,
+  isFunction: isFunction,
+  isStream: isStream,
+  isURLSearchParams: isURLSearchParams,
+  isStandardBrowserEnv: isStandardBrowserEnv,
+  forEach: forEach,
+  merge: merge,
+  extend: extend,
+  trim: trim
+};
+
 
 /***/ }),
 /* 4 */
@@ -7266,13 +7296,133 @@ var index_esm = {
 
 /***/ }),
 /* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Task = function () {
+    function Task(data) {
+        _classCallCheck(this, Task);
+
+        if (!data) {
+            return this.setDefaultValues();
+        }
+        this.id = data.id;
+        this.name = data.name;
+        this.status_id = data.status_id;
+        this.priority_id = data.priority_id;
+        this.due_date = data.due_date;
+        this.sort_order = data.sort_order;
+        this.due_time = data.due_time;
+        this.section = data.section;
+        this.note = data.note;
+        this.users = data.assigned_users;
+        this.comments = data.comments;
+        this.created_at = data.created_at;
+        if (typeof data.section.project !== 'undefined') {
+            this.project = data.section.project;
+        }
+    }
+
+    _createClass(Task, [{
+        key: 'setDefaultValues',
+        value: function setDefaultValues() {
+            this.id = null;
+            this.name = null;
+            this.status_id = null;
+            this.priority_id = null;
+            this.due_date = null;
+            this.sort_order = null;
+            this.due_time = null;
+            this.section = null;
+            this.note = null;
+            this.users = null;
+            this.comments = null;
+            this.created_at = null;
+            this.project = null;
+            return true;
+        }
+    }, {
+        key: 'isDone',
+        value: function isDone() {
+            this.status_id = 1;
+            return true;
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            this.id = '';
+            this.name = '';
+            this.status_id = '';
+            this.priority_id = '';
+            this.due_date = '';
+            this.due_time = '';
+            this.note = '';
+            this.created_at = '';
+            this.sort_order = '';
+            return true;
+        }
+    }, {
+        key: 'getPriority',
+        value: function getPriority() {
+            var priority = null;
+            switch (this.priority_id) {
+                case 1:
+                    priority = { id: 1, name: 'High' };
+                    break;
+                case 2:
+                    priority = { id: 2, name: 'Medium' };
+                    break;
+                case 3:
+                    priority = { id: 3, name: 'Low' };
+                    break;
+                    priority = { id: 3, name: 'Low' };
+            }
+            return priority;
+        }
+    }, {
+        key: 'setPriority',
+        value: function setPriority(priority_id) {
+            return this.priority_id = priority_id;
+        }
+    }, {
+        key: 'getStatus',
+        value: function getStatus() {
+            var status = null;
+            switch (this.status_id) {
+                case 1:
+                    status = { id: 1, name: 'Done' };
+                    break;
+                case 2:
+                    status = { id: 2, name: 'Working On It' };
+                    break;
+            }
+            return status;
+        }
+    }, {
+        key: 'setStatus',
+        value: function setStatus(status_id) {
+            return this.status_id = status_id;
+        }
+    }]);
+
+    return Task;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (Task);
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(154);
+var utils = __webpack_require__(3);
+var normalizeHeaderName = __webpack_require__(156);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -7363,10 +7513,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -7556,7 +7706,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18522,7 +18672,7 @@ module.exports = Vue;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(20).setImmediate))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var stringify = __webpack_require__(145);
@@ -19099,7 +19249,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19133,95 +19283,11 @@ var Project = function () {
 /* harmony default export */ __webpack_exports__["a"] = (Project);
 
 /***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Task = function () {
-    function Task(data) {
-        _classCallCheck(this, Task);
-
-        this.id = data.id;
-        this.name = data.name;
-        this.status_id = data.status_id;
-        this.priority_id = data.priority_id;
-        this.due_date = data.due_date;
-        this.sort_order = data.sort_order;
-        this.due_time = data.due_time;
-        this.note = data.note;
-        this.users = data.assigned_users;
-        this.created_at = data.created_at;
-    }
-
-    _createClass(Task, [{
-        key: 'isDone',
-        value: function isDone() {
-            this.status_id = 1;
-            return true;
-        }
-    }, {
-        key: 'clear',
-        value: function clear() {
-            this.id = '';
-            this.name = '';
-            this.status_id = '';
-            this.priority_id = '';
-            this.due_date = '';
-            this.due_time = '';
-            this.note = '';
-            this.created_at = '';
-            this.sort_order = '';
-            return true;
-        }
-    }, {
-        key: 'priority',
-        value: function priority(priorityId) {
-            var priority = null;
-            switch (priorityId) {
-                case 1:
-                    priority = { id: 1, name: 'High' };
-                    break;
-                case 2:
-                    priority = { id: 2, name: 'Medium' };
-                    break;
-                case 3:
-                    priority = { id: 3, name: 'Low' };
-                    break;
-                    priority = { id: 3, name: 'Low' };
-            }
-            return priority;
-        }
-    }, {
-        key: 'status',
-        value: function status(statusId) {
-            var status = null;
-            switch (statusId) {
-                case 1:
-                    status = { id: 1, name: 'Done' };
-                    break;
-                case 2:
-                    status = { id: 2, name: 'Working On It' };
-                    break;
-            }
-            return status;
-        }
-    }]);
-
-    return Task;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (Task);
-
-/***/ }),
 /* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Task__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Task__ = __webpack_require__(6);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19312,13 +19378,13 @@ module.exports = function bind(fn, thisArg) {
 "use strict";
 
 
-var utils = __webpack_require__(2);
-var settle = __webpack_require__(155);
-var buildURL = __webpack_require__(157);
-var parseHeaders = __webpack_require__(158);
-var isURLSameOrigin = __webpack_require__(159);
+var utils = __webpack_require__(3);
+var settle = __webpack_require__(157);
+var buildURL = __webpack_require__(159);
+var parseHeaders = __webpack_require__(160);
+var isURLSameOrigin = __webpack_require__(161);
 var createError = __webpack_require__(17);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(160);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(162);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -19414,7 +19480,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(161);
+      var cookies = __webpack_require__(163);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -19496,7 +19562,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(156);
+var enhanceError = __webpack_require__(158);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -19801,7 +19867,7 @@ exports.clearImmediate = clearImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(8)))
 
 /***/ }),
 /* 22 */
@@ -34191,7 +34257,7 @@ function serializer(replacer, cycleReplacer) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project__ = __webpack_require__(11);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -34219,40 +34285,39 @@ var Team = function Team(data) {
 /***/ }),
 /* 147 */,
 /* 148 */,
-/* 149 */
+/* 149 */,
+/* 150 */,
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_notification__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_notification___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_notification__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_velocity_animate__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_velocity_animate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_velocity_animate__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_laravel_echo__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_raven_js__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_raven_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_raven_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_raven_js_plugins_vue__ = __webpack_require__(180);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_raven_js_plugins_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_raven_js_plugins_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_notification__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_notification___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_notification__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_velocity_animate__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_velocity_animate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_velocity_animate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_laravel_echo__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_laravel_echo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_laravel_echo__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_raven_js__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_raven_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_raven_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_raven_js_plugins_vue__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_raven_js_plugins_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_raven_js_plugins_vue__);
 
-window._ = __webpack_require__(150);
-window.axios = __webpack_require__(151);
+window._ = __webpack_require__(152);
+window.axios = __webpack_require__(153);
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios = axios;
 
+window.Vue = __webpack_require__(9);
 
-window.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
+Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
-
-window.moment = __WEBPACK_IMPORTED_MODULE_2_moment___default.a;
+window.moment = __WEBPACK_IMPORTED_MODULE_1_moment___default.a;
 
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_notification___default.a, { velocity: __WEBPACK_IMPORTED_MODULE_4_velocity_animate___default.a });
+Vue.use(__WEBPACK_IMPORTED_MODULE_2_vue_notification___default.a, { velocity: __WEBPACK_IMPORTED_MODULE_3_velocity_animate___default.a });
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -34276,9 +34341,9 @@ if (token) {
 
 
 
-window.Pusher = __webpack_require__(173);
+window.Pusher = __webpack_require__(175);
 
-window.Echo = new __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default.a({
+window.Echo = new __WEBPACK_IMPORTED_MODULE_4_laravel_echo___default.a({
     broadcaster: 'pusher',
     key: 'e8467a85a47627e2cc82',
     cluster: 'mt1',
@@ -34292,10 +34357,10 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_5_laravel_echo___default.a({
 
 
 
-__WEBPACK_IMPORTED_MODULE_6_raven_js___default.a.config('https://71413cb2c5ce45fb8cc9cd1d2cc8371d@sentry.io/224452').addPlugin(__WEBPACK_IMPORTED_MODULE_7_raven_js_plugins_vue___default.a, __WEBPACK_IMPORTED_MODULE_0_vue___default.a).install();
+__WEBPACK_IMPORTED_MODULE_5_raven_js___default.a.config('https://71413cb2c5ce45fb8cc9cd1d2cc8371d@sentry.io/224452').addPlugin(__WEBPACK_IMPORTED_MODULE_6_raven_js_plugins_vue___default.a, Vue).install();
 
 /***/ }),
-/* 150 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -51400,22 +51465,22 @@ __WEBPACK_IMPORTED_MODULE_6_raven_js___default.a.config('https://71413cb2c5ce45f
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(14)(module)))
 
 /***/ }),
-/* 151 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(152);
+module.exports = __webpack_require__(154);
 
 /***/ }),
-/* 152 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var bind = __webpack_require__(15);
-var Axios = __webpack_require__(153);
-var defaults = __webpack_require__(6);
+var Axios = __webpack_require__(155);
+var defaults = __webpack_require__(7);
 
 /**
  * Create an instance of Axios
@@ -51449,14 +51514,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(19);
-axios.CancelToken = __webpack_require__(167);
+axios.CancelToken = __webpack_require__(169);
 axios.isCancel = __webpack_require__(18);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(168);
+axios.spread = __webpack_require__(170);
 
 module.exports = axios;
 
@@ -51465,18 +51530,18 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 153 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(6);
-var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(162);
-var dispatchRequest = __webpack_require__(163);
-var isAbsoluteURL = __webpack_require__(165);
-var combineURLs = __webpack_require__(166);
+var defaults = __webpack_require__(7);
+var utils = __webpack_require__(3);
+var InterceptorManager = __webpack_require__(164);
+var dispatchRequest = __webpack_require__(165);
+var isAbsoluteURL = __webpack_require__(167);
+var combineURLs = __webpack_require__(168);
 
 /**
  * Create a new instance of Axios
@@ -51557,13 +51622,13 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 154 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -51576,7 +51641,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 155 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51608,7 +51673,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 156 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51634,13 +51699,13 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 157 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -51709,13 +51774,13 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 158 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 /**
  * Parse headers into an object
@@ -51753,13 +51818,13 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -51828,7 +51893,7 @@ module.exports = (
 
 
 /***/ }),
-/* 160 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51871,13 +51936,13 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 161 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -51931,13 +51996,13 @@ module.exports = (
 
 
 /***/ }),
-/* 162 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -51990,16 +52055,16 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 163 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
-var transformData = __webpack_require__(164);
+var utils = __webpack_require__(3);
+var transformData = __webpack_require__(166);
 var isCancel = __webpack_require__(18);
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(7);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -52076,13 +52141,13 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 164 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 /**
  * Transform the data for a request or a response
@@ -52103,7 +52168,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 165 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52124,7 +52189,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 166 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52143,7 +52208,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 167 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52207,7 +52272,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 168 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52241,7 +52306,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 169 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -52504,15 +52569,15 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 169;
+webpackContext.id = 171;
 
 /***/ }),
-/* 170 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(true)
-		module.exports = factory(__webpack_require__(8));
+		module.exports = factory(__webpack_require__(9));
 	else if(typeof define === 'function' && define.amd)
 		define(["vue"], factory);
 	else if(typeof exports === 'object')
@@ -53628,7 +53693,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 171 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS.org (1.5.0). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
@@ -58411,7 +58476,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS
 
 
 /***/ }),
-/* 172 */
+/* 174 */
 /***/ (function(module, exports) {
 
 var asyncGenerator = function () {
@@ -59209,7 +59274,7 @@ var Echo = function () {
 module.exports = Echo;
 
 /***/ }),
-/* 173 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -63397,7 +63462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 174 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -63406,7 +63471,7 @@ return /******/ (function(modules) { // webpackBootstrap
  * Raven library, you SHOULD load this file (vs raven.js).
  **/
 
-var RavenConstructor = __webpack_require__(175);
+var RavenConstructor = __webpack_require__(177);
 
 // This is to be defensive in environments where window does not exist (see https://github.com/getsentry/raven-js/pull/785)
 var _window =
@@ -63435,17 +63500,17 @@ module.exports = Raven;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 175 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global XDomainRequest:false */
 
-var TraceKit = __webpack_require__(176);
+var TraceKit = __webpack_require__(178);
 var stringify = __webpack_require__(145);
-var md5 = __webpack_require__(177);
-var RavenConfigError = __webpack_require__(178);
+var md5 = __webpack_require__(179);
+var RavenConfigError = __webpack_require__(180);
 
-var utils = __webpack_require__(9);
+var utils = __webpack_require__(10);
 var isError = utils.isError;
 var isObject = utils.isObject;
 var isPlainObject = utils.isPlainObject;
@@ -63473,7 +63538,7 @@ var supportsReferrerPolicy = utils.supportsReferrerPolicy;
 var serializeKeysForMessage = utils.serializeKeysForMessage;
 var serializeException = utils.serializeException;
 
-var wrapConsoleMethod = __webpack_require__(179).wrapMethod;
+var wrapConsoleMethod = __webpack_require__(181).wrapMethod;
 
 var dsnKeys = 'source protocol user pass host port path'.split(' '),
   dsnPattern = /^(?:(\w+):)?\/\/(?:(\w+)(:\w+)?@)?([\w\.-]+)(?::(\d+))?(\/.*)/;
@@ -65571,10 +65636,10 @@ module.exports = Raven;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 176 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var utils = __webpack_require__(9);
+/* WEBPACK VAR INJECTION */(function(global) {var utils = __webpack_require__(10);
 
 /*
  TraceKit - Cross brower stack traces
@@ -66207,7 +66272,7 @@ module.exports = TraceKit;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 177 */
+/* 179 */
 /***/ (function(module, exports) {
 
 /*
@@ -66479,7 +66544,7 @@ module.exports = md5;
 
 
 /***/ }),
-/* 178 */
+/* 180 */
 /***/ (function(module, exports) {
 
 function RavenConfigError(message) {
@@ -66493,10 +66558,10 @@ module.exports = RavenConfigError;
 
 
 /***/ }),
-/* 179 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var utils = __webpack_require__(9);
+var utils = __webpack_require__(10);
 
 var wrapMethod = function(console, level, callback) {
   var originalConsoleLevel = console[level];
@@ -66541,7 +66606,7 @@ module.exports = {
 
 
 /***/ }),
-/* 180 */
+/* 182 */
 /***/ (function(module, exports) {
 
 /**
@@ -66594,7 +66659,7 @@ module.exports = vuePlugin;
 
 
 /***/ }),
-/* 181 */
+/* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -66614,7 +66679,7 @@ var User = function User() {
 /* harmony default export */ __webpack_exports__["a"] = (User);
 
 /***/ }),
-/* 182 */
+/* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -66655,8 +66720,6 @@ var Notification = function () {
 /* harmony default export */ __webpack_exports__["a"] = (Notification);
 
 /***/ }),
-/* 183 */,
-/* 184 */,
 /* 185 */,
 /* 186 */,
 /* 187 */,
@@ -66687,11 +66750,13 @@ var Notification = function () {
 /* 212 */,
 /* 213 */,
 /* 214 */,
-/* 215 */
+/* 215 */,
+/* 216 */,
+/* 217 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(5);
 //
 //
@@ -66769,11 +66834,11 @@ var Notification = function () {
 });
 
 /***/ }),
-/* 216 */
+/* 218 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_Team__ = __webpack_require__(146);
 //
 //
@@ -66827,8 +66892,6 @@ var Notification = function () {
 });
 
 /***/ }),
-/* 217 */,
-/* 218 */,
 /* 219 */,
 /* 220 */,
 /* 221 */,
@@ -66884,21 +66947,26 @@ var Notification = function () {
 /* 271 */,
 /* 272 */,
 /* 273 */,
-/* 274 */
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(275);
+module.exports = __webpack_require__(280);
 
 
 /***/ }),
-/* 275 */
+/* 280 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(149);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(276);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sign_up_routes__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(5);
 
 
@@ -66934,7 +67002,7 @@ var app = new Vue({
     } });
 
 /***/ }),
-/* 276 */
+/* 281 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -66946,10 +67014,10 @@ var routes = [{
     redirect: '/user/'
 }, {
     path: '/user/',
-    component: __webpack_require__(277).default
+    component: __webpack_require__(282).default
 }, {
     path: '/team/',
-    component: __webpack_require__(279).default
+    component: __webpack_require__(284).default
 }];
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
@@ -66958,14 +67026,14 @@ var routes = [{
 }));
 
 /***/ }),
-/* 277 */
+/* 282 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_RegisterUser_vue__ = __webpack_require__(215);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_RegisterUser_vue__ = __webpack_require__(217);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c13c1adc_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegisterUser_vue__ = __webpack_require__(278);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c13c1adc_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegisterUser_vue__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(1);
 var disposed = false
 /* script */
@@ -67013,7 +67081,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 278 */
+/* 283 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67277,14 +67345,14 @@ if (false) {
 }
 
 /***/ }),
-/* 279 */
+/* 284 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_CreateTeam_vue__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_CreateTeam_vue__ = __webpack_require__(218);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c8057706_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CreateTeam_vue__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c8057706_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CreateTeam_vue__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(1);
 var disposed = false
 /* script */
@@ -67332,7 +67400,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 280 */
+/* 285 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

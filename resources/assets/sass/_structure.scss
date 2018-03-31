@@ -1,9 +1,11 @@
 /** Sidebar menu */
 aside{
   background-color: #2d2b4a !important;
-  color:#FFFFFF ;
+  color:#FFFFFF;
   .side-menu{
+
     margin-top: 1em;
+    padding:0.75rem;
     button{
       color:#FFFFFF ;
     }
@@ -39,7 +41,13 @@ aside{
     }
   }
 }
-
+.sidebar-logo{
+  background-color: #42415c !important;
+  //height:70px;
+  .logo{
+    padding:1.75em 0.5em;
+  }
+}
 .mobile-side-nav{
   z-index: 5;
   width: 90% !important;
@@ -78,8 +86,10 @@ hr{
 }
 /** page */
 .header{
-  margin-top: 1em;
   padding:1rem !important;
+  .logo{
+    max-width:200px;
+  }
 }
 .box{
   background-color: #ffffff;
@@ -141,11 +151,11 @@ hr{
     //width: 50%;
   }
   .task-header{
-    background-color:white;
-    padding-bottom: 1em;
-    margin-bottom: 1em;
+    background-color:whitesmoke;
     border-bottom: 1px solid #dbdbdb;
-    position: relative;
+    padding: 20px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     .status{
       i{
         padding-top: .25em;
@@ -162,10 +172,13 @@ hr{
     p.description{
       font-size: 1.25em;
     }
-    .task-updates{
-      textarea{
-        width: 100%;
-      }
+  }
+  textarea{
+    width: 100%;
+    min-height: 0.5em !important;
+    margin-right:0.5em;
+    &.is-danger{
+      border-color: #ff3860;
     }
   }
 }
@@ -182,6 +195,12 @@ hr{
   -o-filter: blur(5px);
   -ms-filter: blur(5px);
   filter: blur(5px);
+}
+.task-comment{
+  margin-bottom: 1em;
+  .message{
+    width:100%;
+  }
 }
 /** forms **/
 
@@ -234,15 +253,17 @@ hr{
 .circle{
   border-radius: 50%;
 }
-.logo{
+
+.avatar{
   width:100px;
-  margin-top:0.5em;
+  //margin-top:0.5em;
 }
 .small-avatar{
   width:50px;
 }
 .x-small-avatar{
   width:40px;
+  margin: 0.25em;
 }
 
 .message-avatar{
@@ -253,6 +274,9 @@ hr{
 
 .main-content {
   position: relative;
+  &.columns{
+    margin-top:0 !important;
+  }
 }
 .vue-simple-spinner-wrap {
   -webkit-box-pack: center;

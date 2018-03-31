@@ -68,6 +68,10 @@ use Illuminate\Http\Request;
     Route::put('team/{team}/project/{project}/section/{section}/task/{task}/done', ['uses'=>'TaskController@done', 'as'=>'task.done'] );
     /** check user can access task */
     Route::get('/team/{team}/project/{project}/section/{section}/task/{task}/can-access', ['uses'=>'TaskController@canAccess', 'as'=>'task.canAccess'] );
+/***********************
+ * Task Comments API
+ **********************/
+Route::apiResource('team/{team}/project/{project}/section/{section}/task/{task}/comment', 'TaskCommentController');
 
 /***********************
  * Notifications API

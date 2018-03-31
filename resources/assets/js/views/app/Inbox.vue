@@ -4,13 +4,14 @@
             <div class="level-left">
                 <h1 class="title">Inbox</h1>
             </div>
-            <div class="level-right">
-                <div class="has-text-right">
-                    <span class="button is-orange" v-if="Object.keys(notifications).length > 0">
-                        <a  @click.prevent.stop="clearInbox" class="orange">Clear Inbox</a>
-                    </span>
-                </div>
-            </div>
+            <logo></logo>
+            <!--<div class="level-right">-->
+                <!--<div class="has-text-right">-->
+                    <!--<span class="button is-orange" v-if="Object.keys(notifications).length > 0">-->
+                        <!--<a  @click.prevent.stop="clearInbox" class="orange">Clear Inbox</a>-->
+                    <!--</span>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
         <transition-group name="fade" mode="out-in" >
             <div class="columns" v-for="(day, key ) in notifications" :key="key" v-cloak>
@@ -40,6 +41,7 @@
 <script>
     import store from '../../store';
     import InboxItem from '../../components/InboxItem.vue';
+    import logo from '../../components/logo.vue';
     export default {
         data() {
             return{
@@ -47,7 +49,7 @@
             }
         },
         components: {
-            InboxItem
+            InboxItem, logo
         },
         computed: {
             user: function(){

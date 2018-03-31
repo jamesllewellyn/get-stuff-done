@@ -9,6 +9,7 @@
                     <multi-select v-model="filter" :options="['All', 'Working On It', 'Over Due' ]" :searchable="false" :show-labels="false" placeholder="Filter Tasks"></multi-select>
                 </div>
             </div>
+            <logo></logo>
         </div>
         <transition  name="fade" mode="out-in" >
             <div class="my-tasks-projects" v-if="!areTasksLoading">
@@ -56,6 +57,7 @@
     import Modal from '../../components/Modal.vue';
     import Notification from '../../components/Notification.vue';
     import MultiSelect from 'vue-multiselect';
+    import logo from '../../components/logo.vue';
     export default {
         data() {
             return{
@@ -67,7 +69,8 @@
             Notification,
             Modal,
             taskList,
-            MultiSelect
+            MultiSelect,
+            logo
         },
         computed: {
             areTasksLoading(){

@@ -426,15 +426,32 @@ const store = new Vuex.Store({
                     commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addTask'});
                 });
         },
-        UPDATE_TASK: function ({ commit, getters} ,{projectId, sectionId, id, task}) {
-            axios.put('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section/' + sectionId + '/task/' + id, task)
+        UPDATE_TASK: function ({ commit, state, getters} ,{ projectId, sectionId, id, task}) {
+            axios.put('/api/team/'+getters.getActiveTeam.id+'/project/'+  projectId +'/section/' + sectionId + '/task/' + id, task)
                 .then(function (response) {
                     /** call success mutation **/
-                    commit('UPDATE_TASK_SUCCESS', {sectionId: sectionId, task: response.data.task });
+                    commit('UPDATE_TASK_SUCCESS', {sectionId: response.data.section_id, task: response.data.task });
+                    /** clear button loading state*/
+                    commit('REMOVE_BUTTON_LOADING_STATE', {name : 'editTask'});
+                    /** close modal */
+                    commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'editTask'});
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if(error.response.data){
+                        commit('UPDATE_TASK_FAILURE', { errors:  error.response.data });
+                    }
+                });
+        },
+        ADD_COMMENT:function ({ commit, getters} ,{projectId, sectionId, id, comment}) {
+            axios.post('/api/team/'+getters.getActiveTeam.id+'/project/'+ projectId +'/section/' + sectionId + '/task/' + id + '/comment', {comment:comment})
+                .then(function (response) {
+                    /** call success mutation **/
+                    commit('ADD_COMMENT_SUCCESS', {comment: response.data.comment });
                 })
                 .catch(function (error) {
                     if(error.response.data){
-                        commit('UPDATE_TASK_FAILURE', { errors:  error.response.data });
+                        commit('ADD_COMMENT_FAILURE', { errors:  error.response.data });
                     }
                 });
         },
@@ -751,6 +768,7 @@ const store = new Vuex.Store({
         },
         GET_TASK_SUCCESS: (state, { task }) => {
             /** add task to active task state **/
+            console.log(task);
             state.task = new Task(task);
         },
         ADD_TASK_SUCCESS: (state, {sectionId, task }) => {
@@ -775,21 +793,27 @@ const store = new Vuex.Store({
             /** cast id to int **/
             let sId = parseInt(sectionId ,10);
             let tId = parseInt(task.id, 10);
-            if(state.project){
-                let sIdx = state.project.sections.map(section => section.id).indexOf(sId);
-                if(sIdx >= 0) {
-                    let tIdx = state.project.sections[sIdx].tasks.map(task => task.id).indexOf(tId);
-                    /** update task to data array **/
-                    state.project.sections[sIdx].tasks[tIdx] = new Task(task);
-                }
-            }
-
             /** notify myTasks component of update **/
             Event.$emit('myTasks.updated');
             /** notify section component of update **/
             Event.$emit('section.'+sId+'.updated');
+            Event.$emit('project.'+state.task.project.id+'.updated');
+            /** go back to task **/
+            Event.$emit('showTask', state.task.project.id, sId,tId);
         },
         UPDATE_TASK_FAILURE: (state, { errors }) => {
+            /** add form errors */
+            state.formErrors = errors;
+        },
+        ADD_COMMENT_SUCCESS: (state, { comment }) => {
+            /** add new comment */
+            state.task.comments.push(comment);
+            /** Clear form errors */
+            state.formErrors = {};
+            /** notify section component of update **/
+            Event.$emit('comment.success');
+        },
+        ADD_COMMENT_FAILURE: (state, { errors }) => {
             /** add form errors */
             state.formErrors = errors;
         },

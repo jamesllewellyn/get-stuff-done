@@ -54,7 +54,7 @@ class TaskController extends Controller
     {
         /** authorize user has access to section */
         $this->authorize('access-section', [$team, $project, $section]);
-        /** create ne task model */
+        /** create new task model */
         $task = new Task();
         /** validate the request data */
         $this->validate(Request(), $task->validation, $task->messages);
@@ -103,12 +103,9 @@ class TaskController extends Controller
     public function show(Team $team, Project $project, Section $section, Task $task)
     {
         /** authorize user has access to task */
-        $this->authorize('access-section', [$team, $project, $section, $task]);
-        /** Get users assigned to task  */
-        $task->assigned_users = $task->assignedUsers()->get();
-
+        $this->authorize('access-task', [$team, $project, $section, $task]);
         /** return success and requested task */
-        return response()->json(['success' => true, 'message' => 'task has been found', 'task' => $task]);
+        return response()->json(['success' => true, 'message' => 'task has been found', 'task' => $task->where('tasks.id', $task->id)->with('comments', 'comments.author','assignedUsers', 'section', 'section.project')->first()]);
     }
 
     /**
@@ -158,7 +155,7 @@ class TaskController extends Controller
         }
 
         /** return success and updated task */
-        return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task]);
+        return response()->json(['success' => true, 'message' => 'task has been updated', 'task' => $task->where('tasks.id', $task->id)->with('comments', 'comments.author','assignedUsers', 'section', 'section.project')->first()]);
     }
 
     /**

@@ -71,6 +71,7 @@
                 <add-team></add-team>
             </template>
         </modal>
+        <edit-task></edit-task>
         <notifications :position="['top', 'right']" animation-type="velocity"   :width=350>
             <template slot="body" scope="props">
                 <div class="notification box">
