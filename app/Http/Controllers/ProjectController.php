@@ -64,7 +64,7 @@ class ProjectController extends Controller
         /** authorize user has access to project */
         $this->authorize('access-project', [$team, $project]);
         /** get project with all sections and tasks */
-        $project = Project::where('id', $project->id)->with('sections', 'sections.tasks', 'sections.tasks.assignedUsers')->first();
+        $project = Project::where('id', $project->id)->with('sections', 'sections.tasks', 'sections.tasks.assignedUsers', 'sections.tasks.section')->first();
         /** return success and requested project */
         return response()->json(['success' => true, 'message' => 'project has been found', 'project' => $project]);
     }

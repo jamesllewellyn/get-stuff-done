@@ -1,5 +1,5 @@
 <template>
-    <aside class="column is-2 is-fullheight hero" :class="addClass">
+    <aside class="column is-fullheight hero is-paddingless is-2-desktop is-3-tablet" :class="addClass">
             <div class="side-menu">
                 <div class="navbar-burger is-pulled-left is-active" @click.prevent.stop="triggerEvent('toggleNav', '')" v-if="isMobileNav">
                     <span></span>
@@ -8,7 +8,7 @@
                 </div>
                 <div class="is-centered">
                     <figure class="has-text-centered">
-                        <img class="logo is-centered" src="/images/logo.png" alt="">
+                        <img class="avatar is-centered circle" :src="user.avatar_url" alt="">
                     </figure>
                 </div>
                 <div class="has-text-centered">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <hr/>
+                <!--<hr/>-->
                 <p class="menu-label">
                     General
                 </p>
@@ -47,7 +47,7 @@
                         </router-link>
                     </li>
                 </ul>
-                <hr/>
+                <!--<hr/>-->
                 <p class="menu-label">
                     Team <a class="is-pulled-right align-vertical tooltip is-tooltip-right" data-tooltip="Add Team" @click.prevent.stop="triggerEvent('toggleModal', 'addTeam')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>
@@ -62,7 +62,7 @@
                         </router-link>
                     </li>
                 </ul>
-                <hr/>
+                <!--<hr/>-->
                 <p class="menu-label">
                     Projects <a class="is-pulled-right align-vertical tooltip is-tooltip-right" data-tooltip="Add Project" @click.prevent.stop="triggerEvent('toggleModal', 'addProject')"><i class="fa fa-plus-circle is-pulled-right align-vertical" aria-hidden="true"></i></a>
                 </p>
@@ -74,6 +74,11 @@
                     </li>
                 </ul>
             </div>
+        <!--<div class="sidebar-logo">-->
+            <!--<figure class="image">-->
+                <!--<img class="logo" src="/images/getstuffdone_logo_white.png"/>-->
+            <!--</figure>-->
+        <!--</div>-->
         </aside>
 </template>
 

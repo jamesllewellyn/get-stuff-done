@@ -11,27 +11,27 @@ let routes = [
     },
     {
         path: '/inbox/',
-        component: require('./views/app/Inbox.vue')
+        component: require('./views/app/Inbox.vue').default
     },
     {
         path: '/my-tasks/',
-        component: require('./views/app/MyTasks.vue')
+        component: require('./views/app/MyTasks.vue').default
     },
     {
         path: '/over-due/',
-        component: require('./views/app/OverDue.vue')
+        component: require('./views/app/OverDue.vue').default
     },
-    { path: '/project/:id', component: require('./views/app/Project.vue'),
+    { path: '/project/:id', component: require('./views/app/Project.vue').default,
         children: [
             {
                 path: '',
-                component: require('./views/app/Project.vue')
+                component: require('./views/app/Project.vue').default
             }
         ]
     },
     {
         path: '/team-dashboard/',
-        component: require('./views/app/TeamDashboard.vue')
+        component: require('./views/app/TeamDashboard.vue').default
     },
 ];
 

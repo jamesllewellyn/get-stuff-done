@@ -25,7 +25,7 @@
             </div>
                 <div class="nav-right">
                     <a class="nav-item">
-                        {{--Getting Stuff Done--}}
+                        Getting Stuff Done
                     </a>
                 </div>
         </nav>
@@ -55,7 +55,7 @@
         </transition>
         <transition name="fade" mode="out-in">
             <div class="vue-simple-spinner-wrap hero is-fullheight" v-if="isLoading">
-                <vue-simple-spinner size="75" :line-size=6></vue-simple-spinner>
+                <vue-simple-spinner size="75" :line-size=6 line-fg-color="#2d2b4a"></vue-simple-spinner>
             </div>
         </transition>
         <task></task>
@@ -71,6 +71,7 @@
                 <add-team></add-team>
             </template>
         </modal>
+        <edit-task></edit-task>
         <notifications :position="['top', 'right']" animation-type="velocity"   :width=350>
             <template slot="body" scope="props">
                 <div class="notification box">

@@ -1,20 +1,20 @@
 <template>
     <div class="project">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Project', event: 'project.'+id+'.delete', action: 'delete this project', areYouSure : true}]"></drop-down-button>
                 <input class="title clear-background h1" type="text" name="name" @change="updateProject" v-model="project.name" v-if="project.name != ''" v-cloak>
                 <h1 v-else class="blokk title" >Project Title</h1>
             </div>
-            <div class="level-right">
-                <div class="has-text-right">
-                    <span class="button is-orange">
-                        <a  @click.prevent.stop="triggerEvent('toggleModal','addSection')" class="orange">Add Section</a>
-                    </span>
-                </div>
-            </div>
+            <logo></logo>
+            <!--<div class="level-right">-->
+                <!--<div class="has-text-right">-->
+                    <!--<span class="button is-orange">-->
+                        <!--<a  @click.prevent.stop="triggerEvent('toggleModal','addSection')" class="orange">Add Section</a>-->
+                    <!--</span>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
-        <hr>
         <div class="columns">
             <div class="column is-half">
                 <div v-if="project">
@@ -46,7 +46,7 @@
 
         <modal modalName="addTask" title="Add New Task">
             <template slot="body">
-                <add-task :projectId="id" :sectionId="sectionId"></add-task>
+                <add-task :projectId="1" :sectionId="1"></add-task>
             </template>
         </modal>
 
@@ -61,6 +61,7 @@
     import projectSection from '../../components/Section';
     import dropDownButton from '../../components/DropDownButton.vue';
     import modal from '../../components/Modal.vue';
+    import logo from '../../components/logo.vue';
     export default {
         data() {
             return{
@@ -68,7 +69,7 @@
                 taskId:''
             }
         },
-        components:{projectSection, modal, addSection , addTask, updateTask, dropDownButton},
+        components:{projectSection, modal, addSection , addTask, updateTask, dropDownButton, logo},
         computed: {
             id: function(){
                 if(!this.$route.params.id){

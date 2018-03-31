@@ -1,9 +1,18 @@
 /** Sidebar menu */
 aside{
-  background-color: #ffffff !important;
+  background-color: #2d2b4a !important;
+  color:#FFFFFF;
   .side-menu{
-    .fa-user{
-      //font-size: 60px;
+
+    margin-top: 1em;
+    padding:0.75rem;
+    button{
+      color:#FFFFFF ;
+    }
+
+    .menu-label{
+      color:#FFFFFF ;
+      margin-top: 2em;
     }
     .menu-label, .multi-select{
       padding-left:0.25em;
@@ -15,22 +24,30 @@ aside{
       a{
         padding:0.8em 0.75em;
         transition: all .3s ease;
+        color:#FFFFFF ;
         //font-size:0.85em;
         &.is-active{
-          background-color:#ffffff;
+          background-color:#42415c;
           font-weight: bold;
-          border-left:3px solid $orange;
-          color:#4a4a4a ;
+          //border-left:3px solid #1e3f60;
+          color:#FFFFFF ;
         }
         &:hover{
-          background-color: #ffffff;
-          color:#4a4a4a ;
+          font-weight: bold;
+          color:#FFFFFF ;
+          background-color: #42415c !important;
         }
       }
     }
   }
 }
-
+.sidebar-logo{
+  background-color: #42415c !important;
+  //height:70px;
+  .logo{
+    padding:1.75em 0.5em;
+  }
+}
 .mobile-side-nav{
   z-index: 5;
   width: 90% !important;
@@ -69,23 +86,32 @@ hr{
 }
 /** page */
 .header{
-  padding-top: 1em;
+  padding:1rem !important;
+  .logo{
+    max-width:200px;
+  }
 }
-  .box{
-    &.place-holder{
-      box-shadow: none !important;
-      background-color:transparent;
-      border: rgba(10, 10, 10, 0.1) solid 1px;
-      .fa-circle{
-        color:#dbdbdb;
-      }
-    }
-    &.is-empty-inbox{
-      box-shadow: none !important;
-      background-color: transparent;
-      border: rgba(10, 10, 10, 0.1) solid 1px;
+.box{
+  background-color: #ffffff;
+  border: none;
+  padding:2rem;
+  -webkit-box-shadow: 0 0 20px 0 #cfd2d478;
+  -moz-box-shadow:    0 0 20px 0 #cfd2d478;
+  box-shadow:         0 0 20px 0 #cfd2d478;
+  &.place-holder{
+    box-shadow: none !important;
+    background-color:transparent;
+    border: rgba(10, 10, 10, 0.1) solid 1px;
+    .fa-circle{
+      color:#dbdbdb;
     }
   }
+  &.is-empty-inbox{
+    box-shadow: none !important;
+    background-color: transparent;
+    border: rgba(10, 10, 10, 0.1) solid 1px;
+  }
+}
 
 .has-no-boarder{
   border:none !important;
@@ -108,23 +134,28 @@ hr{
 }
 /** Task **/
 .task{
-  z-index: 5;
-  width: 90%;
-  display: block;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  position: absolute;
-  padding: 2em;
-  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  //position: fixed;
+  //width: 60%;
+  //background-color: #fff;
+  //left: 20%;
+  //height: 90%;
+  //overflow: hidden;
+  //overflow-y: scroll;
+  //overflow-x: hidden;
+  //top: 5%;
+  //z-index: 5;
+  //display: block;
+  //padding-top: 0;
+  //box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   @include tablet() {
-    width: 50%;
+    //width: 50%;
   }
-  .header{
-    padding-bottom: 1em;
-    margin-bottom: 1em;
+  .task-header{
+    background-color:whitesmoke;
     border-bottom: 1px solid #dbdbdb;
-    position: relative;
+    padding: 20px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     .status{
       i{
         padding-top: .25em;
@@ -138,13 +169,16 @@ hr{
     }
   }
   .body{
-    p{
+    p.description{
       font-size: 1.25em;
     }
-    .task-updates{
-      textarea{
-        width: 100%;
-      }
+  }
+  textarea{
+    width: 100%;
+    min-height: 0.5em !important;
+    margin-right:0.5em;
+    &.is-danger{
+      border-color: #ff3860;
     }
   }
 }
@@ -161,6 +195,12 @@ hr{
   -o-filter: blur(5px);
   -ms-filter: blur(5px);
   filter: blur(5px);
+}
+.task-comment{
+  margin-bottom: 1em;
+  .message{
+    width:100%;
+  }
 }
 /** forms **/
 
@@ -213,22 +253,41 @@ hr{
 .circle{
   border-radius: 50%;
 }
-.logo{
+
+.avatar{
   width:100px;
-  margin-top:0.5em;
+  //margin-top:0.5em;
 }
 .small-avatar{
   width:50px;
+}
+.x-small-avatar{
+  width:40px;
+  margin: 0.25em;
+}
+
+.message-avatar{
+  margin-right: 1em;
 }
 
 /** ajax loader */
 
 .main-content {
   position: relative;
+  &.columns{
+    margin-top:0 !important;
+  }
 }
 .vue-simple-spinner-wrap {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
   align-items: center;
+}
+.task-is-loading{
+  overflow-y: hidden;
+  overflow-x: hidden;
+  .vue-simple-spinner-wrap{
+    min-height: 100% !important;
+  }
 }

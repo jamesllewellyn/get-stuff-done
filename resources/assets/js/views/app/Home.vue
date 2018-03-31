@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <input class="title clear-background h1" type="text" name="name" @change="updateTeam" v-model="team.name" v-if="team">
                 <!--<h1 class="title" v-text="" ></h1>-->
@@ -13,7 +13,6 @@
                 </div>
             </div>
         </div>
-        <hr />
         <div>
             <div class="columns is-multiline">
                 <div class="column is-full">

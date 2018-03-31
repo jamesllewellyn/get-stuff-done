@@ -1,6 +1,6 @@
 <template>
     <div id="my-tasks">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <div class="level-item">
                     <h1 class="title">My Tasks</h1>
@@ -9,8 +9,8 @@
                     <multi-select v-model="filter" :options="['All', 'Working On It', 'Over Due' ]" :searchable="false" :show-labels="false" placeholder="Filter Tasks"></multi-select>
                 </div>
             </div>
+            <logo></logo>
         </div>
-        <hr />
         <transition  name="fade" mode="out-in" >
             <div class="my-tasks-projects" v-if="!areTasksLoading">
                 <div class="columns is-multiline" v-if="tasks">
@@ -57,6 +57,7 @@
     import Modal from '../../components/Modal.vue';
     import Notification from '../../components/Notification.vue';
     import MultiSelect from 'vue-multiselect';
+    import logo from '../../components/logo.vue';
     export default {
         data() {
             return{
@@ -68,7 +69,8 @@
             Notification,
             Modal,
             taskList,
-            MultiSelect
+            MultiSelect,
+            logo
         },
         computed: {
             areTasksLoading(){

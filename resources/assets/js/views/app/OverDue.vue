@@ -1,11 +1,10 @@
 <template>
     <div id="working-on-it">
-        <div class="level header is-mobile">
+        <div class="level header box is-mobile">
             <div class="level-left">
                 <h1 class="title">Over Due</h1>
             </div>
         </div>
-        <hr />
         <div class="columns is-multiline">
             <div class=" column is-half" v-for="section in overDue">
                 <div class="box">

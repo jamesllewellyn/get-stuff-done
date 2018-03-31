@@ -10864,7 +10864,7 @@ input.input-date {
 
 input:focus {
   outline: none;
-  border-bottom: 1px solid #ff7739 !important;
+  border-bottom: 1px solid #F95E77 !important;
 }
 
 .select,
@@ -10894,9 +10894,8 @@ textarea {
 body {
   background-color: #f5f8fa;
   font-family: "Raleway", sans-serif;
-  color: #4a4a4a;
+  color: #1e3f60;
   font-size: 1rem;
-  font-weight: 400;
   line-height: 1.5;
 }
 
@@ -10956,7 +10955,7 @@ h4 {
 }
 
 .is-orange {
-  background-color: #ff7739;
+  background-color: #F95E77;
   color: #ffffff;
 }
 
@@ -11038,7 +11037,7 @@ h4 {
 }
 
 .tag.is-orange {
-  background-color: #ff7739;
+  background-color: #F95E77;
   color: #ffffff;
 }
 
@@ -11067,7 +11066,7 @@ html {
 }
 
 .is-orange {
-  background-color: #ff7739;
+  background-color: #F95E77;
   color: #ffffff;
 }
 

@@ -1,6 +1,7 @@
 import './bootstrap';
 import router from './app-routes';
 import store from './store/index';
+
 import AddProject from './components/modals/AddProject.vue';
 import AddTeam from './components/modals/AddTeam.vue';
 import Modal from './components/Modal.vue';
@@ -9,6 +10,8 @@ import Task from './components/Task.vue';
 import Profile from './components/Profile.vue';
 import Navigation from './components/Nav.vue';
 import Spinner from 'vue-simple-spinner'
+import EditTask from './components/modals/EditTask.vue';
+
 window.Event = new Vue();
 import { mapState, mapGetters } from 'vuex'
 const app = new Vue({
@@ -21,18 +24,11 @@ const app = new Vue({
          ])
     ,
     components : {
-        Task, Modal, AddProject, Navigation , Profile, Spinner, AddTeam, areYouSure
+        Task, Modal, AddProject, Navigation , Profile, Spinner, AddTeam, areYouSure, EditTask
     },
     methods: {
         /** listens to Echo channels */
         listen(){
-            // /** listens to users current teams projects channel */
-            // Echo.channel('teams.'+ this.user.current_team_id + '.projects' )
-            //      /** listen for new project being added*/
-            //     .listen('ProjectAdded', (e) => {
-            //         /** called ADD_PROJECT_SUCCESS to add project to list of projects */
-            //         this.$store.commit('ADD_PROJECT_SUCCESS', { project : e.project});
-            //     });
             Echo.private('App.User.' + this.user.id)
                 .notification((notification) => {
                     console.log(notification);
