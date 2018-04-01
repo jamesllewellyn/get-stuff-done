@@ -35,6 +35,11 @@ class Section extends Model
         'name.required' => 'Please provide a name for this section'
     ];
 
+
+    /***********************
+     * Eloquent Relationships
+     **********************/
+
     /**
      * Get all section tasks.
      */
@@ -46,5 +51,19 @@ class Section extends Model
      */
     public function project(){
         return $this->belongsTo(Project::class, 'project_id','id');
+    }
+
+    /***********************
+     * Methods
+     **********************/
+
+    /**
+     * delete all the tasks within the section
+     */
+    public function deleteTasks(){
+
+        return $this->tasks()->get()->each(function ($task){
+            $task->delete();
+        });
     }
 }

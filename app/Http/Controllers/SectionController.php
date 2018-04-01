@@ -69,7 +69,9 @@ class SectionController extends Controller
     public function destroy(Team $team, Project $project, Section $section) {
         /** authorize user has access to section */
         $this->authorize('access-section', [$team, $project, $section]);
-        /** delete project */
+        /** delete section tasks */
+        $section->deleteTasks();
+        /** delete section */
         $section->delete();
         /** return success message */
         return response()->json(['success' => true, 'message' => 'Section '.$section->name.' has been successfully deleted']);
