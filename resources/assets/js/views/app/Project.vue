@@ -2,7 +2,7 @@
     <div class="project">
         <div class="level header box is-mobile">
             <div class="level-left">
-                <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Project', event: 'project.'+id+'.delete', action: 'delete this project', areYouSure : true}]"></drop-down-button>
+                <drop-down-button :boarder="false" :dropdowns="[{text : 'Add Project Section', event: { name : 'toggleModal', payload : 'addSection'}, action: 'add new project section', areYouSure : false},{text : 'Delete Project', event: { name : 'project.'+id+'.delete', payload : null}, action: 'delete this project', areYouSure : true}]"></drop-down-button>
                 <input class="title clear-background h1" type="text" name="name" @change="updateProject" v-model="project.name" v-if="project.name != ''" v-cloak>
                 <h1 v-else class="blokk title" >Project Title</h1>
             </div>
@@ -20,7 +20,8 @@
                 <div v-if="project">
                     <!--<transition-group tag="template" name="fade" mode="out-in">-->
                     <project-section v-for="(section, key) in sectionsColumnOne" :projectId="id" :id="section.id" :sectionName="section.name" :key="key" ></project-section>
-                    <project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>
+                    <!--<project-section  v-if="project.sections.length == 0" :placeHolder="true"></project-section>-->
+                    <add-project-section-button  v-if="project.sections.length == 0"></add-project-section-button>
                     <!--</transition-group>-->
                 </div>
             </div>
@@ -46,7 +47,7 @@
 
         <modal modalName="addTask" title="Add New Task">
             <template slot="body">
-                <add-task :projectId="1" :sectionId="1"></add-task>
+                <add-task :projectId="id" :sectionId="sectionId"></add-task>
             </template>
         </modal>
 
@@ -56,6 +57,7 @@
 <script>
     import store from '../../store';
     import addSection from '../../components/modals/AddSection.vue';
+    import addProjectSectionButton from '../../components/AddProjectSectionButton.vue';
     import addTask from '../../components/modals/AddTask.vue';
     import updateTask from '../../components/modals/UpdateTask.vue';
     import projectSection from '../../components/Section';
@@ -69,7 +71,7 @@
                 taskId:''
             }
         },
-        components:{projectSection, modal, addSection , addTask, updateTask, dropDownButton, logo},
+        components:{projectSection, modal, addSection , addTask, updateTask, dropDownButton, logo, addProjectSectionButton},
         computed: {
             id: function(){
                 if(!this.$route.params.id){

@@ -3,7 +3,7 @@
      <div class="box" :class="placeHolder ? 'place-holder' : ''">
          <div class="level">
              <div class="level-left">
-                 <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Section', event: 'section.'+id+'.delete', action: 'delete this section', areYouSure : true}]" v-if="!placeHolder">
+                 <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Section', event: { name : 'section.'+id+'.delete', payload : null}, action: 'delete this section', areYouSure : true}]" v-if="!placeHolder">
                  </drop-down-button>
                  <input class="clear-background title h3" type="text" name="name" placeholder="Section Name" @change="updateSection" v-model="name" v-if="name">
                  <h3 v-else class="title blokk"> Section Name</h3>
@@ -106,6 +106,7 @@
                 this.$store.dispatch('UPDATE_SECTION', {id: this.id, section :{id: this.id, name: this.name }})
             },
             deleteSection(){
+                console.log('here');
                 this.$store.dispatch('DELETE_SECTION', {id: this.id})
             },
             /**

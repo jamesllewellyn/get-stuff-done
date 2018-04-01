@@ -412,14 +412,14 @@ const store = new Vuex.Store({
             axios.post('/api/team/'+getters.getActiveTeam.id+'/project/'+ state.project.id +'/section/' + sectionId + '/task', task)
                 .then(function (response) {
                     /** call success mutation **/
-                    commit('ADD_TASK_SUCCESS', { sectionId: sectionId,  task: response.data.task });
+                    commit('ADD_TASK_SUCCESS', { sectionId: response.data.task.section_id,  task: response.data.task });
                     /** clear button loading state*/
                     commit('REMOVE_BUTTON_LOADING_STATE', {name : 'addTask'});
                     /** close modal */
                     commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'addTask'});
                 })
                 .catch(function (error) {
-                    if(error.response.data){
+                    if(typeof  error.response.data !== 'undefined'){
                         commit('ADD_TASK_FAILURE', { errors:  error.response.data });
                     }
                     /** clear button loading state*/
@@ -437,7 +437,6 @@ const store = new Vuex.Store({
                     commit('TOGGLE_MODAL_IS_VISIBLE', {name : 'editTask'});
                 })
                 .catch(function (error) {
-                    console.log(error);
                     if(error.response.data){
                         commit('UPDATE_TASK_FAILURE', { errors:  error.response.data });
                     }
