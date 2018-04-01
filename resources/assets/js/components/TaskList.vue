@@ -15,7 +15,7 @@
         <td class="is-centered-text" :class="placeHolder ? 'blokk' : ''">{{priority}} </td>
         <td class="is-centered-text" :class="placeHolder ? 'blokk' : ''">{{ dueDateFormatted }}</td>
         <td v-if="!placeHolder && page == 'project'" class="is-centered-text">
-            <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Task', event: 'task.'+id+'.delete' , action: 'delete this task' , areYouSure : true}]"></drop-down-button>
+            <drop-down-button :boarder="false" :dropdowns="[{text : 'Delete Task', event: { name : 'task.'+id+'.delete', payload : null} , action: 'delete this task' , areYouSure : true}]"></drop-down-button>
         </td>
     </tr>
 </template>

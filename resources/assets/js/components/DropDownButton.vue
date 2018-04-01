@@ -1,13 +1,13 @@
 <template>
-    <div class="dropdown is-hoverable" >
-        <div class="dropdown-trigger">
+    <div class="dropdown" :class="{'is-active' : isActive}" v-on-clickaway="hideDropdown">
+        <div class="dropdown-trigger" @click.prevent="isActive = !isActive">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" :class="!boarder ? 'has-no-boarder' : ''" >
                 <span class="icon is-small">
-                     <i class="fa fa-angle-down" aria-hidden="true"></i>
+                     <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </span>
             </button>
         </div>
-        <div class="dropdown-menu" id="dropdown-menu" role="menu" ref="dropdown" @blur="hideDropdown">
+        <div class="dropdown-menu" id="dropdown-menu" role="menu" ref="dropdown" >
             <div class="dropdown-content" >
                     <a class="dropdown-item" v-for="dropdown in dropdowns" @click="triggerEvent(dropdown)">
                        {{dropdown.text}}
@@ -19,7 +19,9 @@
 </template>
 
 <script>
+    import { mixin as clickaway } from 'vue-clickaway';
     export default {
+        mixins: [ clickaway ],
         data() {
             return{
                 isActive: false
@@ -39,14 +41,12 @@
             /** trigger event */
             triggerEvent(object){
                 if(object.areYouSure){
-                    Event.$emit('showAreYouSure', object.action, object.event);
+                    Event.$emit('showAreYouSure', object.action, object.event.name);
+                    this.hideDropdown();
                     return true
                 }
-                Event.$emit(object.event);
-            },
-            showDropdown(){
-                this.isActive = true;
-                this.$refs.dropdown.focus();
+                Event.$emit(object.event.name, object.event.payload);
+                this.hideDropdown();
             },
             hideDropdown(){
                 this.isActive = false;

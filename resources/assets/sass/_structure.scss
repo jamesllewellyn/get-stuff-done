@@ -101,6 +101,7 @@ hr{
   &.place-holder{
     box-shadow: none !important;
     background-color:transparent;
+    min-height:150px;
     border: rgba(10, 10, 10, 0.1) solid 1px;
     .fa-circle{
       color:#dbdbdb;
@@ -120,6 +121,9 @@ hr{
 .fa-plus-circle{
   color:$orange;
 }
+.add-icon{
+  padding: 75px 0;
+}
 .handle{
   font-weight: bold;
   margin-right: 0.5em;
@@ -131,6 +135,33 @@ hr{
 /** Section **/
 .project-section{
   padding-bottom: 1.5rem;
+}
+.add-project-section-button{
+  cursor: pointer;
+  .box{
+    transition: all .3s ease;
+    .fa-plus-circle{
+      color:rgba(10, 10, 10, 0.1) ;
+      transition: all .3s ease;
+    }
+    &:hover{
+      background-color: #ffffff;
+      border: none;
+      //padding:2rem;
+      -webkit-box-shadow: 0 0 20px 0 #cfd2d478;
+      -moz-box-shadow:    0 0 20px 0 #cfd2d478;
+      box-shadow:         0 0 20px 0 #cfd2d478;
+      .fa-plus-circle{
+        color: $orange;
+      }
+    }
+    &:active{
+      -webkit-box-shadow: none;
+      -moz-box-shadow:    none;
+      box-shadow:         none;
+    }
+
+  }
 }
 /** Task **/
 .task{

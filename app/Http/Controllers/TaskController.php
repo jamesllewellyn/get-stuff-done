@@ -52,6 +52,7 @@ class TaskController extends Controller
      */
     public function store(Request $request, Team $team, Project $project, Section $section)
     {
+//        dd($this->authorize('access-section', [$team, $project, $section]));
         /** authorize user has access to section */
         $this->authorize('access-section', [$team, $project, $section]);
         /** create new task model */
@@ -88,7 +89,7 @@ class TaskController extends Controller
         }
 
         /** return success and stored task */
-        return response()->json(['success' => true, 'message' => 'New task has been added to ' . $section->name, 'task' => $task]);
+        return response()->json(['success' => true, 'message' => 'New task has been added to ' . $section->name, 'task' => $task->where('tasks.id', $task->id)->with('comments', 'comments.author','assignedUsers', 'section', 'section.project')->first()]);
     }
 
     /**
