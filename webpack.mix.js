@@ -15,4 +15,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .js('resources/assets/js/sign-up.js', 'public/js')
    .js('resources/assets/js/welcome.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css')
-   .sass('resources/assets/sass/welcome.scss', 'public/css');
+   .sass('resources/assets/sass/welcome.scss', 'public/css')
+    .version();

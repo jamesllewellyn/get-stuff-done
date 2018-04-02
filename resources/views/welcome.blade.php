@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="//fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/welcome.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -136,6 +136,6 @@
     </footer>
 </div>
 <!-- Scripts -->
-<script src="{{ asset('js/welcome.js') }}"></script>
+<script src="{{ mix('js/welcome.js') }}"></script>
 </body>
 </html>
