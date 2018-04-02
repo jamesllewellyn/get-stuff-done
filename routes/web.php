@@ -27,4 +27,5 @@ Route::post('invitation', 'InvitationController@createUserFromInvitation')->name
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', 'Auth\LoginController@logout')->name('app.logout');
 

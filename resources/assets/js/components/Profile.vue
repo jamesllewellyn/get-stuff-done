@@ -6,7 +6,7 @@
             <div class="modal-background" @click.prevent.stop="triggerEvent('toggleProfile')" v-if="profileVisible"></div>
         </transition>
         <transition name="slide">
-            <aside class="profile task hero is-fullheight has-shadow" v-if="profileVisible">
+            <aside class="profile hero is-fullheight has-shadow" v-if="profileVisible">
                 <div class="header">
                     <div class="level">
                         <h2 class="has-text-centered">Profile</h2>

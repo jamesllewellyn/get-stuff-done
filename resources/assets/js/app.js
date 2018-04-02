@@ -85,5 +85,14 @@ const app = new Vue({
         Event.$on('changePage', function($route) {
             router.push($route);
         });
+        /** listen log out event */
+        Event.$on('logout', function() {
+            window.location.href = "/logout";
+        });
+        /** Toggle profile and mobile nav */
+        Event.$on('profileHandler', function(){
+            Event.$emit('toggleProfile');
+            Event.$emit('toggleNav');
+        });
     }
 });

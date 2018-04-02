@@ -31,26 +31,21 @@
         </nav>
         <transition name="fade" mode="out-in">
             <section class="main-content columns" v-if="!isLoading" v-cloak>
+
+                {{--Nav bar--}}
+                <navigation :add-class="'is-hidden-touch'" v-cloak></navigation>
+
+                {{--Mobile nav bar --}}
                 <transition name="slide-left">
-                    <navigation v-if="navVisible" :add-class="'mobile-side-nav is-hidden-desktop'" :is-mobile-nav="true" v-cloak>
-                        <p href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="has-text-centered">
-                            Logout
-                        </p>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
-                    </navigation>
+                    <navigation v-if="navVisible" :add-class="'mobile-side-nav is-hidden-desktop'" :is-mobile-nav="true" v-cloak></navigation>
                 </transition>
 
-                <navigation :add-class="'is-hidden-touch'" v-cloak>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
-                        Logout
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
-                </navigation>
                 <div class="hero is-fullheight column is-10-desktop is-12-tablet">
                     <transition name="fade" mode="out-in">
                         <router-view :key="$route.params.id"> </router-view>
                     </transition>
                 </div>
+
             </section>
         </transition>
         <transition name="fade" mode="out-in">

@@ -68713,6 +68713,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -68731,6 +68732,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         dropdowns: {
             type: Array,
             required: true
+        },
+        text: {
+            type: String,
+            required: false,
+            default: null
         }
     },
     methods: {
@@ -70229,7 +70235,8 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_multiselect__ = __webpack_require__(148);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_multiselect__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_DropDownButton_vue__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(6);
 //
 //
 //
@@ -70296,24 +70303,8 @@ if (false) {(function () {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 
@@ -70332,7 +70323,7 @@ if (false) {(function () {
             default: false
         }
     },
-    components: { MultiSelect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a },
+    components: { MultiSelect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a, dropDownButton: __WEBPACK_IMPORTED_MODULE_2__components_DropDownButton_vue__["a" /* default */] },
     computed: {
         profileVisible: function profileVisible() {
             return this.$store.state.profileVisible;
@@ -70359,10 +70350,6 @@ if (false) {(function () {
         },
         triggerEvent: function triggerEvent(eventName, payload) {
             Event.$emit(eventName, payload);
-        },
-        profileHandler: function profileHandler() {
-            Event.$emit('toggleProfile');
-            Event.$emit('toggleNav');
         },
         switchTeam: function switchTeam(team) {
             this.$store.dispatch('SWITCH_TEAM', { teamId: team.id });
@@ -70669,6 +70656,15 @@ var app = new Vue({
         /** listen for force change page events */
         Event.$on('changePage', function ($route) {
             __WEBPACK_IMPORTED_MODULE_1__app_routes__["a" /* default */].push($route);
+        });
+        /** listen log out event */
+        Event.$on('logout', function () {
+            window.location.href = "/logout";
+        });
+        /** Toggle profile and mobile nav */
+        Event.$on('profileHandler', function () {
+            Event.$emit('toggleProfile');
+            Event.$emit('toggleNav');
         });
     }
 });
@@ -75947,7 +75943,13 @@ var render = function() {
                 "aria-controls": "dropdown-menu"
               }
             },
-            [_vm._m(0)]
+            [
+              _vm.text
+                ? _c("span", { domProps: { textContent: _vm._s(_vm.text) } })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._m(0)
+            ]
           )
         ]
       ),
@@ -78892,7 +78894,7 @@ var render = function() {
         _vm.profileVisible
           ? _c(
               "aside",
-              { staticClass: "profile task hero is-fullheight has-shadow" },
+              { staticClass: "profile hero is-fullheight has-shadow" },
               [
                 _c("div", { staticClass: "header" }, [
                   _c("div", { staticClass: "level" }, [
@@ -79180,67 +79182,33 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "has-text-centered" }, [
-          _c("div", { staticClass: "dropdown is-hoverable" }, [
-            _c("div", { staticClass: "dropdown-trigger" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "button has-no-boarder",
-                  attrs: {
-                    "aria-haspopup": "true",
-                    "aria-controls": "dropdown-menu"
+        _c(
+          "div",
+          { staticClass: "has-text-centered" },
+          [
+            _c("drop-down-button", {
+              attrs: {
+                text: _vm.getName(),
+                boarder: false,
+                dropdowns: [
+                  {
+                    text: "Profile",
+                    event: { name: "profileHandler", payload: null },
+                    action: null,
+                    areYouSure: false
+                  },
+                  {
+                    text: "Logout",
+                    event: { name: "logout", payload: null },
+                    action: null,
+                    areYouSure: false
                   }
-                },
-                [
-                  _c("span", {
-                    domProps: { textContent: _vm._s(_vm.getName()) }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(0)
                 ]
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "dropdown-menu",
-                attrs: { id: "dropdown-menu", role: "menu" }
-              },
-              [
-                _c(
-                  "div",
-                  { staticClass: "dropdown-content" },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            $event.stopPropagation()
-                            return _vm.profileHandler($event)
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                                Profile\n                            "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm._t("default")
-                  ],
-                  2
-                )
-              ]
-            )
-          ])
-        ]),
+              }
+            })
+          ],
+          1
+        ),
         _vm._v(" "),
         _c("p", { staticClass: "menu-label" }, [
           _vm._v("\n                General\n            ")
@@ -79469,19 +79437,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon is-small" }, [
-      _c("i", {
-        staticClass: "fa fa-angle-down",
-        attrs: { "aria-hidden": "true" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {

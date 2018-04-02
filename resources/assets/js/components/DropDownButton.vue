@@ -2,6 +2,7 @@
     <div class="dropdown" :class="{'is-active' : isActive}" v-on-clickaway="hideDropdown">
         <div class="dropdown-trigger" @click.prevent="isActive = !isActive">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" :class="!boarder ? 'has-no-boarder' : ''" >
+                <span v-text="text" v-if="text"></span>
                 <span class="icon is-small">
                      <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </span>
@@ -35,6 +36,11 @@
             dropdowns:{
                 type: Array,
                 required: true
+            },
+            text:{
+                type: String,
+                required: false,
+                default:null
             }
         },
         methods: {

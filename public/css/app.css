@@ -12072,6 +12072,29 @@ hr {
   width: 100%;
 }
 
+/** profile **/
+
+.profile {
+  z-index: 5;
+  width: 90%;
+  display: block;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  position: absolute;
+  padding: 2em;
+  -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  background-color: white !important;
+  color: black !important;
+}
+
+@media screen and (min-width: 769px), print {
+  .profile {
+    width: 50%;
+  }
+}
+
 /** forms **/
 
 .table.place-holder {
