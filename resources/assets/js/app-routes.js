@@ -17,10 +17,6 @@ let routes = [
         path: '/my-tasks/',
         component: require('./views/app/MyTasks.vue').default
     },
-    {
-        path: '/over-due/',
-        component: require('./views/app/OverDue.vue').default
-    },
     { path: '/project/:id', component: require('./views/app/Project.vue').default,
         children: [
             {

@@ -19,7 +19,7 @@
             <div class="container">
                 <div class="nav-left">
                     <a class="nav-item" href="{{ url('/') }}">
-                        <img class="logo is-centered" src="/images/logo.png" alt="">
+                        <img class="logo is-centered" src="/images/getstuffdone_logo_no_text.png" alt="">
                     </a>
                 </div>
                 <span class="nav-toggle">

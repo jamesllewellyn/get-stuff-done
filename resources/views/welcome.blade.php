@@ -20,7 +20,7 @@
                 <div class="container">
                     <div class="nav-left">
                         <a class="nav-item" href="{{ url('/home') }}">
-                            <img class="logo is-centered" src="/images/logo.png" alt="">
+                            <img class="logo is-centered" src="/images/getstuffdone_logo_no_text.png" alt="">
                         </a>
                     </div>
                     <span class="nav-toggle">
@@ -46,7 +46,7 @@
                                     Login
                                 </a>
                                 <span class="nav-item">
-                                  <a class="button is-orange" href="{{ url('/register') }}">
+                                  <a class="button" href="{{ url('/register') }}">
                                     <span>Create Team</span>
                                   </a>
                                 </span>
@@ -58,14 +58,15 @@
         </div>
         <div class="hero-body">
             <div class="container has-text-centered">
-                <h1 class="title is-2">
-                    Get Stuff Done
-                </h1>
+                <img class="logo is-centered" src="/images/getstuffdone_logo.png" alt="Get Stuff Done">
+                {{--<h1 class="title is-2">--}}
+                    {{--Get Stuff Done--}}
+                {{--</h1>--}}
                 <h2 class="subtitle is-5">
                     Team based project to-do list application.
                 </h2>
                 <p>
-                    <a class="button has-shadow" href="{{ url('/register') }}">
+                    <a class="button has-shadow  is-orange" href="{{ url('/register') }}">
                         <span>
                           Start Getting Stuff Done
                         </span>
@@ -100,7 +101,7 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <p class="title has-text-centered">Collaborate</p>
-                    <p class="subtitle has-text-centered">Add friend and colleagues, assign each other task and get your stuff done </p>
+                    <p class="subtitle has-text-centered">Add friends and colleagues, assign each other task and get your stuff done </p>
                 </div>
                 <div class="column is-4 has-text-centered" >
                     <span class="icon is-large">
